@@ -1,0 +1,33 @@
+<html>
+<body>
+    <label>
+        <input type="checkbox" value="C#" />
+        <span>C#</span>
+    </label>
+    <label>
+        <input type="checkbox" value="JavaScript" />
+        <span>JavaScript</span>
+    </label>
+    <label>
+        <input type="checkbox" value="jQuery" />
+        <span>jQuery</span>
+    </label>
+    <label>
+        <input type="checkbox" value="Vue.js" />
+        <span>Vue.js</span>
+    </label>
+    <hr />
+    <button onclick="checkResult()">Check Result</button>
+    <div class="result"></div>
+    <script>
+        function checkResult() {
+            var list = [];
+            var chked = document.querySelectorAll("[type=checkbox]:checked");
+            for (var i = 0; i < chked.length; i++) {
+                list.push(chked[i].value);
+            }
+            document.querySelector(".result").innerHTML = list.join(', ') || "none";
+        }
+    </script>
+</body>
+</html>

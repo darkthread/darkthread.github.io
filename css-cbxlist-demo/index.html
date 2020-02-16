@@ -1,0 +1,61 @@
+<html>
+
+<head>
+    <style>
+        label {
+            padding: 0;
+            margin-right: 3px;
+            cursor: pointer;
+        }
+        input[type=checkbox] {
+            display: none;
+        }
+        input[type=checkbox]+span {
+            display: inline-block;
+            background-color: #aaa;
+            padding: 3px 6px;
+            border: 1px solid gray;
+            color: #444;
+            user-select: none; /* 防止文字被滑鼠選取反白 */
+        }
+
+        input[type=checkbox]:checked+span {
+            color: yellow;
+            background-color: #444;
+        }
+    </style>
+</head>
+
+<body>
+    <label>
+        <input type="checkbox" value="C#" />
+        <span>C#</span>
+    </label>
+    <label>
+        <input type="checkbox" value="JavaScript" />
+        <span>JavaScript</span>
+    </label>
+    <label>
+        <input type="checkbox" value="jQuery" />
+        <span>jQuery</span>
+    </label>
+    <label>
+        <input type="checkbox" value="Vue.js" />
+        <span>Vue.js</span>
+    </label>
+    <hr />
+    <button onclick="checkResult()">Check Result</button>
+    <div class="result"></div>
+    <script>
+        function checkResult() {
+            var list = [];
+            var chked = document.querySelectorAll("[type=checkbox]:checked");
+            for (var i = 0; i < chked.length; i++) {
+                list.push(chked[i].value);
+            }
+            document.querySelector(".result").innerHTML = list.join(', ') || "none";
+        }
+    </script>
+</body>
+
+</html>
