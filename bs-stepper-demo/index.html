@@ -1,0 +1,138 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bs-stepper@1.7.0/dist/css/bs-stepper.min.css">
+</head>
+
+<body>
+  <h3 class="text-center">
+    茶包弓箭組商品登錄
+  </h3>
+  <form class="container">
+    <div class="bs-stepper">
+      <div class="bs-stepper-header" role="tablist">
+        <div class="step" data-target="#step1">
+          <button type="button" class="step-trigger" role="tab">
+            <span class="bs-stepper-circle">1</span>
+            <span class="bs-stepper-label">商品資料</span>
+          </button>
+        </div>
+        <div class="line"></div>
+        <div class="step" data-target="#step2">
+          <button type="button" class="step-trigger" role="tab">
+            <span class="bs-stepper-circle">2</span>
+            <span class="bs-stepper-label">連絡資訊</span>
+          </button>
+        </div>
+        <div class="line"></div>
+        <div class="step" data-target="#step3">
+          <button type="button" class="step-trigger" role="tab">
+            <span class="bs-stepper-circle">3</span>
+            <span class="bs-stepper-label">送出資料</span>
+          </button>
+        </div>
+        <div class="line"></div>
+        <div class="step" data-target="#step4">
+          <button type="button" class="step-trigger" role="tab">
+            <span class="bs-stepper-circle">4</span>
+            <span class="bs-stepper-label">完成登錄</span>
+          </button>
+        </div>
+      </div>
+      <div class="bs-stepper-content">
+        <div id="step1" class="content" role="tabpanel">
+          <div class="form-group">
+            <label>
+              商品型號
+            </label>
+            <select class="form-control">
+              <option>百步穿揚組合包</option>
+              <option>例無虛發同綁包</option>
+              <option>亂槍打鳥特大包</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>
+              商品序號
+            </label>
+            <input class="form-control" />
+          </div>
+          <div>
+            <button type="button" onclick="stepper.next()">下一步</button>
+          </div>
+        </div>
+        <div id="step2" class="content" role="tabpanel">
+          <div class="form-group">
+            <label>姓名</label>
+            <input class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>手機號碼</label>
+            <input class="form-control" />
+          </div>
+          <div>
+            <button type="button" onclick="stepper.previous()">上一步</button>
+            <button type="button" onclick="stepper.next()">下一步</button>
+          </div>
+        </div>
+        <div id="step3" class="content" role="tabpanel">
+          <div class="form-group">
+            <label>電子郵件</label>
+            <input type="email" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox">
+              我願意收到優惠活動及商品資訊
+            </label>
+          </div>
+          <div>
+            <button type="button" onclick="stepper.previous()">上一步</button>
+            <button type="button" onclick="simulateSubmit()">確認送出</button>
+          </div>
+        </div>
+        <div id="step4" class="content" role="tabpanel">
+          <div class="alert alert-success">
+            感謝您購買本公司商品並完成線上登錄，祝茶包退散，永不來犯。
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <script src="https://cdn.jsdelivr.net/npm/bs-stepper@1.7.0/dist/js/bs-stepper.min.js"></script>
+  <script>
+    var stepperElem = document.querySelector('.bs-stepper');
+    var stepper = new Stepper(stepperElem);
+    var done = false;
+    var currStep = 1;
+    history.pushState(currStep, '');
+    //切換到步驟前觸發，呼叫e.preventDefault()可阻止切換
+    stepperElem.addEventListener("show.bs-stepper", function (e) {
+      if (done) { //若程序完成，不再切換
+        e.preventDefault();
+        return;
+      }
+    });
+    //切換到步驟後觸發，e.detail.indexStep為目前步驟序號(從0開始)
+    stepperElem.addEventListener("shown.bs-stepper", function (e) {
+      var idx = e.detail.indexStep + 1;
+      currStep = idx;
+      //pushState()記下歷程以支援瀏覽器回上頁功能
+      history.pushState(idx, '');
+    })
+    //瀏覽器上一頁下一頁觸發
+    window.onpopstate = function (e) {
+      if (e.state && e.state != currStep)
+        stepper.to(e.state);
+    };
+    //模擬送出表單，註記已完成，不再允許切換步驟
+    function simulateSubmit() {
+      stepper.next();
+      done = true;
+    }
+  </script>
+</body>
+
+</html>
