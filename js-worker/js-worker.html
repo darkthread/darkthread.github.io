@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Benchmark - Worker</title>
+	<script src="excanvas.compiled.js"></script>
+	<script src="animation.js"></script>
+	<style>
+		#info {
+			position: absolute;
+			z-index: 99;
+			color:yellow;
+			font-size: 14pt;
+			top: 10px;
+			left: 10px;
+			padding: 6px;
+			background-color: gray;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="snowflakes">
+	</div>
+	<div id=info>
+	</div>
+	<script>
+		var worker = new Worker('worker.js');
+		worker.onmessage = function(e) {
+			let dura = (new Date().getTime() - st);
+			document.getElementById('info').innerText = dura + 'ms ' + e.data.length + ' primes';
+			console.log(new Date());
+		}
+		var st = new Date().getTime();
+		setTimeout(() => {
+			worker.postMessage(10000000);			
+		}, 1000);
+	</script>
+</body>
+
+</html>

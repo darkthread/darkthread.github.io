@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link href="snowflake.css" rel="stylesheet" />
+	<style>
+		/* https://codepen.io/iautomation/pen/VYexBz */
+		#info {
+			position: absolute; z-index: 99;
+			color: yellow; font-size: 12pt;
+			top: 10px; left: 10px;
+			width: 300px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="snowflakes">
+	</div>
+	<div id=info>
+	</div>
+	<script>
+		let h = [];
+		for (let i = 0; i < 128; i++) h.push('<i></i>');
+		document.getElementsByClassName('snowflakes')[0].innerHTML = h.join('');
+
+		var worker = new Worker('worker.js');
+		var st = new Date().getTime();
+		worker.onmessage = function(e) {
+			let dura = (new Date().getTime() - st);
+			document.getElementById('info').innerText = dura + 'ms ' + e.data.length + ' primes';
+		}
+		worker.postMessage(10000000);
+	</script>
+</body>
+
+</html>

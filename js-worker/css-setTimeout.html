@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link href="snowflake.css" rel="stylesheet" />
+	<style>
+		/* https://codepen.io/iautomation/pen/VYexBz */
+		#info {
+			position: absolute; z-index: 99;
+			color: yellow; font-size: 12pt;
+			top: 10px; left: 10px;
+			width: 300px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="snowflakes">
+	</div>
+	<div id=info>
+	</div>
+	<script>
+		let h = [];
+		for (let i = 0; i < 128; i++) h.push('<i></i>');
+		document.getElementsByClassName('snowflakes')[0].innerHTML = h.join('');
+		function isPrime(num) {
+			if (num <= 3) return num > 1;
+			if ((num % 2 === 0) || (num % 3 === 0)) return false;
+			let count = 5;
+			while (Math.pow(count, 2) <= num) {
+				if (num % count === 0 || num % (count + 2) === 0) return false;
+				count += 6;
+			}
+			return true;
+		}
+		function listPrimes(maxNum) {
+			let res = [];
+			for (let i = 1; i <= maxNum; i++) {
+				if (isPrime(i)) res.push(i);
+			}
+			return res;
+		}
+		setTimeout(function () {
+			var st = new Date().getTime();
+			let res = listPrimes(10000000);
+			dura = (new Date().getTime() - st);
+			document.getElementById('info').innerText = dura + 'ms ' + res.length + ' primes';
+		}, 1000);
+	</script>
+</body>
+
+</html>
