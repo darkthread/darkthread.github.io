@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <div>
+        <button onclick="test()">Format XML</button>
+    </div>
+    <textarea id="result" rows="8" cols="64"></textarea>
+    <script>
+        var xml = `<rows>
+<row id="1">ITEM1</row>
+<row id="2"
+    remark="reserved"
+    >ITEM2</row>
+<row id="3" /><row id="4">ITEM4</row>
+</rows>`;
+        document.getElementById('result').value = xml;
+        function test() {
+            let res = document.getElementById('result');
+            res.value = formatXml(res.value);
+        }
+        // https://gist.github.com/sente/1083506/d2834134cd070dbcc08bf42ee27dabb746a1c54d
+        function formatXml(xml) {
+            xml = new XMLSerializer().serializeToString(
+                new DOMParser().parseFromString(xml, 'text/xml'))
+                .replace(/>\s{0,}</g, '><');
+            const PADDING = ' '.repeat(2); // set desired indent size here
+            const reg = /(>)(<)(\/*)/g;
+            let pad = 0;
+            xml = xml.replace(reg, '$1\r\n$2$3');
+            return xml.split('\r\n').map((node, index) => {
+                let indent = 0;
+                if (node.match(/.+<\/\w[^>]*>$/)) {
+                    indent = 0;
+                } else if (node.match(/^<\/\w/) && pad > 0) {
+                    pad -= 1;
+                } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
+                    indent = 1;
+                } else {
+                    indent = 0;
+                }
+                pad += indent;
+                return PADDING.repeat(pad - indent) + node;
+            }).join('\r\n');
+        }
+    </script>
+</body>
+
+</html>

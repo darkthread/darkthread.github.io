@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="simplerXML.js"></script>
+    </head>
+    <body>
+        <button>12pt</button>
+        <button>10pt</button>
+        <button>9pt</button>
+        <div id="demo">
+
+        </div>
+        <script>
+            $.get('demo.xml', function (data) {
+                $('#demo').simpleXML({ xml: data });
+            });
+            $('button').click(function () {
+                $("#demo").css('font-size', $(this).text());
+            });
+        </script>
+    </body>
+</html>
