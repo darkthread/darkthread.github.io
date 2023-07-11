@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Animate.css Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        .content {
+            display: flex; flex-direction: row;
+        }
+        .title {
+            font-size: 14pt; margin-right: 6px; font-weight: bold;
+        }
+        .util {
+            display: flex; flex-direction: column;
+        }
+        .util .list {
+            flex-grow: 1;
+        }
+        .list {
+            display: flex; flex-direction: column;
+            border: 1px solid gray; padding: 6px; width: 150px;
+            background-color: #eee;
+        }
+        .list .item {
+            cursor: pointer; padding: 3px;
+        }
+        .active {
+            background-color:darkcyan;
+            color: yellow;
+        }
+        #target { 
+            top: calc(50% - 38px); left: calc(50% - 213px); padding: 3px 12px;
+            position: absolute;  background-color: cadetblue;
+        }
+        #target > * { vertical-align: middle; }
+        #target > span {
+            color: white; margin-left: 6px;
+            font-size: 46pt; text-shadow: 1px 1px 6px #444;;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="show">
+        <div id="target">
+            <img src="logo.png"  />
+            <span>CSS Rocks!</span>
+        </div>
+    </div>
+    <div id="app">
+        <div class="content">
+            <div class="title">Animate.css Demo</div>
+            <div>
+                <label>
+                    <input type="checkbox" v-model="AutoPlay" />
+                    Auto Play
+                </label>
+            </div>
+        </div>
+        <div class="content">
+            <div class="catg list">
+                <div v-for="catg in Catgs" :class="['item', { active: CurrCatg == catg}]" @click="CurrCatg = catg">
+                    {{catg}}
+                </div>
+            </div>
+            <div class="anim list">
+                <div v-for="anim in Animations" :class="['item', { active: CurrAnimation == anim }]" @click="Play(anim)">
+                    {{ anim }}
+                </div>
+            </div>
+            <div class="util">
+                <div class="speed list">
+                    <div v-for="speed in Speeds" :class="['item', { active: CurrSpeed == speed }]" @click="CurrSpeed = speed">
+                        {{ speed }}
+                    </div>
+                </div>
+                <div class="delay list">
+                    <div v-for="delay in Delays" :class="['item', { active: CurrDelay == delay }]" @click="CurrDelay = delay">
+                        {{ delay }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="list.js"></script>
+    <script>
+        const target = document.getElementById('target');
+        var app = Vue.createApp({
+            data() {
+                return {
+                    Catgs: Object.keys(animList),
+                    CurrCatg: '',
+                    CurrAnimation: '',
+                    CurrSpeed: 'normal',
+                    Speeds: ['faster', 'fast', 'normal', 'slow', 'slower'],
+                    CurrDelay: 'no-delay',
+                    Delays: ['no-delay', 'delay-2s', 'delay-3s', 'delay-4s', 'delay-5s'],
+                    AutoPlay: false
+                }
+            },
+            computed: {
+                Animations() {
+                    return animList[this.CurrCatg];
+                },
+                CurrAnimSettings() { // for watched
+                    return `${this.CurrAnimation} ${this.CurrSpeed} ${this.CurrDelay}`;
+                }
+            },
+            methods: {
+                Play(animName) {
+                    this.CurrAnimation = animName;
+                    target.setAttribute('class', '');
+                    const self = this;
+                    setTimeout(() => {
+                        target.classList.add('animate__animated');
+                        target.classList.add('animate__' + animName);
+                        if (self.CurrSpeed != 'normal') {
+                            target.classList.add('animate__' + self.CurrSpeed);
+                        }
+                        if (self.CurrDelay != 'no-delay') {
+                            target.classList.add('animate__' + self.CurrDelay);
+                        }
+                    }, 0);
+                },
+                PlayNext() {
+                    const idx = this.Animations.indexOf(this.CurrAnimation);
+                    if (idx < this.Animations.length - 1) {
+                        this.Play(this.Animations[idx + 1]);
+                    }
+                    else {
+                        const catgIdx = this.Catgs.indexOf(this.CurrCatg);
+                        if (catgIdx < this.Catgs.length - 1) {
+                            this.CurrCatg = this.Catgs[catgIdx + 1];
+                        }
+                        else {
+                            this.CurrCatg = this.Catgs[0];
+                        }
+                        this.Play(this.Animations[0]);
+                    }
+                }
+            },
+            watch: {
+                CurrCatg() {
+                    this.CurrAnimation = this.Animations[0];
+                },
+                CurrAnimSettings() {
+                    this.Play(this.CurrAnimation);
+                }
+            },
+            mounted() {
+                const self = this;
+                self.CurrCatg = self.Catgs[0];
+                target.addEventListener('animationend', () => {
+                    if (self.AutoPlay) {
+                        setTimeout(() => {
+                            self.PlayNext();
+                        }, 1000);
+                    }
+                });
+            }
+        });
+        var vm = app.mount('#app');
+    </script>
+</body>
+
+</html>
