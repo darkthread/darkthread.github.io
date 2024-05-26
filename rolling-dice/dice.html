@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rolling Dice</title>
+  <style>
+    :root {
+      --dice-size: 50px;
+      --dice-bg-size: calc(var(--dice-size) * 1.28);
+      --trans-z-face: calc(var(--dice-size) / 2);
+      --trans-z-show: calc(var(--trans-z-face) * -1);
+    }
+
+    .dice-cube {
+
+      * {
+        box-sizing: border-box;
+      }
+
+      display: inline-block;
+      width: var(--dice-size);
+      height: var(--dice-size);
+      border: 1px solid #CCC;
+      margin: 10px;
+      perspective: calc(var(--dice-size) * 4);
+
+      .cube {
+        width: var(--dice-size);
+        height: var(--dice-size);
+        position: relative;
+        transform-style: preserve-3d;
+        transform: translateZ(var(--trans-z-show));
+        transition: transform 0.3s;
+      }
+
+      .cube.show-front {
+        transform: translateZ(var(--trans-z-show)) rotateY(0deg);
+      }
+
+      .cube.show-right {
+        transform: translateZ(var(--trans-z-show)) rotateY(-90deg);
+      }
+
+      .cube.show-back {
+        transform: translateZ(var(--trans-z-show)) rotateY(-180deg);
+      }
+
+      .cube.show-left {
+        transform: translateZ(var(--trans-z-show)) rotateY(90deg);
+      }
+
+      .cube.show-top {
+        transform: translateZ(var(--trans-z-show)) rotateX(-90deg);
+      }
+
+      .cube.show-bottom {
+        transform: translateZ(var(--trans-z-show)) rotateX(90deg);
+      }
+
+      .cube__face {
+        position: absolute;
+        width: var(--dice-size);
+        height: var(--dice-size);
+        border: 1px solid #444;
+        line-height: var(--dice-size);
+        background-color: white;
+        background-position: center;
+        background-size: var(--dice-bg-size);
+      }
+
+      .cube__face--front {
+        transform: rotateY(0deg) translateZ(var(--trans-z-face));
+        background-image: url(imgs/dice1.svg);
+      }
+
+      .cube__face--right {
+        transform: rotateY(90deg) translateZ(var(--trans-z-face));
+        background-image: url(imgs/dice5.svg);
+      }
+
+      .cube__face--back {
+        transform: rotateY(180deg) translateZ(var(--trans-z-face));
+        background-image: url(imgs/dice6.svg);
+      }
+
+      .cube__face--left {
+        transform: rotateY(-90deg) translateZ(var(--trans-z-face));
+        background-image: url(imgs/dice2.svg);
+      }
+
+      .cube__face--top {
+        transform: rotateX(90deg) translateZ(var(--trans-z-face));
+        background-image: url(imgs/dice4.svg);
+      }
+
+      .cube__face--bottom {
+        transform: rotateX(-90deg) translateZ(var(--trans-z-face));
+        background-image: url(imgs/dice3.svg);
+      }
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 12px;
+    }
+
+    label {
+      margin-right: 10px;
+      font-size: 16pt;
+      color: #666;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button {
+      font-size: 14pt;
+    }
+
+    .points {
+      margin-left: 12px;
+      font-size: 20pt;
+      color: dodgerblue;
+    }
+    .table {
+      width: 305px;
+      border: 2px solid gray;
+      padding: 20px;
+      background-color: #ccc;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="table">
+    <dice-cube></dice-cube>
+    <dice-cube></dice-cube>
+    <dice-cube></dice-cube>
+    <dice-cube></dice-cube>
+  </div>
+  <p class="radio-group">
+    <label>
+      <input type="radio" name="rotate-cube-side" value="front" checked /> 1
+    </label>
+    <label>
+      <input type="radio" name="rotate-cube-side" value="left" /> 2
+    </label>
+    <label>
+      <input type="radio" name="rotate-cube-side" value="bottom" /> 3
+    </label>
+    <label>
+      <input type="radio" name="rotate-cube-side" value="top" /> 4
+    </label>
+    <label>
+      <input type="radio" name="rotate-cube-side" value="right" /> 5
+    </label>
+    <label>
+      <input type="radio" name="rotate-cube-side" value="back" /> 6
+    </label>
+  </p>
+  <p>
+    <button>洗巴辣~</button>
+    <span class="points">
+    </span>
+  </p>
+  <script>
+
+    const faces = ['front', 'left', 'bottom', 'top', 'right', 'back'];
+    const oppsiteFaces = {
+      front: 'back',
+      right: 'left',
+      back: 'front',
+      left: 'right',
+      top: 'bottom',
+      bottom: 'top'
+    };
+
+    class DiceCube extends HTMLElement {
+      constructor() {
+        super();
+        this.innerHTML = `
+          <div class="dice-cube">
+            <div class="cube">
+              <div class="cube__face cube__face--front"></div>
+              <div class="cube__face cube__face--back"></div>
+              <div class="cube__face cube__face--right"></div>
+              <div class="cube__face cube__face--left"></div>
+              <div class="cube__face cube__face--top"></div>
+              <div class="cube__face cube__face--bottom"></div>
+            </div>  
+          </div>
+        `;
+        this.face = 'front';
+        this.prevFace = '';
+      }
+      get points() {
+        return faces.indexOf(this.face) + 1;
+      }
+      roll(face) {
+        let cube = this.querySelector('.cube');
+        cube.className = 'cube';
+        cube.classList.add(`show-${face}`);
+        this.prevFace = this.side;
+        this.face = face;
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve();
+          }, 220);
+        });
+      }
+      randomFace() {
+        return faces[Math.floor(Math.random() * faces.length)];
+      }
+      async throw() {
+        const times = 20;
+        for (let i = 0; i < times; i++) {
+          let nextFace;
+          do {
+            nextFace = this.randomFace();
+          } while (nextFace === this.face ||
+          nextFace === this.prevFace ||
+            nextFace === oppsiteFaces[this.face]
+          );
+          await this.roll(nextFace);
+        }
+        await this.roll(this.randomFace());
+      }
+    }
+    customElements.define('dice-cube', DiceCube);
+
+    // REF: https://3dtransforms.desandro.com/cube        
+    var cubes = [...document.querySelectorAll('dice-cube')];
+    var radioGroup = document.querySelector('.radio-group');
+    radioGroup.addEventListener('change', () => {
+      cubes.forEach(c => c.roll(radioGroup.querySelector(':checked').value));
+    });
+
+    document.querySelector('button').addEventListener('click', async function () {
+      const res = document.querySelector('.points');
+      res.textContent = '洗巴辣~~~';
+      await Promise.all(cubes.map(c => c.throw()));
+      res.textContent = cubes.map(c => c.points).join(' ');
+    });
+  </script>
+</body>
+
+</html>
