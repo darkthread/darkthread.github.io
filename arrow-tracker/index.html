@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrow Trackers</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <style>
+        html,body,input,select,button { font-size: 9pt; }
+        .arrow {
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom-width: 10px;
+            border-bottom-style: solid;
+            position: absolute;
+        }
+        .canvas {
+            position: relative;
+            border: 1px solid black;
+            margin: 10px 0;
+            background-color: #eee;
+        }
+        .boom {
+            width: 10px; /* Initial diameter (2 * radius) */
+            height: 10px;
+            background-color: orangered;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: explode 0.8s forwards;
+        }
+
+        @keyframes explode {
+            from {
+                width: 10px; /* Initial diameter (2 * radius) */
+                height: 10px;
+            }
+            to {
+                width: 100px; /* Final diameter (2 * radius) */
+                height: 100px;
+                opacity: 0;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            Count: <input type="number" v-model="count" min="0" max="100"> /
+            Size: <select v-model="size">
+                <option value="360x270">360x270</option>
+                <option value="480x360">480x360</option>
+                <option value="640x480">640x480</option>
+                <option value="800x600">800x600</option>
+            </select> /
+            <button @click="setup">Restart</button>
+        </div>
+        <div class="canvas" :style="{width: width + 'px', height: height + 'px'}" 
+            @mouseenter="active = true" @mouseleave="active = false"
+            @mousemove="handleMouseMove" @click="explode">
+            <arrow v-for="arrow in arrows" :x="arrow.x" :y="arrow.y" :rotate="arrow.rotate" :color="arrow.color">
+            </arrow>
+            <div class="boom" v-if="active && boom" :style="{left: cursorX + 'px', top: cursorY + 'px'}"></div>
+        </div>
+    </div>
+    <div class="circle"></div>
+    <script>
+        const Arrow = Vue.defineComponent({
+            props: {
+                x: {
+                    type: Number,
+                    required: true
+                },
+                y: {
+                    type: Number,
+                    required: true
+                },
+                rotate: {
+                    type: Number,
+                    required: true
+                },
+                color: {
+                    type: String,
+                    required: true
+                }
+            },
+            template: `
+                <div 
+                    class="arrow" 
+                    :style="{
+                        position: 'absolute',
+                        left: x + 'px',
+                        top: y + 'px',
+                        transform: 'rotate(' + rotate + 'deg)',
+                        'border-bottom-color': color
+                    }">
+                </div>
+            `
+        });
+
+        class ArrowData {
+            static minX = 0;
+            static minY = 0;
+            static maxX = 640;
+            static maxY = 480;
+            constructor(x, y, rotate, color) {
+                this.x = x;
+                this.y = y;
+                this.rotate = rotate;
+                this.color = color;
+            }
+            aim(x, y) {
+                const dy = y - this.y;
+                const dx = x - this.x;
+                let angle = Math.atan2(dy, dx) / Math.PI * 180 + 90;;
+                if (angle < 0) {
+                    angle += 360; // 確保角度在 0 到 360 度之間
+                }
+                this.rotate = angle;
+            }
+            calcDistance(x, y) {
+                return Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2);
+            }
+            move(step) {
+                // 朝著 rotate 的方向移動
+                const radian = (this.rotate -90)/ 180 * Math.PI;
+                this.x += Math.cos(radian) * step;
+                this.y += Math.sin(radian) * step;
+                if (this.x < ArrowData.minX) this.x = ArrowData.minX;
+                if (this.x > ArrowData.maxX) this.x = ArrowData.maxX;
+                if (this.y < ArrowData.minY) this.y = ArrowData.minY;
+                if (this.y > ArrowData.maxY) this.y = ArrowData.maxY;
+            }            
+        }
+        const randomColors = ['red', 'orange', 'green', 'blue', 'indigo', 'magenta', 'black'];
+
+        const app = Vue.createApp({
+            components: {
+                Arrow
+            },
+            data() {
+                return {
+                    width: 640,
+                    height: 480,
+                    size: '640x480',
+                    cursorX: 0,
+                    cursorY: 0,
+                    count: 25,
+                    arrows: [],
+                    lines: [],
+                    active: false,
+                    boom: false
+                }
+            },
+            methods: {
+                setup() {
+                    this.arrows = [];
+                    this.lines = [];
+                    const [width, height] = this.size.split('x');
+                    this.width = width;
+                    this.height = height;
+                    this.cursorX = width / 2;
+                    this.cursorY = height / 2;
+                    const padding = 10;
+                    const genXY = () => [
+                        Math.random() * (this.width - (padding * 2)) + padding,
+                        Math.random() * (this.height - (padding * 2)) + padding
+                    ];
+                    ArrowData.minX = ArrowData.minY = padding;
+                    ArrowData.maxX = this.width - padding;
+                    ArrowData.maxY = this.height - padding;
+                    for (let i = 0; i < this.count; i++) {
+
+                        let [x, y] = genXY(); // 計算與已存在者距離，避免重疊
+                        while (this.arrows.some(arrow => arrow.calcDistance(x, y) < 20)) {
+                            [x, y] = genXY();
+                        }
+                        this.arrows.push(new ArrowData(
+                            x, y,
+                            0, //Math.random() * 360,
+                            randomColors[Math.floor(Math.random() * randomColors.length)]
+                        ));
+                    }
+                },
+                handleMouseMove(event) {
+                    if (!event.target.classList.contains('canvas')) return;
+                    const rect = event.target.getBoundingClientRect();
+                    this.cursorX = event.clientX - rect.left;
+                    this.cursorY = event.clientY - rect.top;
+                    for (const arrow of this.arrows) {
+                        arrow.aim(this.cursorX, this.cursorY);
+                    }
+                },
+                explode() {
+                    for (const arrow of this.arrows) {
+                        const distance = arrow.calcDistance(this.cursorX, this.cursorY);
+                        if (distance < 100) {
+                            // 距離越近，移動距離越遠
+                            const step = -1000 / distance * (Math.random() * 2 + 0.5);
+                            arrow.move(step);
+                            arrow.rotate += Math.random() * 360;
+                        }
+                    }
+                    const self = this;
+                    self.boom = true;
+                    setTimeout(() => {
+                        self.boom = false;
+                    }, 800);
+                }
+            }
+        });
+        const vm = app.mount('#app');
+        setInterval(() => {
+            if (!vm.active) return;
+            for (const arrow of vm.arrows) {
+                arrow.move(2);
+            }
+        }, 200);
+    </script>
+</body>
+
+</html>
