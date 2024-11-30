@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIDR / Range Toggle Display</title>
+    <style>
+        html {
+            font-family: Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 150%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sample">
+        <ul>
+            <li>from 127.0.0.1/32 to 172.28.16.0/20</li>
+            <li>from 192.168.1.1 to 0.0.0.0/0</li>
+            <li>subnet 192.168.1.0/24</li>
+        </ul>
+    </div>
+    <style>
+        .cidr {
+            input[type="checkbox"] {
+                display: none;
+            }
+
+            label {
+                opacity: 0.2;
+                cursor: pointer;
+                border: 1px solid #444;
+                background-color: #ccc;
+                display: inline-block;
+                width: 9pt;
+                height: 9pt;
+                font-size: 9pt;
+                line-height: 9.2pt;
+                text-align: center;
+                vertical-align: middle;
+                margin-right: 2px;
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+            > span {
+                background-color: #eee;
+                padding: 2px 6px;
+            }
+            .cidr-e {
+                display: none;
+            }
+
+            .toggle:checked+.cidr-c {
+                display: none;
+            }
+
+            .toggle:checked+.cidr-c+.cidr-e {
+                display: inline;
+            }
+        }
+    </style>
+    <script>
+        function cidrToRange(cidr) {
+            const [ip, mask] = cidr.split('/');
+            const ipParts = ip.split('.').map(Number);
+            const maskParts = [0, 0, 0, 0];
+            const maskLength = Number(mask);
+            for (let i = 0; i < maskLength; i++) {
+                maskParts[i >> 3] |= 1 << (7 - i % 8);
+            }
+            const start = ipParts.map((part, i) => part & maskParts[i]).join('.');
+            const end = ipParts.map((part, i) => part | ~maskParts[i] & 255).join('.');
+            return [start, end];
+        }
+
+        function injectExpandButton(selector) {
+            document.querySelectorAll(selector).forEach(e => {
+                const idPrefix = "_" + Math.random().toString(36).substring(2);
+                let idx = 0;
+                e.innerHTML = e.innerHTML.replace(
+                    /(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\/\d{1,2})/g,
+                    cidr => {
+                        const [start, end] = cidrToRange(cidr);
+                        if (start === end) {
+                            return cidr;
+                        }
+                        const id = idPrefix + (idx++);
+                        return `<span class="cidr">
+                            <input type="checkbox" id="${id}" class="toggle">
+                            <span class="cidr-c"><label for="${id}">+</label>${cidr}</span>
+                            <span class="cidr-e"><label for="${id}">–</label>${start} ~ ${end}</span>
+                        </span>`;
+                    });
+            });
+        }
+        injectExpandButton('.sample');
+    </script>
+</body>
+
+</html>
