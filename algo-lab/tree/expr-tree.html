@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Expression as Tree</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            margin-top: 10px;
+        }
+        pre {
+            font-size: 20px;
+            font-weight: bold;
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <button onclick="pendingResolve && pendingResolve()">Next</button>
+    </div>
+    <canvas id="treeCanvas" width="720" height="250"></canvas>
+    <div>
+        <pre id="output"></pre>
+    </div>
+    <script>
+        const canvas = document.getElementById('treeCanvas');
+        const ctx = canvas.getContext('2d');
+        const nodeRadius = 15;
+        const levelHeight = 60;
+        const siblingDistance = 60;
+        const canvasWidth = document.getElementById('treeCanvas').width;
+        
+        let focusNode = null;
+        function drawNode(node, x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, nodeRadius, 0, 2 * Math.PI);
+            ctx.fillStyle = node == focusNode ? 'red' : node.color;
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = node == focusNode ? 'white' : 'black';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.font = "18px Arial";
+            ctx.fillText(node.name, x, y);
+            if (node.value !== null) {
+                ctx.fillStyle = node.isNumber ? 'purple' : 'blue';
+                ctx.fillText(node.value, x + 35, y);
+            }
+            if (node.seq) {
+                ctx.font = "9pt Arial";
+                ctx.fillStyle = 'dodgerblue';
+                ctx.beginPath();
+                ctx.arc(x - 20, y - 15, 10, 0, 2 * Math.PI, false);
+                ctx.fill();
+                ctx.fillStyle = 'white';
+                ctx.fillText(node.seq, x - 20, y - 15);
+            }
+        }
+        function drawTree(node, offset, level = 0, right = false) {
+            if (!node) return;
+            const width = canvasWidth / Math.pow(2, level);
+            const y = level * levelHeight + nodeRadius + 16;
+            const x = offset + width / 2 + (right ? width : 0);
+            drawNode(node, x, y);
+            if (node.children) {
+                const numChildren = node.children.length;
+                let startX = x - width / 2;
+                for (let i = 0; i < numChildren; i++) {
+                    const child = node.children[i];
+                    const [childX, childY] = drawTree(child, startX + i * width / 2, level + 1, i > numChildren / 2);
+                    ctx.beginPath();
+                    ctx.moveTo(x, y + nodeRadius);
+                    ctx.lineTo(childX, childY - nodeRadius);
+                    ctx.stroke();
+                }
+            }
+            return [x, y];
+        }
+        function renderTree() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawTree(treeData, 0);
+        }
+    </script>    
+    <script>
+        class TreeNode {
+            constructor(name, ...children) {
+                this.name = name;
+                this.seq = '';
+                this.color = 'white';
+                this.children = children.map(child => {
+                    if (child instanceof TreeNode) {
+                        return child;
+                    } else {
+                        return new TreeNode(child);
+                    }
+                });
+                this.isNumber = !isNaN(parseFloat(name));
+                this.value = '';
+                this.expr = '';
+            }
+        }
+        const treeData = new TreeNode("×",
+            new TreeNode("×",
+                new TreeNode("+",
+                    "3", "5"
+                ),
+                "2"
+            ),
+            new TreeNode("×",
+                new TreeNode("-", "9", "1"),
+                new TreeNode("÷", "8", "2") // Changed "/" to "÷"
+            )
+        );
+    </script>
+    <script>
+        function print(msg) {
+            document.getElementById('output').textContent += msg + '\n';
+        }
+        let pendingResolve = null;
+        let seq = 0;
+        async function waitClick(sec) {
+            renderTree();
+            return new Promise(resolve => pendingResolve = resolve);
+        }
+        async function postOrderTraverse(node) {
+            focusNode = node;
+            await waitClick();
+            let value = 0;
+            let expr = '';
+            if (node.children) {
+                for (let child of node.children) {
+                    value += await postOrderTraverse(child);
+                }
+            }
+            focusNode = node;
+            if (node.isNumber) {
+                value = parseFloat(node.name);
+                expr = node.name;
+            } else {
+                const left = node.children[0];
+                const right = node.children[1];
+                switch (node.name) {
+                    case '+':
+                        value = left.value + right.value;
+                        expr = `(${left.expr} + ${right.expr})`;
+                        break;
+                    case '-':
+                        value = left.value - right.value;
+                        expr = `(${left.expr} - ${right.expr})`;
+                        break;
+                    case '×':
+                        value = left.value * right.value;
+                        expr = `(${left.expr} × ${right.expr})`;
+                        break;
+                    case '÷':
+                        value = left.value / right.value;
+                        expr = `(${left.expr} ÷ ${right.expr})`;
+                        break;
+                }
+            }
+            node.value = value;
+            node.expr = expr;
+            node.color = 'yellow';
+            node.seq = ++seq;
+            if (!node.isNumber) {
+                print(`[${node.seq}] ${expr} = ${value}`);
+            }
+            await waitClick();
+            return value;
+        }
+        async function demo() {
+            await postOrderTraverse(treeData);
+            focusNode = null;
+            renderTree();
+        }
+        demo();
+    </script>
+</body>
+
+</html>

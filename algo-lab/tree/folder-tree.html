@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folder Tree Demo</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            margin: 10px;
+        }
+
+        .title {
+            font-size: 16px;
+            font-weight: bold;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <span class="title"></span>
+        <button onclick="pendingResolve && pendingResolve()">Next</button>
+    </div>
+    <canvas id="treeCanvas" width="640" height="220"></canvas>
+    <div>
+        <pre id="output"></pre>
+    </div>
+    <script>
+        const canvas = document.getElementById('treeCanvas');
+        const ctx = canvas.getContext('2d');
+        let focusNode = null;
+        function drawTree(ctx, node, x, y, level) {
+            const horizontalSpacing = 250;
+            const verticalSpacing = 50;
+            const nodeWidth = 100;
+            const nodeHeight = 25;
+
+            ctx.fillStyle = node == focusNode ? 'red' : node.color;
+            ctx.fillRect(x, y, nodeWidth, nodeHeight);
+            ctx.fillStyle = node == focusNode ? 'white' : 'black';
+            let textWidth = ctx.measureText(node.name).width;
+            let textX = x + (nodeWidth - textWidth) / 2;
+            ctx.fillText(node.name, textX, y + 18);
+            if (node.seq) {
+                const seqText = node.seq.toString();
+                const seqX = x;
+                const seqY = y + 5;
+                const radius = 10;
+                ctx.beginPath();
+                ctx.arc(seqX, seqY, radius, 0, 2 * Math.PI, false);
+                ctx.fillStyle = 'dodgerblue';
+                ctx.fill();
+                ctx.fillStyle = 'white';
+                textWidth = ctx.measureText(seqText).width;
+                ctx.fillText(node.seq, seqX - textWidth / 2, seqY + 5);
+            }
+
+            if (node.children) {
+                const childCount = node.children.length;
+                let flexHorzSpacing = horizontalSpacing;
+                if (level == 2) flexHorzSpacing = 120;
+                const childX = x - (childCount - 1) * flexHorzSpacing / 2;
+                const childY = y + verticalSpacing;
+                node.children.forEach((child, index) => {
+                    const childNode = typeof child === 'string' ? { name: child } : child;
+                    const childXPos = childX + index * flexHorzSpacing;
+                    ctx.beginPath();
+                    ctx.moveTo(x + nodeWidth / 2, y + nodeHeight);
+                    ctx.lineTo(childXPos + nodeWidth / 2, childY);
+                    ctx.strokeStyle = "#666";
+                    ctx.stroke();
+                    drawTree(ctx, childNode, childXPos, childY, level + 1);
+                });
+            }
+        }
+        ctx.font = "12px Arial";
+    </script>
+    <script>
+        class TreeNode {
+            constructor(name, ...children) {
+                const [n, s] = name.split(':');
+                this.name = n;
+                this.size = parseInt(s) || 0;
+                this.seq = '';
+                this.color = '#ddd';
+                this.children = children.map(child => typeof child === 'string' ? new TreeNode(child) : child);
+            }
+        }
+        const buildTree = () => new TreeNode("Project",
+            new TreeNode("SA",
+                "UseCases.md:2048"
+            ),
+            new TreeNode("SD",
+                new TreeNode("API",
+                    "api-book.md:16384",
+                    "config.md:1024",
+                    "openai.json:512"
+                ),
+                new TreeNode("DB",
+                    "Schema.md:4096"
+                )
+            ),
+            new TreeNode("Tests",
+                "TestCases.md:8192"
+            )
+        );
+        let treeData = buildTree();
+        function renderTree() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawTree(ctx, treeData, canvas.width / 2 - 50, 20, 0);
+        }
+    </script>
+    <script>
+        function print(msg) {
+            document.getElementById('output').textContent += msg + '\n';
+        }
+        let pendingResolve = null;
+        let seq = 0;
+        async function waitClick(sec) {
+            renderTree();
+            return new Promise(resolve => pendingResolve = resolve);
+        }
+        function reset(title) {
+            treeData = buildTree();
+            seq = 0;
+            focusNode = null;
+            document.querySelector('.title').textContent = title;
+            document.getElementById('output').textContent = '';
+            renderTree();
+        }
+        async function preOrderTraverse(node, level) {
+            focusNode = node;
+            node.seq = ++seq;
+            print(' '.repeat(level * 2) + node.name + (node.size ? ` [${node.size} bytes]` : ''));
+            node.color = 'orange';
+            await waitClick(1);
+            if (node.children?.length) {
+                for (const child of node.children) {
+                    await preOrderTraverse(child, level + 1);
+                }
+            }
+            focusNode = node;
+            await waitClick();
+        }
+        async function postOrderTraverse(node, level) {
+            focusNode = node;
+            node.color = 'yellow';
+            await waitClick();
+            let size = node.size || 0;
+            if (node.children?.length) {
+                for (const child of node.children) {
+                    size += await postOrderTraverse(child, level + 1);
+                }
+            }
+            focusNode = node;
+            print(' '.repeat(level * 2) + node.name + ` [${size} bytes]`);
+            node.seq = ++seq;
+            node.color = 'orange';
+            await waitClick(1);
+            return size;
+        }
+
+        async function demo() {
+            reset('Pre-order Traversal');
+            await preOrderTraverse(treeData, 0);
+            waitClick();
+            reset('Post-order Traversal');
+            await postOrderTraverse(treeData, 0);
+            waitClick();
+        }
+        demo();
+    </script>
+</body>
+</html>
