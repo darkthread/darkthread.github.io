@@ -22,7 +22,7 @@
     <div>
         <button onclick="pendingResolve && pendingResolve()">Next</button>
     </div>
-    <canvas id="treeCanvas" width="720" height="250"></canvas>
+    <canvas id="treeCanvas" width="800" height="250"></canvas>
     <div>
         <pre id="output"></pre>
     </div>
@@ -35,6 +35,17 @@
         const canvasWidth = document.getElementById('treeCanvas').width;
         
         let focusNode = null;
+
+        function drawSeqNum(x, y, seq, color) {
+            ctx.font = "8pt Arial";
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, 2 * Math.PI, false);
+            ctx.fill();
+            ctx.fillStyle = 'white';
+            ctx.fillText(seq, x, y);
+        }
+
         function drawNode(node, x, y) {
             ctx.beginPath();
             ctx.arc(x, y, nodeRadius, 0, 2 * Math.PI);
@@ -48,17 +59,19 @@
             ctx.fillText(node.name, x, y);
             if (node.value !== null) {
                 ctx.fillStyle = node.isNumber ? 'purple' : 'blue';
-                ctx.fillText(node.value, x + 35, y);
+                ctx.textAlign = 'left';
+                ctx.fillText(node.value, x + 40, y);
+                ctx.textAlign = 'center';
             }
-            if (node.seq) {
-                ctx.font = "9pt Arial";
-                ctx.fillStyle = 'dodgerblue';
-                ctx.beginPath();
-                ctx.arc(x - 20, y - 15, 10, 0, 2 * Math.PI, false);
-                ctx.fill();
-                ctx.fillStyle = 'white';
-                ctx.fillText(node.seq, x - 20, y - 15);
+            if (node.seqPre) {
+                drawSeqNum(x - 25, y, node.seqPre, 'orange');
             }
+            if (node.seqIn) {
+                drawSeqNum(x, y + 25, node.seqIn, 'dodgerblue');
+            }
+            if (node.seqPost) {
+                drawSeqNum(x + 25, y, node.seqPost, '#6185df');
+            }               
         }
         function drawTree(node, offset, level = 0, right = false) {
             if (!node) return;
@@ -71,6 +84,7 @@
                 let startX = x - width / 2;
                 for (let i = 0; i < numChildren; i++) {
                     const child = node.children[i];
+                    if (!child) continue;
                     const [childX, childY] = drawTree(child, startX + i * width / 2, level + 1, i > numChildren / 2);
                     ctx.beginPath();
                     ctx.moveTo(x, y + nodeRadius);
@@ -87,17 +101,17 @@
     </script>    
     <script>
         class TreeNode {
-            constructor(name, ...children) {
+            constructor(name, left, right) {
                 this.name = name;
-                this.seq = '';
+                this.seqPre = '';
+                this.seqIn = '';
+                this.seqPost = '';
                 this.color = 'white';
-                this.children = children.map(child => {
-                    if (child instanceof TreeNode) {
-                        return child;
-                    } else {
-                        return new TreeNode(child);
-                    }
-                });
+                if (left !== undefined && left !== null)
+                    this.left = left instanceof TreeNode ? left : new TreeNode(left);
+                if (right !== undefined && right !== null)
+                    this.right = right instanceof TreeNode ? right : new TreeNode(right);
+                this.children = [this.left, this.right];
                 this.isNumber = !isNaN(parseFloat(name));
                 this.value = '';
                 this.expr = '';
@@ -128,14 +142,14 @@
         }
         async function postOrderTraverse(node) {
             focusNode = node;
+            node.seqPre = ++seq;
             await waitClick();
             let value = 0;
             let expr = '';
-            if (node.children) {
-                for (let child of node.children) {
-                    value += await postOrderTraverse(child);
-                }
-            }
+            if (node.left)
+                value += await postOrderTraverse(node.left);
+            if (node.right)
+                value += await postOrderTraverse(node.right);
             focusNode = node;
             if (node.isNumber) {
                 value = parseFloat(node.name);
@@ -162,12 +176,14 @@
                         break;
                 }
             }
+            node.seqIn = ++seq;
+            await waitClick();
+            node.seqPost = ++seq;
+            node.color = 'yellow';
             node.value = value;
             node.expr = expr;
-            node.color = 'yellow';
-            node.seq = ++seq;
             if (!node.isNumber) {
-                print(`[${node.seq}] ${expr} = ${value}`);
+                print(`[${node.seqPre}] ${expr} = ${value}`);
             }
             await waitClick();
             return value;

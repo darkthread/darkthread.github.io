@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Search Tree</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            margin-top: 10px;
+        }
+        pre {
+            font-size: 20px;
+            font-weight: bold;
+            color: blue;
+        }
+        #nums {
+            width: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>Binary Search Tree</h3>
+    <div>
+        <input type="text" id="nums" value="8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9">
+        <button id="btnRun" onclick="run()">Run</button>
+        <button onclick="pendingResolve && pendingResolve()">Next</button>
+    </div>
+    <div>
+        <pre id="output"></pre>
+    </div>    
+    <canvas id="treeCanvas" width="800" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('treeCanvas');
+        const ctx = canvas.getContext('2d');
+        const nodeRadius = 15;
+        const levelHeight = 60;
+        const siblingDistance = 60;
+        function resizeCanvas(width, height) {
+            canvas.width = width;
+            canvas.height = height;
+        }
+        
+        let focusNode = null;
+
+        function drawSeqNum(x, y, seq, color) {
+            ctx.font = "8pt Arial";
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, 2 * Math.PI, false);
+            ctx.fill();
+            ctx.fillStyle = 'white';
+            ctx.fillText(seq, x, y);
+        }
+
+        function drawNode(node, x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, nodeRadius, 0, 2 * Math.PI);
+            ctx.fillStyle = node == focusNode ? 'red' : node.color;
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = node == focusNode ? 'white' : 'black';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.font = "18px Arial";
+            ctx.fillText(node.value, x, y);
+            if (node.remark) {
+                ctx.font = "12pt Arial";
+                ctx.textAlign = 'left';              
+                ctx.fillStyle = 'red';  
+                ctx.fillText(node.remark, x + 25, y);
+                ctx.textAlign = 'center';
+                node.remark = '';
+            }
+            if (node.seqPre) {
+                drawSeqNum(x - 25, y, node.seqPre, 'orange');
+            }
+            if (node.seqIn) {
+                drawSeqNum(x, y + 25, node.seqIn, 'dodgerblue');
+            }
+            if (node.seqPost) {
+                drawSeqNum(x + 25, y, node.seqPost, '#6185df');
+            }               
+        }
+
+        let depth = 0;
+        function drawTree(node, offset, level = 0, right = false) {
+            if (!node) return;
+
+            const width = (canvas.width - 150) / Math.pow(2, level);
+            const y = level * levelHeight + nodeRadius + 16;
+            const x = offset + width / 2 + (right ? width : 0);
+            drawNode(node, x, y);
+            if (node.children) {
+                const numChildren = node.children.length;
+                let startX = x - width / 2;
+                for (let i = 0; i < numChildren; i++) {
+                    const child = node.children[i];
+                    if (!child) continue;
+                    const [childX, childY] = drawTree(child, startX + i * width / 2, level + 1, i > numChildren / 2);
+                    ctx.beginPath();
+                    ctx.moveTo(x, y + nodeRadius);
+                    ctx.lineTo(childX, childY - nodeRadius);
+                    ctx.stroke();
+                }
+            }
+            depth = Math.max(depth, level);
+            return [x, y];
+        }
+        function renderTree() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            depth = 0;
+            drawTree(tree.root, 0);
+            let autoWidth = canvas.width;
+            depth++;
+            if (depth > 6) {
+                autoWidth = 1280 + (depth - 6) * 160;
+            }
+            else if (depth > 5) {
+                autoWidth = 1280;
+            }
+            else if (depth > 4) {
+                autoWidth = 1024;
+            }
+            else if (depth > 3) {
+                autoWidth = 960;
+            }
+            if (canvas.width < autoWidth) {
+                resizeCanvas(autoWidth, depth * levelHeight + 80);
+                drawTree(tree.root, 0);
+            }
+        }
+    </script>    
+    <script>
+        class BinarySearchTree {
+            constructor(value) {
+                this.root = null;
+                this.value = value;
+            }
+            async insert(value) {
+                const newNode = new TreeNode(value);
+                if (!this.root) {
+                    this.root = newNode;
+                    return this;
+                }
+                let current = this.root;
+                current.remark = `Inserting ${value}`;
+                focusNode = current;
+                await waitClick();
+                while (true) {
+                    if (value === current.value) return undefined;
+                    if (value < current.value) {
+                        if (!current.left) {
+                            current.left = newNode;
+                            focusNode = current.left;
+                            focusNode.remark = `${value} < ${current.value}, Insert Left`;
+                            await waitClick();
+                            return this;
+                        }
+                        const remark = `${value} < ${current.value}, Go Left`;
+                        current = current.left;
+                        focusNode = current;
+                        focusNode.remark = remark;
+                    } else {
+                        if (!current.right) {
+                            current.right = newNode;
+                            focusNode = current.right;
+                            focusNode.remark = `${value} > ${current.value}, Insert Right`;
+                            await waitClick();
+                            return this;
+                        }
+                        const remark = `${value} > ${current.value}, Go Right`;
+                        current = current.right;
+                        focusNode = current;
+                        focusNode.remark = remark;
+                    }
+                    await waitClick();
+                }
+                focusNode = null;
+            }
+        }
+        class TreeNode {
+            constructor(value) {
+                this.value = value;
+                this.seqPre = '';
+                this.seqIn = '';
+                this.seqPost = '';
+                this.color = 'white';
+                this.left = null;
+                this.right = null;
+                this.remark = '';
+            }
+            get children() {
+                return [this.left, this.right];
+            }
+        }
+        let tree = new BinarySearchTree();
+    </script>
+    <script>
+        function print(msg) {
+            document.getElementById('output').textContent += msg + ' ';
+        }
+        let pendingResolve = null;
+        let seq = 0;
+        async function waitClick(sec) {
+            renderTree();
+            return new Promise(resolve => pendingResolve = resolve);
+        }
+        async function inOrderTraverse(node) {
+            node.seqPre = ++seq;
+            await waitClick();
+            let value = 0;
+            if (node.left)
+                await inOrderTraverse(node.left);
+                node.color = 'yellow';
+            print(node.value);
+            node.seqIn = ++seq;
+            focusNode = node;
+            await waitClick();
+            if (node.right)
+                await inOrderTraverse(node.right);
+            node.seqPost = ++seq;
+            await waitClick();
+            return value;
+        }
+        async function run() {
+            document.getElementById('output').textContent = '';
+            seq = 0;
+            document.getElementById('btnRun').disabled = true;
+            tree = new BinarySearchTree();
+            const values = document.getElementById('nums').value.split(',').map(v => parseInt(v));
+            print(`Data: [ ${values.join(', ')} ]\n`);
+            for (const value of values) {
+                await tree.insert(value);
+                renderTree();
+                await waitClick();
+            }
+            print('\nIn-order Traversal: \n');
+            await inOrderTraverse(tree.root);
+            focusNode = null;
+            renderTree();
+            document.getElementById('btnRun').disabled = false;
+        }
+    </script>
+</body>
+
+</html>
