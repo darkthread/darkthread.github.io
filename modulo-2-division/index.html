@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>CRC 模二除法(Modulo-2 Division)計算機</title>
+    </head>
+    <body>
+        <dl>
+            <dt>被除數</dt>
+            <dd>
+                <input id="dividend" type="text" value="1000110" />
+            </dd>
+            <dt>除數</dt>
+            <dd>
+                <input id="divisor" type="text" value="1011" />
+            </dd>
+            <dt>操作</dt>
+            <dd><button onclick="calc()">計算</button></dd>
+            <dt>結果</dt>
+            <dd>
+                <pre id="result"></pre>
+            </dd>
+        </dl>
+        <script>
+            function xor(a, b) {
+                if (a.length != b.length) {
+                    throw new Error('a.length != b.length');
+                }
+                return a.split('').map((v, i) => v == b[i] ? '0' : '1').join('');
+            }
+            function calc() {
+                const dividend = document.getElementById('dividend').value;
+                const divisor = document.getElementById('divisor').value;
+                const result = document.getElementById('result');
+                const chkRe = /^[01]+$/;
+                const msgs = [];
+                if (!chkRe.test(dividend)) 
+                    msgs.push('被除數格式錯誤，需為二進位數字');
+                if (!chkRe.test(divisor))
+                    msgs.push('除數格式錯誤，需為二進位數字');
+                if (msgs.length > 0) {
+                    result.innerHTML = msgs.join('\n');
+                    return;
+                }
+                const dividendLen = dividend.length;
+                const divisorLen = divisor.length;
+                msgs.push(`${' '.repeat(divisorLen)}${'_'.repeat(dividendLen)}`);
+                msgs.push(`${divisor})${dividend}`);
+                //quotient = dividend / divisor;
+                //remainder = dividend % divisor;
+                let m = dividend.substr(0, divisorLen);
+                let p, q, remainder, quotient = '';
+                let indent = ' '.repeat(divisorLen + 1);
+                for (let i = 0; i <= dividendLen - divisorLen; i++) {
+                    q = m[0] == '1';
+                    p = q ? divisor : '0'.repeat(divisorLen)
+                    remainder = xor(m, p).substr(1);
+                    quotient += q ? '1' : '0';
+                    msgs.push(`${indent}${p}`);
+                    msgs.push(`${indent}${'-'.repeat(divisorLen)}`);
+                    indent += ' ';
+                    m = remainder + dividend.substr(divisorLen + i, 1);
+                    msgs.push(`${indent}${m}`);
+                }
+                msgs.unshift(`${' '.repeat(divisorLen)} ${quotient}`);
+                result.innerHTML = msgs.join('\n');
+            }
+        </script>
+    </body>
+</html>
