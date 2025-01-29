@@ -148,6 +148,8 @@
             let expr = '';
             if (node.left)
                 value += await postOrderTraverse(node.left);
+            node.seqIn = ++seq;
+            await waitClick();
             if (node.right)
                 value += await postOrderTraverse(node.right);
             focusNode = node;
@@ -176,14 +178,12 @@
                         break;
                 }
             }
-            node.seqIn = ++seq;
-            await waitClick();
             node.seqPost = ++seq;
             node.color = 'yellow';
             node.value = value;
             node.expr = expr;
             if (!node.isNumber) {
-                print(`[${node.seqPre}] ${expr} = ${value}`);
+                print(`[${seq}] ${expr} = ${value}`);
             }
             await waitClick();
             return value;
