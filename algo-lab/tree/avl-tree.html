@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVL Tree Playground</title>
+    <style>
+        html,
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        fieldset {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            min-height: 40px;
+
+            button {
+                width: 2.2em;
+                margin-right: 4px;
+            }
+        }
+
+        table.bal-info {
+            position: absolute;
+            opacity: 0.9;
+            margin: 10px;
+            border-collapse: collapse;
+            width: 300px;
+            font-size: 9.5pt;
+
+            td {
+                text-align: center;
+                border: 1px solid #ccc;
+                padding: 5px;
+            }
+
+            .header td {
+                background-color: darkslategray;
+                color: white;
+            }
+        }
+
+        .layout {
+            display: flex;
+
+            .left {
+                flex-basis: 640px;
+                flex-shrink: 0;
+            }
+
+            .right {
+                flex-grow: 1;
+                flex-shrink: 1;
+
+                .list {
+                    margin-top: 6px;
+                    border: 1px solid gray;
+                    height: 190px;
+                    overflow-y: scroll;
+
+                    .records {
+
+                        .entry {
+                            cursor: pointer;
+                            display: inline-block;
+                            white-space: nowrap;
+                            border: 1px solid #aaa;
+                            padding: 2px 6px;
+                            margin: 4px;
+                            background-color: #ddd;
+                            font-size: 10pt;
+                            color: #333;
+
+                            .del-btn {
+                                background-color: transparent;
+                                border: none;
+                                font-size: 8pt;
+                                margin-left: 12px;
+                                width: 1em;
+                                padding: 0;
+                                opacity: 0.7;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        #tree-container {
+            margin: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .step-btns {
+            .active {
+                color: red;
+            }
+        }
+
+        .bal-act-btns {
+            button {
+                margin: 4px;
+            }
+        }
+
+        #app {
+            position: relative;
+            padding: 6px;
+
+            .modal {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(255, 255, 255, 0.5);
+                z-index: 100;
+            }
+
+            [lang] {
+                display: none;
+            }
+
+            .en {
+                span[lang="en"] {
+                    display: inline;
+                }
+            }
+
+            .cht {
+                span[lang="cht"] {
+                    display: inline;
+                }
+            }
+        }
+
+        .lang-switch {
+            float: right;
+
+            a {
+                font-size: 9pt;
+                width: 60px;
+                cursor: pointer;
+                color: blue;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        .tools {
+            button {
+                margin: 2px;
+                vertical-align: middle;
+            }
+
+            input {
+                height: 22px;
+                margin: 1px;
+                border: 1px solid #ccc;
+
+                &[readonly] {
+                    background-color: #eee;
+                    width: 250px;
+                }
+            }
+        }
+
+        img.copy {
+            width: 28px;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+
+        .title {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 18pt;
+            margin-left: 12px;
+            color: forestgreen;
+            background-color: #ddd;
+            padding: 4px 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div :class="lang">
+            <div>
+                <span class="title">
+                    <span lang="en">AVL Tree 🌳 Playground</span>
+                    <span lang="cht">AVL 樹 🌳 遊戲區</span>
+                </span>
+                by
+                <a href="https://blog.darkthread.net/">
+                    <span lang="en">Darkthread</span>
+                    <span lang="cht">黑暗執行緒</span>
+                </a>
+                <span class="lang-switch">
+                    <a v-show="lang=='en'" @click="lang='cht'">🌐 中文</a>
+                    <a v-show="lang!='en'" @click="lang='en'">🌐 English</a>
+                </span>
+            </div>
+            <div class="layout">
+                <div class="left">
+                    <fieldset>
+                        <legend>
+                            <span lang="en">Add Nodes</span>
+                            <span lang="cht">加入節點</span>
+                        </legend>
+                        <div>
+                            <button v-for="value in candidates" @click="insertValue(value)">
+                                {{ value }}
+                            </button>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>
+                            <span lang="en">Remove Nodes</span>
+                            <span lang="cht">移除節點</span>
+                        </legend>
+                        <div>
+                            <button v-for="value in added" @click="removeValue(value)">
+                                {{ value }}
+                            </button>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>
+                            <span lang="en">Steps</span>
+                            <span lang="cht">步驟</span>
+                            <button @click="currStep--" :disabled="!steps.length || reachLastStep || currStep <= 1"
+                                style="margin-left: 12px;">&lt;</button>
+                            <button @click="currStep++"
+                                :disabled="!steps.length || reachLastStep || currStep >= steps.length">&gt;</button>
+                        </legend>
+                        <div class="step-btns">
+                            <button v-for="(value, idx) in steps" @click="currStep = idx + 1" :disabled="reachLastStep"
+                                :class="{active: idx == currStep - 1 }">
+                                {{ value }}
+                            </button>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="right">
+                    <div class="tools">
+                        <button @click="clear">
+                            <span lang="en">Clear</span>
+                            <span lang="cht">清除</span>
+                        </button>
+                        <input type="text" v-model="desc" size="6">
+                        <button @click="saveRecord" :disabled="added.length == 0">
+                            <span lang="en">Save</span>
+                            <span lang="cht">儲存</span>
+                        </button>
+                        <input type="text" v-model="hashPreview" readonly>
+                        <img class="copy" src="copy.svg" alt="copy" @click="copyTreeUrlToClipboard"
+                            :style="{'visibility': hashPreview ? 'visible' : 'hidden'}">
+                        <button @click="examples">
+                            <span lang="en">Examples</span>
+                            <span lang="cht">範例</span>
+                        </button>
+                    </div>
+                    <div class="list">
+                        <div class="records">
+                            <div v-for="(record,index) in records" class="entry">
+                                <span @click="restoreRecord(index)">{{ record }}</span>
+                                <button @click="deleteRecord(index)" class="del-btn">❌</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal" v-show="showInfo"></div>
+            <table class="bal-info" v-show="showInfo">
+                <tr class="header">
+                    <td>
+                        <span lang="en">Unbalanced Type</span>
+                        <span lang="cht">失衡類型</span>
+                    </td>
+                    <td>
+                        <span lang="en">Rotate Action</span>
+                        <span lang="cht">旋轉操作</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{unbalType}}</td>
+                    <td class="bal-act-btns">
+                        <button v-for="btn in balActionButtons" @click="resume" :disabled="!btn.active"
+                            v-html="btn.html"></button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="tree-container"></div>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+        let storedRecords = JSON.parse(localStorage.getItem('avl-records') || '[]');
+        const candidates15 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+        const exmapleTrees = [
+            "4,2,5,1,3", "4,3,5,2,1",
+            "4,3,5,1,0", // https://www.hello-algo.com/zh-hant/chapter_tree/avl_tree/#1_1
+            "5,3,6,1,4,0",
+            "1,0,4,5,6", // https://www.hello-algo.com/zh-hant/chapter_tree/avl_tree/#2_1
+            "1,0,4,3,5,6",
+            "4,3,5,1,2", //https://www.hello-algo.com/zh-hant/chapter_tree/avl_tree/#3
+            "2,1,3,5,4" // https://www.hello-algo.com/zh-hant/chapter_tree/avl_tree/#4
+        ];
+        const app = Vue.createApp({
+            data() {
+                return {
+                    lang: (navigator.language || navigator.userLanguage).startsWith('zh') ? 'cht' : 'en',
+                    candidates: candidates15.slice(0),
+                    added: [],
+                    unbalType: '',
+                    balActions: '',
+                    showInfo: false,
+                    resolver: null,
+                    records: storedRecords,
+                    steps: [],
+                    currStep: 0,
+                    desc: 'Name'
+                };
+            },
+            computed: {
+                reachLastStep() {
+                    return this.currStep == this.steps.length;
+                },
+                treeNodeValueList() {
+                    const values = this.steps.length ? this.steps : this.added;
+                    if (!values.length) return '';
+                    return values.join(',');
+                },
+                hashPreview() {
+                    if (!this.treeNodeValueList) return '';
+                    return `#${this.desc || 'TREE'}:${this.treeNodeValueList}:${this.currStep}`;
+                },
+                treeUrl() {
+                    return this.hashPreview ? window.location.href.split('#')[0] + this.hashPreview : '';
+                },
+                balActionButtons() {
+                    if (!this.balActions) return [];
+                    return this.balActions.split(',').map(v => {
+                        const active = v.endsWith('*');
+                        const text = v.replace('*', '');
+                        const html = `<span lang=en>${text}</span><span lang=cht>${text.includes('Left') ? '左旋' : '右旋'}</span>`;
+
+                        return { html, active };
+                    });
+                }
+            },
+            watch: {
+                currStep(value) {
+                    if (!this.steps.length) return;
+                    if (this.added.length != this.currStep) {
+                        this.syncCurrStep();
+                    }
+                }
+            },
+            methods: {
+                copyTreeUrlToClipboard() {
+                    navigator.clipboard.writeText(this.treeUrl);
+                },
+                async clear() {
+                    this.candidates = candidates15.slice(0);
+                    this.added = [];
+                    this.showInfo = false;
+                    this.steps = [];
+                    this.currStep = 0;
+                    treeRoot = null;
+                    await renderTree();
+                },
+                examples() {
+                    exmapleTrees.forEach((tree, idx) => {
+                        if (this.records.indexOf(tree) < 0) {
+                            this.records.push(tree);
+                        }
+                    });
+                },
+                async saveRecord() {
+                    this.records.push(this.hashPreview);
+                    localStorage.setItem('avl-records', JSON.stringify(this.records));
+                },
+                async deleteRecord(index) {
+                    this.records.splice(index, 1);
+                    localStorage.setItem('avl-records', JSON.stringify(this.records));
+                },
+                async restoreRecord(index) {
+                    await this.clear();
+                    const record = this.records[index];
+
+                    if (record.startsWith('#')) {
+                        const parts = record.split(':');
+                        this.desc = parts[0].replace('#', '');
+                        this.currStep = parseInt(parts[2]);
+                        this.steps = parts[1].split(',').map(v => parseInt(v));
+                    }
+                    else {
+                        this.steps = record.split(',').map(v => parseInt(v));
+                        this.currStep = 1;
+                    }
+                },
+                async import(treeNodes, stepIdx) {
+                    await this.clear();
+                    this.steps = treeNodes.split(',').map(v => parseInt(v));
+                    this.currStep = stepIdx;
+                },
+                async syncCurrStep() {
+                    const expectedLength = this.currStep;
+                    while (this.added.length < expectedLength) {
+                        await this.insertValue(this.steps[this.added.length]);
+                    }
+                    while (this.added.length > expectedLength) {
+                        await this.removeValue(this.added[this.added.length - 1]);
+                    }
+                },
+                async resume() {
+                    if (this.resolver) {
+                        this.resolver();
+                        this.resolver = null;
+                    }
+                    this.showInfo = false;
+                },
+                async insertValue(value) {
+                    this.candidates = this.candidates.filter(v => v !== value);
+                    this.added.push(value);
+                    if (this.steps.length && this.steps.indexOf(value) < 0) {
+                        this.steps.splice(this.currStep, 0, value);
+                        this.currStep++;
+                    }
+                    await insert(value);
+                },
+                async removeValue(value) {
+                    this.added = this.added.filter(v => v !== value);
+                    this.candidates.push(value);
+                    this.candidates.sort((a, b) => a - b);
+                    await remove(value);
+                }
+            }
+        });
+        const vm = app.mount('#app');
+    </script>
+    <script>
+        class TreeNode {
+            constructor(value) {
+                this.value = value;
+                this.left = null;
+                this.right = null;
+                this.level = 0;
+            }
+            findMin() {
+                let node = this;
+                while (node.left) {
+                    node = node.left;
+                }
+                return node;
+            }
+            findMax() {
+                let node = this;
+                while (node.right) {
+                    node = node.right;
+                }
+                return node;
+            }
+            find(value) {
+                if (value < this.value) {
+                    if (this.left) {
+                        return this.left.find(value);
+                    }
+                } else if (value > this.value) {
+                    if (this.right) {
+                        return this.right.find(value);
+                    }
+                } else {
+                    return this;
+                }
+                return null;
+            }
+            height() {
+                let leftHeight = this.left ? this.left.height() : 0;
+                let rightHeight = this.right ? this.right.height() : 0;
+                return 1 + Math.max(leftHeight, rightHeight);
+            }
+            balanceFactor() {
+                if (!this.left && !this.right) {
+                    return 0;
+                }
+                let leftHeight = this.left ? this.left.height() : 0;
+                let rightHeight = this.right ? this.right.height() : 0;
+                return leftHeight - rightHeight;
+            }
+            async insert(value) {
+                const existingNode = this.find(value);
+                if (existingNode) {
+                    return this;
+                }
+                if (value < this.value) {
+                    if (this.left) {
+                        this.left = await this.left.insert(value);
+                    } else {
+                        this.left = new TreeNode(value);
+                    }
+                } else {
+                    if (this.right) {
+                        this.right = await this.right.insert(value);
+                    } else {
+                        this.right = new TreeNode(value);
+                    }
+                }
+                return await this.balance();
+            }
+            async delete(value) {
+                if (value < this.value) {
+                    if (this.left) {
+                        // 若有左子樹，置換成左子樹的刪除結果
+                        this.left = await this.left.delete(value);
+                    }
+                } else if (value > this.value) {
+                    if (this.right) {
+                        // 若有右子樹，置換成右子樹的刪除結果
+                        this.right = await this.right.delete(value);
+                    }
+                } else {
+                    // 若找到目標節點
+                    if (!this.left && !this.right) {
+                        // 若為葉節點，直接刪除
+                        return null;
+                    }
+                    // 若有一個子樹，直接返回該子樹
+                    if (!this.left) {
+                        return this.right;
+                    }
+                    if (!this.right) {
+                        return this.left;
+                    }
+                    // 若有兩個子樹，找到右子樹的最小節點，置換成該節點的值，並刪除該節點
+                    let minNode = this.right.findMin();
+                    this.value = minNode.value;
+                    this.right = await this.right.delete(minNode.value);
+                }
+                return await this.balance();
+            }
+            rotateLeft() {
+                // 右節點當新的根節點，原根節點當左子樹
+                let newRoot = this.right;
+                // 把新根節點的左子樹(永遠比自己大)掛到右邊
+                this.right = newRoot.left;
+                // 註：只處理 this.right，this.left 維持不變
+                // 把自己掛成新根節點的左子樹
+                newRoot.left = this;
+                return newRoot;
+            }
+            rotateRight() {
+                let newRoot = this.left;
+                this.left = newRoot.right;
+                newRoot.right = this;
+                return newRoot;
+            }
+            async balance() {
+                let balanceFactor = this.balanceFactor();
+                if (balanceFactor > 1) {
+                    // 判斷是 LL，還是 LR
+                    vm.unbalType = this.left.balanceFactor() < 0 ? 'LR' : 'LL';
+                    vm.balActions = vm.unbalType == 'LL' ? 'RotateRight*' : 'RotateLeft*,RotateRight';
+                    await renderTree(true);
+                    if (this.left.balanceFactor() < 0) {
+                        this.left = this.left.rotateLeft();
+                        vm.balActions = 'RotateLeft,RotateRight*';
+                        await renderTree(true);
+                    }
+                    return this.rotateRight();
+                } else if (balanceFactor < -1) {
+                    vm.unbalType = this.right.balanceFactor() > 0 ? 'RL' : 'RR';
+                    vm.balActions = vm.unbalType == 'RR' ? 'RotateLeft*' : 'RotateRight*,RotateLeft';
+                    await renderTree(true);
+                    if (this.right.balanceFactor() > 0) {
+                        this.right = this.right.rotateRight();
+                        vm.balActions = 'RotateRight,RotateLeft*';
+                        await renderTree(true);
+                    }
+                    return this.rotateLeft();
+                }
+                return this;
+            }
+        }
+        let treeRoot = null;
+        async function insert(value) {
+            if (!treeRoot) {
+                treeRoot = new TreeNode(value);
+            } else {
+                treeRoot = await treeRoot.insert(value);
+            }
+            await renderTree();
+        }
+        async function remove(value) {
+            if (treeRoot) {
+                treeRoot = await treeRoot.delete(value);
+                await renderTree();
+            }
+        }
+        const RADIUS = 15;
+        async function waitClick() {
+            return new Promise(resolve => {
+                vm.resolver = resolve;
+                vm.showInfo = true;
+            });
+        }
+        async function renderTree(showBalInfo = false) {
+            let treeContainer = document.getElementById('tree-container');
+            treeContainer.innerHTML = '';
+            if (!treeRoot) {
+                return;
+            }
+            let treeHeight = treeRoot.height();
+            let autoWidth = (6 - treeHeight) * 16;
+            let treeWidth = Math.pow(2, treeHeight) * autoWidth;
+            let canvas = document.createElement('canvas');
+            canvas.width = treeWidth;
+            canvas.height = treeHeight * 50 + 30;
+            let ctx = canvas.getContext('2d');
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            let drawNode = (node, x, y, width) => {
+                if (node.left) {
+                    let leftX = x - width / 2;
+                    let leftY = y + 50;
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(leftX, leftY);
+                    ctx.stroke();
+                    drawNode(node.left, leftX, leftY, width / 2);
+                }
+                if (node.right) {
+                    let rightX = x + width / 2;
+                    let rightY = y + 50;
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(rightX, rightY);
+                    ctx.stroke();
+                    drawNode(node.right, rightX, rightY, width / 2);
+                }
+                ctx.beginPath();
+                ctx.arc(x, y, RADIUS, 0, 2 * Math.PI);
+                ctx.fillStyle = '#ddd';
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillStyle = 'black';
+                ctx.fillText(node.value, x, y);
+                // balance factor
+                ctx.fillStyle = node.balanceFactor() > 1 || node.balanceFactor() < -1 ? 'red' : 'green';
+                let balanceFactor = node.balanceFactor();
+                if (balanceFactor > 0) balanceFactor = `+${balanceFactor}`;
+                ctx.fillText(balanceFactor, x, y + 25);
+            };
+            drawNode(treeRoot, treeWidth / 2, 25, treeWidth / 2);
+            treeContainer.appendChild(canvas);
+            if (showBalInfo) {
+                await waitClick();
+            }
+        }
+        // detect hash change and import tree
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash;
+            if (hash.includes(':')) {
+                const parts = hash.split(':');
+                if (parts.length < 2) return;
+                const treeNodes = parts[1];
+                vm.import(treeNodes, parts.length > 2 ? parseInt(parts[2]) : 1);
+            }
+        });
+        setTimeout(() => {
+            if (window.location.hash) {
+                window.dispatchEvent(new Event('hashchange'));
+            }
+        }, 100);
+    </script>
+</body>
+
+</html>
