@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>D3.js Bar Plot Example</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <style>
+        .bar {
+            fill: steelblue;
+        }
+
+        .bar:hover, .bar.active {
+            fill: orange;
+        }
+
+        .axis-label {
+            font-size: 12px;
+        }
+
+        .op {
+            label {
+                cursor: pointer;
+            }
+
+            button {
+                margin-left: 8px;
+            }
+        }
+
+        .view {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            .table {
+                display: flex;
+                flex-direction: row;
+            }
+
+            table {
+                margin-left: 10px;
+                border-collapse: collapse;
+                width: 100px;
+
+                td {
+                    border: 1px solid #ccc;
+                    text-align: center;
+                }
+
+                tr.focus {
+                    background-color: yellow;
+                }
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="op">
+            <label v-for="count in dataCounts" :key="count">
+                <input type="radio" v-model="dataCount" :value="count" />
+                {{ count }}
+            </label>
+            <button @click="genData(dataCount)">Generate</button>
+            <button @click="sortData()">Sort</button>
+        </div>
+        <div class="view">
+            <svg width="400" height="260"></svg>
+            <div class="table">
+                <table>
+                    <tbody>
+                        <tr v-for="(item, index) in data.slice(0, 10)" :class="{ 'focus': focusIdx === item.n }"
+                            @mouseover="focusBar(item.n)" @mouseout="unfocusBar(item.n)">
+                            <td>{{ item.n }}</td>
+                            <td>{{ item.c }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table v-if="data.length > 10">
+                    <tbody>
+                        <tr v-for="(item, index) in data.slice(10)" :class="{ 'focus': focusIdx === item.n }"
+                            @mouseover="focusBar(item.n)" @mouseout="unfocusBar(item.n)">
+                            <td>{{ item.n }}</td>
+                            <td>{{ item.c }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showData(data) {
+            const svg = d3.select("svg"),
+                width = +svg.attr("width"),
+                height = +svg.attr("height"),
+                margin = { top: 20, right: 30, bottom: 30, left: 40 };
+
+            svg.selectAll("*").remove();
+
+            // 建立 X 軸 Band Scaler (帶狀比例尺)函數
+            // 將離散資料（如類別、索引）平均分配到一段連續像素範圍，並自動處理每個區塊的寬度與間距
+            // 例如：總寬度 400，間距 0.25，則每個區塊寬度為 (400 - 40 - 30) / 9 = 40
+            const x = d3.scaleBand()
+                // 使用元素索引作為 x 軸
+                .domain(data.map((d, i) => i))
+                .range([margin.left, width - margin.right])
+                // 設定間距
+                .padding(0.25);
+
+            // 建立 Y 軸 Linear Scaler (線性比例尺)函數
+            const y = d3.scaleLinear()
+                // .nice() 會自動調整成易讀刻度，例如： 97 調成 100
+                .domain([0, d3.max(data, d => d.c)]).nice()
+                .range([height - margin.bottom, margin.top]);
+
+            // 建立長條圖
+            svg.append("g") // 在 SVG 中新增一個群組元素 g
+                .attr("fill", "steelblue")
+                .selectAll("rect") // 選擇所有 rect 元素，一開始是空集合
+                .data(data) // 綁定資料，d3.js 決定產生多少個 rect
+                .join("rect") // 依據資料新增或移除對應數量的 rect
+                .attr("class", "bar")
+                .attr("data-n", (d, i) => d.n)
+                .attr("x", (d, i) => x(i)) // 用 Band Scaler 函數算出索引對應的 X 軸位置
+                .attr("y", d => y(d.c))   // 用 Linear Scaler 函數算出筆數對應的 Y 軸的位置
+                .attr("height", d => y(0) - y(d.c)) // 長條圖的高度
+                .attr("width", x.bandwidth()) // 長條寬度 (考量 padding)
+                // 互動事件
+                .on('mouseover', function (event, d) {
+                    vm.focusIdx = d.n;
+                })
+                .on('mouseout', function (event, d) {
+                    vm.focusIdx = -1;
+                });
+
+            // 加入 X 軸
+            svg.append("g")
+                .attr("transform", `translate(0,${height - margin.bottom})`)
+                // 將 g 傳給 axisBottom()，用 X Band Scaler 設定 X 軸刻度位置
+                .call(d3.axisBottom(x).tickFormat((i) => data[i]?.n ?? ""))
+                .selectAll("text")
+                .attr("class", "axis-label")
+                .attr("transform", "rotate(-0)")
+                .style("text-anchor", "middle");
+
+            // 加入 Y 軸
+            svg.append("g")
+                .attr("transform", `translate(${margin.left},0)`)
+                // 將 g 傳給 axisLeft()，用 Y Linear Scaler 設定 Y 軸標記
+                // .ticks(n) 可指定 Y 軸分成 n 等份
+                .call(d3.axisLeft(y).ticks(5));
+        }
+    </script>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    data: [],
+                    dataCount: 10,
+                    dataCounts: [5, 10, 20],
+                    focusIdx: -1,
+                }
+            },
+            methods: {
+                sortData() {
+                    const sorted = this.data.slice().sort((a, b) => b.c - a.c);
+                    showData(sorted);
+                },
+                genData(range) {
+                    this.data = Array.from({ length: range }, (_, i) => ({
+                        n: i + 1,
+                        c: Math.floor(Math.random() * 512)
+                    }));
+                    if (this.sort) {
+                        this.sortData();
+                    }
+                    showData(this.data);
+                },
+                focusBar(n) {
+                    this.focusIdx = n;
+                    d3.select(`rect[data-n='${n}']`).classed('active', true);
+                },
+                unfocusBar(n) {
+                    this.focusIdx = -1;
+                    d3.select(`rect[data-n='${n}']`).classed('active', false);
+                }
+            }
+        });
+        const vm = app.mount('#app');
+        vm.genData(vm.dataCount);
+    </script>
+
+</body>
+
+</html>
