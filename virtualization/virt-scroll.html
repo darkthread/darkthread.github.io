@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>虛擬化捲動展示</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 10px;
+            height: 100vh;
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .op {
+            height: 30px;
+            padding: 5px;
+        }
+
+        .stk-list {
+            width: 800px;
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+            position: relative;
+
+            table {
+                margin: 6px;
+                border-collapse: collapse;
+                font-size: 10pt;
+
+                thead {
+                    background-color: #ddd;
+                    position: sticky;
+                    top: 0;
+                    z-index: 2;
+
+                    button {
+                        border: none;
+                        background-color: transparent;
+                        padding: 0 4px;
+                        cursor: pointer;
+
+                        &.active {
+                            color: red;
+                        }
+                    }
+                }
+
+
+                td {
+                    padding: 4px;
+                    border: 1px solid #ccc;
+                    text-align: center;
+                }
+
+                .num {
+                    text-align: right;
+                    padding-right: 8px;
+                }
+
+                .table-body-container {
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                .table-body-spacer {
+                    width: 1px;
+                    visibility: hidden;
+                }
+            }
+        }
+
+        .stats {
+            height: 30px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="op">
+            <input v-model="keywd" type="text" placeholder="關鍵字" @input="keywdChanged" />
+        </div>
+        <div class="stk-list" @scroll="handleScroll">
+            <table class="stk-table">
+                <thead>
+                    <tr>
+                        <td width="100">
+                            股票代碼
+                        </td>
+                        <td width="200">名稱</td>
+                        <td width="80">
+                            <button @click="toggleOrder()">
+                                收盤價
+                                <span>
+                                    <span v-if="sortMode == 1">▲</span>
+                                    <span v-else-if="sortMode == 2">▼</span>
+                                    <span v-else>⇳</span>
+                                </span>
+                            </button>
+                        </td>
+                        <td width="80">開盤價</td>
+                        <td width="80">最高價</td>
+                        <td width="80">最低價</td>
+                        <td width="100">成交量</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-body-spacer" :style="{ height: topSpacerHeight + 'px' }"></tr>
+                    <tr v-for="stock in visibleItems" class="stk-item">
+                        <td>{{ stock.Code }}</td>
+                        <td>{{ stock.Name }}</td>
+                        <td class="num">{{ stock.ClosingPrice }}</td>
+                        <td class="num">{{ stock.OpeningPrice }}</td>
+                        <td class="num">{{ stock.HighestPrice }}</td>
+                        <td class="num">{{ stock.LowestPrice }}</td>
+                        <td class="num">{{ stock.TradeVolume }}</td>
+                    </tr>
+                    <tr class="table-body-spacer" :style="{ height: bottomSpacerHeight + 'px' }"></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="stats">
+            Total rows: {{ filteredData.length }} | Rendered rows: {{ visibleItems.length }} |
+            Start index: {{ startIndex }} | End index: {{ endIndex }}
+        </div>
+    </div>
+    <script>
+        function addTicks(prz, ticks) {
+            const sgn = Math.sign(ticks);
+            prz = parseFloat(prz);
+            for (let i = 0; i < ticks; i++) {
+                if (prz < 10) prz += 0.01 * sgn;
+                else if (prz < 50) prz += 0.05 * sgn;
+                else if (prz < 100) prz += 0.1 * sgn;
+                else if (prz < 500) prz += 0.5 * sgn;
+                else if (prz < 1000) prz += 1 * sgn;
+                else prz += 5 * sgn;
+            }
+            return prz.toFixed(2);
+        }
+        const app = Vue.createApp({
+            data() {
+                return {
+                    data: [],
+                    sortedData: [],
+                    sortMode: 0, // 0: 無排序, 1: 股價由低至高, 2: 股價由高到低
+                    keywd: '', // 關鍵字
+
+                    // 虛擬化捲動相關變數
+                    rowHeight: 28,
+                    visibleItems: [],
+                    startIndex: 0,
+                    endIndex: 0,
+                    bufferSize: 5,
+                    viewportHeight: 0,
+                    scrollTop: -1,
+                    isScrolling: false,
+                }
+            },
+            watch: {
+                keywd(newVal) {
+                    this.updateVisibleItems();
+                }
+            },
+            computed: {
+                filteredData() {
+                    if (!this.keywd) return this.sortedData;
+                    const keyword = this.keywd.toLowerCase();
+                    return this.sortedData.filter(item => item.Name.toLowerCase().includes(keyword) || item.Code.includes(keyword));
+                },
+            },
+            methods: {
+                sortData() {
+                    const start = performance.now();
+                    const sortedData = this.data.slice();
+                    if (this.sortMode === 1) {
+                        sortedData.sort((a, b) => a.ClosingPrice - b.ClosingPrice);
+                    } else if (this.sortMode === 2) {
+                        sortedData.sort((a, b) => b.ClosingPrice - a.ClosingPrice);
+                    }
+                    this.sortedData = sortedData;
+                    const end = performance.now();
+                    console.log(`Sorting took ${end - start} milliseconds`);
+                },
+                toggleOrder() {
+                    this.sortMode = (this.sortMode + 1) % 3;
+                    this.sortData();
+                    this.updateVisibleItems();
+                },
+                loadData() {
+                    // https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL
+                    let idx = 1;
+                    fetch('./STOCK_DAY_ALL.json')
+                        .then(response => response.json())
+                        .then(data => {
+                            // 過濾無收盤價或收盤價 < 5 的資料
+                            data = data.filter(item => item.ClosingPrice && parseFloat(item.ClosingPrice) >= 5);
+                            // 資料增量十倍
+                            const list = [];
+                            const prefixCodes = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+                            for (let i = 0; i < 26; i++) {
+                                const dupData = JSON.parse(JSON.stringify(data)).map(item => {
+                                    item.Code = prefixCodes[i] + '-' + item.Code;
+                                    item.Name = item.Name + ` [${idx++}]`;
+                                    item.OpeningPrice = addTicks(item.OpeningPrice, Math.floor(Math.random() * 500) - 500);
+                                    item.HighestPrice = addTicks(item.OpeningPrice, Math.floor(Math.random() * 200) - 100);
+                                    item.LowestPrice = addTicks(item.OpeningPrice, Math.floor(Math.random() * 200) - 100);
+                                    item.ClosingPrice = addTicks(item.OpeningPrice, Math.floor(Math.random() * 200) - 100);
+                                    item.HighestPrice = Math.max(item.HighestPrice, item.LowestPrice, item.ClosingPrice);
+                                    item.LowestPrice = Math.min(item.LowestPrice, item.OpeningPrice, item.ClosingPrice);
+                                    item.TradeVolume += Math.floor(Math.random() * 1000);
+                                    return item;
+                                })
+                                list.push(...dupData);
+                            }
+                            this.data = list;
+                            this.sortedData = list;
+                            // 稍後執行虛擬捲動初始化
+                            this.$nextTick(() => {
+                                this.initializeVirtualScroll();
+                            });
+                        })
+                },
+
+                // 虛擬捲動初始化
+                initializeVirtualScroll() {
+                    // 測量 Row 高度
+                    setTimeout(() => {
+                        const sampleRow = document.querySelector('.stk-item');
+                        if (sampleRow) {
+                            this.rowHeight = sampleRow.offsetHeight;
+                            console.log(`Row height set to: ${this.rowHeight}px`);
+                        }
+                    }, 50);
+                    // 更新可視項目
+                    this.updateVisibleItems();
+                },
+                // 使用者捲動時，重算可視項目
+                handleScroll(event) {
+                    this.updateVisibleItems();
+                },
+                updateVisibleItems() {
+                    const container = document.querySelector('.stk-list');
+                    if (!container || this.isScrolling) return;
+                    this.isScrolling = true;
+                    const containerHeight = container.clientHeight;
+                    // 取得目前捲動位置
+                    let scrollTop = container.scrollTop;
+                    
+                    const data = this.filteredData;
+                    // 顯示範圍的開始筆數(向上抓 bufferSize 筆)
+                    this.startIndex = Math.floor(scrollTop / this.rowHeight) - this.bufferSize;
+                    this.startIndex = Math.max(0, this.startIndex);
+                    // 顯示範圍筆數 = 容器高度 / 列高 + 2 倍 bufferSize 筆
+                    const visibleCount = Math.ceil(containerHeight / this.rowHeight) + 2 * this.bufferSize;
+                    // 顯示範圍的結束筆數 (不可大於總筆數)
+                    this.endIndex = Math.min(this.startIndex + visibleCount, data.length);
+
+                    if (this.startIndex >= this.endIndex) {
+                        this.startIndex = Math.max(0, this.endIndex - visibleCount);
+                    }
+
+                    // 上下各放一列佔位，依範圍外的筆數多寬計算高度
+                    this.topSpacerHeight = this.startIndex * this.rowHeight;
+                    this.bottomSpacerHeight = (data.length - this.endIndex) * this.rowHeight;
+
+                    // 從資料陣列取出可視範圍的項目
+                    this.visibleItems = data.slice(this.startIndex, this.endIndex);
+                    this.$nextTick(() => {
+                        this.isScrolling = false;
+                        container.scrollTop = scrollTop; // 確保捲動位置不變
+                    });
+                }
+            }
+        });
+
+        const vm = app.mount('#app');
+        vm.loadData();
+        let debounceTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                vm.updateVisibleItems();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>
