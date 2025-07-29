@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQLite WASM 展示</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header with Status Section -->
+        <div class="header-container">
+            <h1>SQLite WASM 展示</h1>
+            <div class="status-section">
+                <span class="status" :class="statusType">{{ statusMessage }}</span>
+                <span v-if="isInitialized && !isDataLoaded && !isLoading">
+                    <button @click="loadCsvFromUrl">載入 CSV 資料</button>
+                </span>
+            </div>
+        </div>
+        
+        <!-- Query Section -->
+        <div class="container" v-show="isDataLoaded">
+            <div class="query-section">
+                <textarea 
+                    v-model="sqlQuery"
+                    class="query-input" 
+                    placeholder="在此輸入您的 SQL 查詢語句，例如：SELECT * FROM repositories LIMIT 10;">
+                </textarea>
+                <br>
+                <button class="btn" @click="executeQuery" :disabled="!sqlQuery.trim()">執行查詢</button>
+                <button class="btn btn-secondary" @click="clearResults">清除結果</button>
+            </div>
+            
+            <div class="sample-queries">
+                <div @click="toggleSampleQueries" class="sample-queries-header">
+                    查詢範例 
+                    <span class="toggle-icon" :class="{ 'expanded': showSampleQueries }">▶</span>
+                </div>
+                <div v-show="showSampleQueries" class="sample-queries-content">
+                    <div 
+                        v-for="(query, index) in sampleQueries" 
+                        :key="index"
+                        class="sample-query" 
+                        @click="selectSampleQuery(query.query)">
+                        <span class="comment">{{ query.display }}</span>
+                        <span class="sql">{{ query.query }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="container" v-show="showResults">
+            <h3>查詢結果</h3>
+            <div v-if="queryResults.length === 0">
+                <p>找不到結果。</p>
+            </div>
+            <table v-else class="results-table">
+                <thead>
+                    <tr>
+                        <th v-for="column in queryResults.columns" :key="column">{{ column }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(row, index) in queryResults.values" :key="index">
+                        <td v-for="(cell, cellIndex) in row" :key="cellIndex">{{ cell }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="libs/vue.global.js"></script>
+    <script src="libs/sql-wasm.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
