@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQLite WASM 資料庫長期保存展示</title>
+    <script src="https://cdn.jsdelivr.net/npm/sql.js@1.13.0/dist/sql-wasm.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        textarea {
+            box-sizing: border-box;
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+
+        .message {
+            margin-left: 12px;
+        }
+
+        .results {
+            margin-top: 20px;
+        }
+
+        .buttons button {
+            margin: 4px 1px;
+            border-width: 1px;
+            border-radius: 0;
+        }
+
+        .header {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .samples {
+            margin-right: 12px;
+            font-size: 0.9em;
+            padding: 6px 12px;
+            background-color: lightblue;
+            a {
+                margin-right: 4px;
+            }
+        }
+
+        .results table {
+            border-collapse: collapse;
+
+            td,
+            th {
+                border: 1px solid #aaa;
+                padding: 6px;
+                min-width: 30px;
+            }
+
+            thead th {
+                background-color: #f2f2f2;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="header">
+            <h2>SQLite WASM 資料庫展示</h2>
+            <div>
+                <span>資料庫作業：</span>
+                <span class="buttons">
+                    <button @click="exportDb">匯出</button>
+                    <button @click="importDb">匯入</button>
+                    <button @click="renewDb">重建</button>
+                </span>
+            </div>
+        </div>
+        <div v-show="!!db">
+            <textarea v-model="sqlCommand" placeholder="在此輸入 SQL 語句"></textarea>
+                <span class="samples">
+                    <span>SQL 範例：</span>
+                    <a href="#" @click.prevent="sqlCommand = 'SELECT * FROM players;'">查詢</a>
+                    <a href="#" @click.prevent="sqlCommand = 'INSERT INTO players (name, score) VALUES (\'NewPlayer\', 500);'">新增</a>
+                    <a href="#" @click.prevent="sqlCommand = 'UPDATE players SET score = score + 100 WHERE name = \'Jeffrey\';'">更新</a>
+                    <a href="#" @click.prevent="sqlCommand = 'DELETE FROM players WHERE name = \'darkthread\';'">刪除</a>
+                </span>             
+            <span class="buttons">
+
+                <button @click="executeCommand">執行</button>
+            </span>
+            <span class="message">
+                <span v-if="isLoading">載入中...</span>
+                <span v-if="statusMessage" :class="statusType">
+                    {{ statusMessage }}
+                </span>
+            </span>
+            <div class="results">
+                <table v-if="queryResults.length > 0">
+                    <thead>
+                        <tr>
+                            <th v-for="(col, index) in Object.keys(queryResults[0])" :key="index">{{ col }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(row, rowIndex) in queryResults" :key="rowIndex">
+                            <td v-for="(value, colIndex) in Object.values(row)" :key="colIndex">{{ value }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div v-else>無查詢結果</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const STORE_KEY = 'sqlite_db';
+        const app = Vue.createApp({
+            data() {
+                return {
+                    sqlLite: null,
+                    db: null,
+                    sqlCommand: 'SELECT * FROM players;',
+                    queryResults: [],
+                    statusMessage: '',
+                    statusType: 'info',
+                    isLoading: false
+                };
+            },
+            mounted() {
+                // 初始化 SQLite WASM
+                this.initSqlJs();
+            },
+            methods: {
+                async initSqlJs() {
+                    if (!this.sqlLite) {
+                        // 傳入 .wasm 檔名，對應下載網址
+                        this.sqlLite = await initSqlJs({
+                            locateFile: file => `https://cdn.jsdelivr.net/npm/sql.js@1.13.0/dist/${file}`
+                        });
+                    }
+                    // 嘗試由 localStorage 讀取資料庫
+                    const dbData = localStorage.getItem(STORE_KEY);
+                    if (dbData) {
+                        // 如果有資料庫，則從 base64 解碼並載入
+                        const uint8Array = new Uint8Array(atob(dbData).split("").map(c => c.charCodeAt(0)));
+                        this.db = new this.sqlLite.Database(uint8Array);
+                    } else {
+                        // 初始化 SQLite 資料庫
+                        const db = new this.sqlLite.Database();
+                        // 建資料表
+                        db.run("CREATE TABLE players (id INTEGER PRIMARY KEY, name TEXT, score INTEGER)");
+                        // 插入樣本資料
+                        db.run("INSERT INTO players (name, score) VALUES ('Jeffrey', 255)");
+                        db.run("INSERT INTO players (name, score) VALUES ('darkthread', 32767)");
+                        this.db = db;
+                    }
+                },
+                saveDb() {
+                    const uint8Array = this.db.export();
+                    const base64String = btoa(String.fromCharCode(...uint8Array));
+                    localStorage.setItem(STORE_KEY, base64String);
+                },
+                exportDb() {
+                    const uint8Array = this.db.export();
+                    const blob = new Blob([uint8Array], { type: 'application/octet-stream' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'database.sqlite';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                },
+                importDb() {
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = '.sqlite,.db';
+                    input.onchange = async (event) => {
+                        const file = event.target.files[0];
+                        if (file) {
+                            const arrayBuffer = await file.arrayBuffer();
+                            const uint8Array = new Uint8Array(arrayBuffer);
+                            this.db = new this.sqlLite.Database(uint8Array);
+                            this.statusMessage = '資料庫匯入成功';
+                            this.statusType = 'success';
+                        } else {
+                            this.statusMessage = '未選擇檔案';
+                            this.statusType = 'error';
+                        }
+                    };
+                    input.click();
+                },
+                renewDb() {
+                    if (confirm('確定要重建資料庫嗎？現有資料將被清除。')) {
+                        localStorage.removeItem(STORE_KEY);
+                        this.initSqlJs();
+                        this.statusMessage = '資料庫已重建';
+                        this.statusType = 'success';
+                    }
+                },
+                executeCommand() {
+                    this.isLoading = true;
+                    this.statusMessage = '執行查詢中...';
+                    this.statusType = 'info';
+
+                    try {
+                        const results = this.db.exec(this.sqlCommand);
+                        if (results.length === 0) {
+                            this.queryResults = [];
+                            this.statusMessage = '執行成功';
+                            this.statusType = 'info';
+                        } else {
+                            this.queryResults = results[0].values.map(row => {
+                                const rowData = {};
+                                results[0].columns.forEach((col, index) => {
+                                    rowData[col] = row[index];
+                                });
+                                return rowData;
+                            });
+                            this.statusMessage = `查詢成功 (${this.queryResults.length} 筆)`;
+                            this.statusType = 'success';
+                            this.showResults = true;
+                        }
+
+                    } catch (error) {
+                        this.statusMessage = `查詢失敗：${error.message}`;
+                        this.statusType = 'error';
+                    } finally {
+                        this.isLoading = false;
+                    }
+                }
+            }
+        });
+        const vm = app.mount('#app');
+        window.addEventListener('beforeunload', (event) => {
+            if (vm.db) {
+                vm.saveDb();
+            }
+        });
+    </script>
+</body>
+
+</html>
