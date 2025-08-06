@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+
+            h1 {
+                color: #333;
+            }
+
+            button {
+                padding: 6px;
+                cursor: pointer;
+            }
+
+            #output {
+                margin-top: 20px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                background-color: #f9f9f9;
+            }
+            .error {
+                color: red;
+            }
+        </style>
+        <script id="worker-script" type="javascript/worker">
+            self.onmessage = function(e) {
+                const data = e.data;
+                if (data === 'error') {
+                    throw new Error('Throw error for testing');
+                }
+                const result = `Echo: ${data}`;
+                self.postMessage(result);
+            };
+        </script>
+    </head>
+    <body>
+        <h1>WebWorker 範例二</h1>
+        <button onclick="worker.postMessage('Hello, Worker!')">發送訊息</button>
+        <button onclick="worker.postMessage('error')">觸發錯誤</button>
+        <div id="output"></div>
+        <script>
+            const output = document.getElementById('output');
+            function showMessage(message, css) {
+                output.innerHTML += `<p class="${css}">${message}</p>`;
+            }
+
+            // 讀取 WebWorker 程式碼轉成 URL 當成 Worker 建構參數
+            const workerScript = document.getElementById('worker-script').textContent;
+            const blob = new Blob([workerScript], { type: 'application/javascript' });
+            const worker = new Worker(URL.createObjectURL(blob));
+            
+            worker.onerror = function(e) {
+                showMessage(e.message, 'error');
+            };
+
+            worker.onmessage = function(e) {
+                const result = e.data;
+                showMessage(result);
+            };
+        </script>
+    </body>
+</html>

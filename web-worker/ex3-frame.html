@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Shared Web Worker Example</title>
+    <style>
+        html, body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            margin: 0;
+            padding: 6px;
+            font-size: 9pt;
+        }   
+        #output {
+            margin-top: 10px;
+            padding: 6px;
+            min-height: 50px;;
+            background-color: #eee;
+            .message {
+                color: #333;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <form id="msgForm">
+        <table>
+            <tr>
+                <td>
+                    <label for="user">User:</label>
+                </td>
+                <td>
+                    <input type="text" id="user" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="message">Message:</label>
+                </td>
+                <td>
+                    <input type="text" id="message" required>
+                </td>
+            </tr>
+        </table>
+        <button type="submit">Send</button>
+    </form>
+    <div id="output"></div>
+    <script>
+        const user = 'User' + Math.floor(Math.random() * 1000);
+        const userElement = document.getElementById('user');
+        userElement.value = user;
+        const msgElement = document.getElementById('message');
+        msgElement.value = 'Hello';
+
+        const output = document.getElementById('output');
+        function showMessage(message, css) {
+            const msg = document.createElement('div');
+            msg.className = css;
+            msg.textContent = `${message.timestamp} [${message.user}]: ${message.text}`;
+            output.appendChild(msg);
+        }
+
+        // 載入 Shared Web Worker
+        const worker = new SharedWorker('ex3-shared-webworker.js');
+        worker.port.start();
+
+        // 顯示收到的訊息
+        worker.port.onmessage = function (e) {
+            const data = e.data;
+            switch (data.command) {
+                case 'init':
+                    data.messages.forEach(msg => {
+                        showMessage(msg, 'message');
+                    });
+                    break;
+                case 'message':
+                    const msg = data.message;
+                    showMessage(msg, 'message');
+                    break;
+            }
+        };
+
+        // 發送訊息
+        document.getElementById('msgForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const user = userElement.value;
+            const text = msgElement.value;
+            worker.port.postMessage({ command: 'speak', message: { user, text } });
+        });
+
+        // 簡便狀態更新：退出或關閉網頁前送出指令通知 Shared Worker 關閉連線 
+        // (嚴謹做法：建立 Heartbeat 機制定期送訊息給 Shared Worker 主動檢查客戶端是否活著)
+        window.addEventListener('beforeunload', function () {
+            worker.port.postMessage({ command: 'close' });
+            worker.port.close();
+        });
+    </script>
+</body>
+
+</html>

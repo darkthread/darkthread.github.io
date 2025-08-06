@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+
+            h1 {
+                color: #333;
+            }
+
+            button {
+                padding: 6px;
+                cursor: pointer;
+            }
+
+            #output {
+                margin-top: 20px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                background-color: #f9f9f9;
+            }
+            .error {
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>WebWorker 範例一</h1>
+        <button onclick="worker.postMessage('Hello, Worker!')">發送訊息</button>
+        <button onclick="worker.postMessage('error')">觸發錯誤</button>
+        <div id="output"></div>
+        <script>
+            const output = document.getElementById('output');
+            function showMessage(message, css) {
+                output.innerHTML += `<p class="${css}">${message}</p>`;
+            }
+
+            const worker = new Worker('ex1-webworker.js');
+            worker.onerror = function(e) {
+                showMessage(e.message, 'error');
+            };
+
+            worker.onmessage = function(e) {
+                const result = e.data;
+                showMessage(result);
+            };
+        </script>
+    </body>
+</html>

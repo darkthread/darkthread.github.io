@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Two Frames Loader</title>
+    <style>
+        html, body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            margin: 0;
+            padding: 6px;
+            font-size: 9pt;
+        }
+
+        #status {
+            font-weight: bold;
+            color: dodgerblue;
+        }
+
+        .frame-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        iframe {
+            width: 300px;
+            height: 200px;
+            border: 1px solid #ccc;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    Shared Web Worker Status: <span id="status"></span>
+    <div class="frame-container">
+        <div class="frame-block">
+            <div>
+                <button onclick="loadFrame('frame1')">Load</button>
+                <button onclick="closeFrame('frame1')">Close</button>
+            </div>            
+            <iframe id="frame1"></iframe>
+
+        </div>
+        <div class="frame-block">
+            <div>
+                <button onclick="loadFrame('frame2')">Load</button>
+                <button onclick="closeFrame('frame2')">Close</button>
+            </div>
+            <iframe id="frame2"></iframe>
+        </div>
+    </div>
+    <script>
+        function loadFrame(id) {
+            document.getElementById(id).src = 'ex3-frame.html';
+        }
+        function closeFrame(id) {
+            document.getElementById(id).src = 'about:blank';
+        }
+        const worker = new SharedWorker('ex3-shared-webworker.js');
+        worker.port.onmessage = function (e) {
+            const data = e.data;
+            if (data.command === 'statusInfo') {
+                document.getElementById('status').textContent = data.info;
+            }
+        };
+        // 掛載 .onmessage 後不用再呼叫 start()，用 addEventListener 才要
+        // worker.port.start();
+        setInterval(() => {
+            worker.port.postMessage({ command: 'status' });
+        }, 500);
+    </script>
+</body>
+
+</html>
