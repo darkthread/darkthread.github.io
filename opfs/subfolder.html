@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>subfolder</title>
+</head>
+
+<body>
+    <script>
+        async function opfsWriteReadExample() {
+            try {
+                // 取得 OPFS 根目錄
+                const opfsRoot = await navigator.storage.getDirectory();
+
+                // 建立子資料夾 mainFolder
+                const mainFolderHandle = await opfsRoot.getDirectoryHandle('mainFolder', { create: true });
+
+                // 在 mainFolderHandle 裡建立檔案 example.txt
+                const fileHandle = await mainFolderHandle.getFileHandle('example.txt', { create: true });
+
+                // 寫入檔案內容
+                const writable = await fileHandle.createWritable();
+                await writable.write('Hello, World!');
+                await writable.close();
+
+                // 在 mainFolder 裡建立子資料夾 subFolder
+                const subFolderHandle = await mainFolderHandle.getDirectoryHandle('subFolder', { create: true });
+
+                // 列舉 mainFolder 裡的檔案和資料夾
+                console.log('mainFolder 內容:');
+                for await (const entry of mainFolderHandle.values()) {
+                    console.log(` - ${entry.name} (${entry.kind})`);
+                }
+
+            } catch (error) {
+                console.error('OPFS 操作錯誤:', error);
+            }
+        }
+
+        // 執行範例
+        opfsWriteReadExample();
+
+    </script>
+</body>
+
+</html>

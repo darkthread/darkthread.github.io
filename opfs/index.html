@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>OPFS Example</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 6px;
+        }
+
+        button {
+            margin-right: 2px;
+        }
+
+        .messages {
+            width: 640px;
+            margin-top: 10px;
+            min-height: 100px;
+            background-color: #f4f4f4;
+            padding: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Origin Private File System (OPFS) 範例</h1>
+        <button @click="listRootDirectory">列出目錄</button>
+        <button @click="writeFile">寫文字檔</button>
+        <button @click="readFile">讀文字檔</button>
+        <button @click="writeBinaryFile">寫二進位檔</button>
+        <button @click="deleteFiles">刪除檔案</button>
+        <div class="messages">
+            <div v-for="log in logs" :key="log.id" :style="{ color: log.color }">
+                {{ log.message }}
+            </div>
+        </div>
+    </div>
+    <script>
+        const { createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    fileName: 'example.txt',
+                    logs: []
+                }
+            },
+            methods: {
+                log(message, color = 'black') {
+                    this.logs.push({ id: Date.now(), message, color });
+                },
+                async getRootDir() {
+                    if ('storage' in navigator && 'getDirectory' in navigator.storage) {
+                        return await navigator.storage.getDirectory();
+                    } else {
+                        throw new Error('OPFS not supported');
+                    }
+                },
+                async listRootDirectory() {
+                    try {
+                        const root = await this.getRootDir();
+                        const entries = [];
+                        this.log('檔案清單:');
+                        for await (const entry of root.values()) {
+                            const file = await entry.getFile();
+                            this.log(` - ${entry.name} / ${file.size.toLocaleString()} bytes`, 'dodgerblue');
+                        }
+                    } catch (e) {
+                        this.log(e.message, 'red');
+                    }
+                },
+                async writeFile() {
+                    try {
+                        const root = await this.getRootDir();
+                        const fileHandle = await root.getFileHandle(this.fileName, { create: true });
+                        const writable = await fileHandle.createWritable();
+                        await writable.write('Hello, OPFS!');
+                        await writable.close();
+                        this.log('寫入檔案', 'green');
+                    } catch (e) {
+                        this.log(e.message, 'red');
+                    }
+                },
+                async readFile() {
+                    try {
+                        const root = await this.getRootDir();
+                        const fileHandle = await root.getFileHandle(this.fileName);
+                        const file = await fileHandle.getFile();
+                        const text = await file.text();
+                        this.log(`檔案內容: ${text}`, 'blue');
+                    } catch (e) {
+                        this.log(e.message, 'red');
+                    }
+                },
+                async deleteFiles() {
+                    try {
+                        const root = await this.getRootDir();
+                        for await (const entry of root.values()) {
+                            await entry.remove();
+                            this.log(`刪除檔案: ${this.fileName}`, 'brown');
+                        }
+                    } catch (e) {
+                        this.log(e.message, 'red');
+                    }
+                },
+                async writeBinaryFile() {
+                    try {
+                        const root = await this.getRootDir();
+                        const fileHandle = await root.getFileHandle('example.bin', { create: true });
+                        const writable = await fileHandle.createWritable();
+                        const chunkSize = 1024 * 1024; // 1MB
+                        const totalSize = 100 * 1024 * 1024; // 100MB
+                        const buffer = new Uint8Array(chunkSize).fill(0xAB); // 模擬資料
+                        const start = performance.now();
+                        for (let written = 0; written < totalSize; written += chunkSize) {
+                            await writable.write(buffer);
+                        }
+                        await writable.write(buffer);
+                        await writable.close();
+                        const end = performance.now();
+                        this.log(`寫入 ${totalSize / 1024 / 1024}MiB 二進位檔，耗時 ${(end - start).toFixed(2)} 毫秒`, 'green');
+                    } catch (e) {
+                        this.log(e.message, 'red');
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>

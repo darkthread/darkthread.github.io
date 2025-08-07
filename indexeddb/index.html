@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+
+<head>
+    <meta charset="UTF-8">
+    <title>IndexedDB 範例</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 6px;
+        }
+
+        ul {
+            width: 640px;
+            min-height: 100px;
+            background-color: #f4f4f4;
+            padding: 10px;
+
+            li {
+                list-style-type: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>IndexedDB 範例</h1>
+    <button onclick="testAdd()">新增<span id="currPlayerId"></span></button>
+    <button onclick="testRead()">讀取資料</button>
+    <button onclick="testDel()">刪除最後一筆</button>
+    <ul id="output"></ul>
+    <script>
+        const output = document.getElementById('output');
+        const colorMapping = {
+            'ERR': 'red',
+            'QRY': 'blue',
+            'ADD': 'green',
+            'DEL': 'brown',
+            'DDL': 'purple'
+        };
+        function log(action, message) {
+            const li = document.createElement('li');
+            li.textContent = `[${action}] ${message}`;
+            li.style.color = colorMapping[action] || 'black';
+            output.appendChild(li);
+        }
+
+        class player {
+            constructor(playerId, name, score) {
+                this.playerId = playerId;
+                this.name = name;
+                this.score = score;
+            }
+            static display(playerObj) {
+                return `${playerObj.playerId}|${playerObj.name}|${playerObj.score}`;
+            }
+        }
+        const sampleData = [
+            new player('A01', 'Jeffrey', 255),
+            new player('A02', 'darkthread', 32767)
+        ];
+        let sampleIndex = 0;
+        function updatePlayerId() {
+            document.getElementById('currPlayerId').textContent = `(${sampleData[sampleIndex].playerId})`;
+        }
+        updatePlayerId();
+
+        let db;
+
+        // 開啟或建立資料庫
+        // 如果要異動資料庫結構，可指定不同的版本號
+        // 在 onupgradeneeded 事件變更資料庫結構
+        const request = indexedDB.open('MyTestDB', 1);
+
+        // 新建或升級資料庫時會觸發 onupgradeneeded 事件
+        request.onupgradeneeded = function (event) {
+            db = event.target.result;
+            if (!db.objectStoreNames.contains('players')) {
+                const dbStore = db.createObjectStore('players', { keyPath: 'id', autoIncrement: true });
+                // 可建立索引限制重複資料或加速查詢
+                dbStore.createIndex('playerId', 'playerId', { unique: true });
+                dbStore.createIndex('name', 'name', { unique: false });
+                log('DDL', 'Create players table');
+            }
+        };
+        // 開啟資料庫的成功失敗事件
+        request.onsuccess = function (event) {
+            db = event.target.result;
+        };
+        request.onerror = function (event) {
+            log('ERR', event.target.errorCode);
+        };
+
+        function testAdd() {
+            const tx = db.transaction('players', 'readwrite');
+            const store = tx.objectStore('players');
+            const addRequest = store.add(sampleData[sampleIndex]);
+            const userDisplay = player.display(sampleData[sampleIndex]);
+            addRequest.onerror = function (event) {
+                log('ERR', event.target.error);
+            };
+            sampleIndex = (sampleIndex + 1) % sampleData.length; // 循環使用範例資料
+            updatePlayerId();
+            tx.oncomplete = function () {
+                log(`ADD`, userDisplay);
+            };
+        };
+
+        function testDel() {
+            const tx = db.transaction('players', 'readwrite');
+            const store = tx.objectStore('players');
+            const request = store.getAll();
+            request.onsuccess = function () {
+                const results = request.result;
+                if (results.length > 0) {
+                    const lastItem = results[results.length - 1];
+                    const deleteRequest = store.delete(lastItem.id);
+                    deleteRequest.onsuccess = function () {
+                        log(`DEL`, lastItem.id + '. ' + player.display(lastItem));
+                    };
+                } else {
+                    log('QRY','No items to delete.');
+                }
+            };
+        };
+
+        function testRead() {
+            const tx = db.transaction('players', 'readonly');
+            const store = tx.objectStore('players');
+            const request = store.getAll();
+            request.onsuccess = function () {
+                const results = request.result;
+                results.forEach(item => {
+                    log(`QRY`, `${item.id}. ${player.display(item)}`);
+                });
+            };
+        };
+    </script>
+</body>
+
+</html>
