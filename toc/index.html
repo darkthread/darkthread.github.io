@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>TOC Demo with Intersection Observer</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            width: 220px;
+            height: 100vh;
+            overflow-y: auto;
+            background: #f4f4f4;
+            border-right: 1px solid #ddd;
+            padding: 1em;
+
+            ul {
+                list-style: none;
+                padding: 0;
+            }
+
+            li {
+                margin: 0.5em 0;
+            }
+
+            a {
+                color: #333;
+                text-decoration: none;
+                transition: color 0.2s;
+            }
+
+            a.active {
+                color: #1976d2;
+                font-weight: bold;
+            }
+        }
+
+        main {
+            flex: 1;
+            padding: 2em;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        section {
+            margin-bottom: 3em;
+            padding-top: 60px;
+            /* Offset for sticky nav */
+            margin-top: -60px;
+        }
+
+        header,footer {
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <h2>Table of Contents</h2>
+        <ul id="toc"></ul>
+    </nav>
+    <main id="content">
+        <header></header>
+        <section id="section1">
+            <h2>Introduction</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur. Sed cursus, augue nec pulvinar dictum, enim erat cursus erat, nec dictum sem urna at sapien. Mauris euismod, velit eu facilisis dictum, enim urna cursus enim, nec dictum sem urna at sapien. Nullam ac urna eu felis dapibus condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet nisi. Proin condimentum fermentum nunc. Etiam pharetra, erat sed fermentum feugiat, velit mauris egestas quam, ut aliquam massa nisl quis neque. Suspendisse in orci enim.</p>
+            <p>Integer nec odio. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget aliquam massa nisl quis neque. Suspendisse potenti. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent libero. Sed cursus ante dapibus diam. Nulla quis sem at nibh elementum imperdiet. Sed nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p>Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur. Sed cursus, augue nec pulvinar dictum, enim erat cursus erat, nec dictum sem urna at sapien. Mauris euismod, velit eu facilisis dictum, enim urna cursus enim, nec dictum sem urna at sapien. Nullam ac urna eu felis dapibus condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet nisi. Proin condimentum fermentum nunc. Etiam pharetra, erat sed fermentum feugiat, velit mauris egestas quam, ut aliquam massa nisl quis neque. Suspendisse in orci enim.</p>
+            <p>Praesent adipiscing. Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris. Sed aliquam ultrices mauris. Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum. Phasellus ullamcorper ipsum rutrum nunc. Nunc nonummy metus. Vestibulum volutpat pretium libero. Cras id dui.</p>
+            <p>Donec interdum, metus et hendrerit aliquet, dolor diam sagittis ligula, eget egestas libero turpis vel mi. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Morbi ac felis. Nunc egestas, augue at pellentesque laoreet, felis eros vehicula leo, at malesuada velit leo quis pede. Cras dapibus. Vivamus elementum semper nisi.</p>
+        </section>
+        <section id="section2">
+            <h2>Getting Started</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur. Sed cursus, augue nec pulvinar dictum, enim erat cursus erat, nec dictum sem urna at sapien. Mauris euismod, velit eu facilisis dictum, enim urna cursus enim, nec dictum sem urna at sapien. Nullam ac urna eu felis dapibus condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet nisi. Proin condimentum fermentum nunc. Etiam pharetra, erat sed fermentum feugiat, velit mauris egestas quam, ut aliquam massa nisl quis neque. Suspendisse in orci enim.</p>
+            <p>Integer nec odio. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget aliquam massa nisl quis neque. Suspendisse potenti. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent libero. Sed cursus ante dapibus diam. Nulla quis sem at nibh elementum imperdiet. Sed nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p>Donec interdum, metus et hendrerit aliquet, dolor diam sagittis ligula, eget egestas libero turpis vel mi. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Morbi ac felis. Nunc egestas, augue at pellentesque laoreet, felis eros vehicula leo, at malesuada velit leo quis pede. Cras dapibus. Vivamus elementum semper nisi.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur. Sed cursus, augue nec pulvinar dictum, enim erat cursus erat, nec dictum sem urna at sapien. Mauris euismod, velit eu facilisis dictum, enim urna cursus enim, nec dictum sem urna at sapien. Nullam ac urna eu felis dapibus condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet nisi. Proin condimentum fermentum nunc. Etiam pharetra, erat sed fermentum feugiat, velit mauris egestas quam, ut aliquam massa nisl quis neque. Suspendisse in orci enim.</p>
+            <p>Praesent adipiscing. Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris. Sed aliquam ultrices mauris. Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum. Phasellus ullamcorper ipsum rutrum nunc. Nunc nonummy metus. Vestibulum volutpat pretium libero. Cras id dui.</p>
+            <p>Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam.</p>
+        </section>
+        <section id="section3">
+            <h2>Features</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur. Sed cursus, augue nec pulvinar dictum, enim erat cursus erat, nec dictum sem urna at sapien. Mauris euismod, velit eu facilisis dictum, enim urna cursus enim, nec dictum sem urna at sapien. Nullam ac urna eu felis dapibus condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet nisi. Proin condimentum fermentum nunc. Etiam pharetra, erat sed fermentum feugiat, velit mauris egestas quam, ut aliquam massa nisl quis neque. Suspendisse in orci enim.</p>
+            <p>Integer nec odio. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget aliquam massa nisl quis neque. Suspendisse potenti. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent libero. Sed cursus ante dapibus diam. Nulla quis sem at nibh elementum imperdiet. Sed nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p>Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam.</p>
+            <p>Donec interdum, metus et hendrerit aliquet, dolor diam sagittis ligula, eget egestas libero turpis vel mi. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Morbi ac felis. Nunc egestas, augue at pellentesque laoreet, felis eros vehicula leo, at malesuada velit leo quis pede. Cras dapibus. Vivamus elementum semper nisi.</p>
+        </section>
+        <section id="section4">
+            <h2>Usage</h2>
+            <p>Integer nec odio. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget aliquam massa nisl quis neque. Suspendisse potenti. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent libero. Sed cursus ante dapibus diam. Nulla quis sem at nibh elementum imperdiet. Sed nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <p>Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur. Sed cursus, augue nec pulvinar dictum, enim erat cursus erat, nec dictum sem urna at sapien. Mauris euismod, velit eu facilisis dictum, enim urna cursus enim, nec dictum sem urna at sapien. Nullam ac urna eu felis dapibus condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet nisi. Proin condimentum fermentum nunc. Etiam pharetra, erat sed fermentum feugiat, velit mauris egestas quam, ut aliquam massa nisl quis neque. Suspendisse in orci enim.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur. Sed cursus, augue nec pulvinar dictum, enim erat cursus erat, nec dictum sem urna at sapien. Mauris euismod, velit eu facilisis dictum, enim urna cursus enim, nec dictum sem urna at sapien. Nullam ac urna eu felis dapibus condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet nisi. Proin condimentum fermentum nunc. Etiam pharetra, erat sed fermentum feugiat, velit mauris egestas quam, ut aliquam massa nisl quis neque. Suspendisse in orci enim.</p>
+            <p>Praesent adipiscing. Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris. Sed aliquam ultrices mauris. Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum. Phasellus ullamcorper ipsum rutrum nunc. Nunc nonummy metus. Vestibulum volutpat pretium libero. Cras id dui.</p>
+            <p>Donec interdum, metus et hendrerit aliquet, dolor diam sagittis ligula, eget egestas libero turpis vel mi. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Morbi ac felis. Nunc egestas, augue at pellentesque laoreet, felis eros vehicula leo, at malesuada velit leo quis pede. Cras dapibus. Vivamus elementum semper nisi.</p>
+        </section>
+        <section id="section5">
+            <h2>Conclusion</h2>
+            <p>Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur. Sed cursus, augue nec pulvinar dictum, enim erat cursus erat, nec dictum sem urna at sapien. Mauris euismod, velit eu facilisis dictum, enim urna cursus enim, nec dictum sem urna at sapien. Nullam ac urna eu felis dapibus condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet nisi. Proin condimentum fermentum nunc. Etiam pharetra, erat sed fermentum feugiat, velit mauris egestas quam, ut aliquam massa nisl quis neque. Suspendisse in orci enim.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur. Sed cursus, augue nec pulvinar dictum, enim erat cursus erat, nec dictum sem urna at sapien. Mauris euismod, velit eu facilisis dictum, enim urna cursus enim, nec dictum sem urna at sapien. Nullam ac urna eu felis dapibus condimentum sit amet a augue. Sed non neque elit. Sed ut imperdiet nisi. Proin condimentum fermentum nunc. Etiam pharetra, erat sed fermentum feugiat, velit mauris egestas quam, ut aliquam massa nisl quis neque. Suspendisse in orci enim.</p>
+        </section>
+        <footer></footer>
+    </main>
+    <script>
+        // 列舉 main section 從中找出 h2 在 #toc 建立 <li> <a>
+        const toc = document.getElementById('toc');
+        const sections = document.querySelectorAll('main section');
+        sections.forEach(section => {
+            const h2 = section.querySelector('h2');
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = '#' + section.id;
+            a.textContent = h2.textContent;
+            // 設定 data-section Attribute
+            // 註：.dataset.section = ... 相當於 .setAttribute('data-section', ...)
+            a.dataset.section = section.id;
+            li.appendChild(a);
+            toc.appendChild(li);
+        });
+
+        // 設定 Observer 選項，準備監測 sections 中的 section 項目
+        const tocLinks = document.querySelectorAll('#toc a');
+        const observerOptions = {
+            // 監測根元素(可視範圍的依據)，null 代表以 HTML DOM 的 document 為準
+            root: null,
+            // 縮小觀察目標元素進入邊界與否的判定標準，第三個 -60% 代表把下緣向上提 60%，等同以 40% 高度當偵測線
+            rootMargin: '0px 0px -60% 0px', 
+            // 設為 0 表示只要有一點點超過偵測線就觸發 (若 0.1 表示超過偵測線 10% 才觸發)
+            threshold: 0
+        };
+
+        let activeId = null;
+        // 建立 Intersection Observer 實例，觸發時傳入被觀察目標陣列，由 isIntersection 判斷是否進入可視範圍
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // 記錄當前進入可視範圍的 section ID
+                    activeId = entry.target.id;
+                    // 將進入可視範圍的 section ID 對應的 TOC 鏈結加上 active 樣式，其他移除
+                    tocLinks.forEach(link => {
+                        link.classList.toggle('active', link.dataset.section === activeId);
+                    });
+                }
+            });
+        }, observerOptions);
+        // 設定 Observer 監測每個 section
+        sections.forEach(section => observer.observe(section));
+
+        // 點選 TOC 鏈結平滑滾動到對應 section
+        tocLinks.forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.getElementById(link.dataset.section);
+                window.scrollTo({
+                    top: target.offsetTop - 50,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
