@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>計算機術語速查</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="textInputWithClearBtn.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T8Q7GM5D5R"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-T8Q7GM5D5R');
+    </script>    
+    <style>
+        html,
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .content {
+            max-width: 960px;
+            .ref {
+                font-size: 90%;
+                text-align: right;
+                margin-right: 10px;
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+
+            td,th {
+                margin-top: 10px;
+                border: solid 1px #aaa;
+                padding: 5px 10px;
+            }
+
+            tbody tr:nth-child(odd) {
+                background-color: #f9f9f9;
+            }
+
+            td.en {
+                color: blue;
+            }
+
+            tr.same {
+                .tw,.cn {
+                    opacity: 0.5;
+                }
+            }
+
+            .header {
+                background-color: #f2f2f2;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <h1>大陸台灣計算機術語速查</h1>
+            <input-with-clear-button v-model="keyword" placeholder="輸入關鍵字..."></input-with-clear-button>
+        </header>
+        <div class="content">
+            <div class="ref">
+            資料來源：<a
+                href="https://zh.wikibooks.org/zh-tw/%E5%A4%A7%E9%99%86%E5%8F%B0%E6%B9%BE%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%9C%AF%E8%AF%AD%E5%AF%B9%E7%85%A7%E8%A1%A8">
+                大陸台灣計算機術語對照表
+            </a>
+            </div>
+            <table>
+                <colgroup>
+                    <col style="width: 40%;">
+                    <col style="width: 30%;">
+                    <col style="width: 30%;">
+                </colgroup>
+                <thead>
+                    <tr class="header">
+                        <th>English</th>
+                        <th>臺灣</th>
+                        <th>中國大陸</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="term in filteredTerms" :key="term.EN"
+                        :class=" { 'same': term.TW === term.CN } "
+                    >
+                        <td class="en">{{ term.EN }}</td>
+                        <td class="tw">{{ term.TW }}</td>
+                        <td class="cn">{{ term.CN }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        class Temr {
+            constructor(EN, TW, CN) {
+                this.EN = EN;
+                this.TW = TW;
+                this.CN = CN;
+            }
+        }
+        const { createApp } = Vue;
+        const vm = createApp({
+            data() {
+                return {
+                    terms: [],
+                    keyword: ''
+                };
+            },
+            computed: {
+                filteredTerms() {
+                    if (!this.keyword) {
+                        return this.terms;
+                    }
+                    const lowerKeyword = this.keyword.toLowerCase();
+                    return this.terms.filter(term =>
+                        term.EN.toLowerCase().includes(lowerKeyword) ||
+                        term.TW.includes(this.keyword) ||
+                        term.CN.includes(this.keyword)
+                    );
+                }
+            },
+            async mounted() {
+                await this.loadTerms();
+            },
+            methods: {
+                async loadTerms() {
+                    try {
+                        const response = await fetch('raw.txt');
+                        const text = await response.text();
+                        const lines = text.split('\n');
+
+                        // Skip the header line and parse the rest
+                        for (let i = 1; i < lines.length; i++) {
+                            const line = lines[i].trim();
+                            if (line) {
+                                const [EN, TW, CN] = line.split('\t');
+                                if (EN && TW && CN) {
+                                    this.terms.push(new Temr(EN, TW, CN));
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error loading terms:', error);
+                    }
+                }
+            }
+        })
+            .mount('#app');
+    </script>
+</body>
+
+</html>
