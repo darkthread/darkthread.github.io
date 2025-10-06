@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自帶清除鈕文字欄位 Web Component (支援 Vue v-model)</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="textInputWithClearBtn.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h2 {
+            color: #444;
+        }
+        input-with-clear-button {
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h2>自帶清除鈕文字欄位</h2>
+    <input-with-clear-button id="t1" placeholder="Type something..."></input-with-clear-button>
+    <input-with-clear-button id="t2" value="Hello World"></input-with-clear-button>
+    <button onclick="showValues()">Check Values</button>
+    <pre id="results">
+    </pre>
+    <script>
+        function showValues() {
+            document.getElementById('results').textContent = 
+`t1: "${document.getElementById('t1').value}"
+t2: "${document.getElementById('t2').value}"`;
+        }
+    </script>
+    <hr>
+    <div id="app">
+        <h2>配合 Vue3 v-model 使用</h2>
+        <input-with-clear-button v-model="searchText" placeholder="Search..."></input-with-clear-button>
+        <p>Vue Data Value: {{ searchText }}</p>
+        <button @click="searchText = 'Hello Vue3'">Set Value</button>
+        <button @click="searchText = ''">Clear</button>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    searchText: 'Init Value'
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
