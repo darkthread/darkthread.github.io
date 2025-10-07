@@ -4,22 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>計算機術語速查</title>
+    <title>中文計算機術語速查</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <script src="textInputWithClearBtn.js"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-T8Q7GM5D5R"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-    gtag('config', 'G-T8Q7GM5D5R');
-    </script>    
+        gtag('config', 'G-T8Q7GM5D5R');
+    </script>
     <style>
         html,
         body {
-            font-family: Arial, sans-serif;
+            font-family: 微軟正黑體, Arial, sans-serif;
             margin: 10px;
         }
 
@@ -30,7 +30,8 @@
         }
 
         .content {
-            max-width: 960px;
+            max-width: 1280px;
+
             .ref {
                 font-size: 90%;
                 text-align: right;
@@ -43,7 +44,8 @@
             border-collapse: collapse;
             margin-top: 20px;
 
-            td,th {
+            td,
+            th {
                 margin-top: 10px;
                 border: solid 1px #aaa;
                 padding: 5px 10px;
@@ -58,7 +60,9 @@
             }
 
             tr.same {
-                .tw,.cn {
+
+                .tw,
+                .cn {
                     opacity: 0.5;
                 }
             }
@@ -73,55 +77,86 @@
 <body>
     <div id="app">
         <header>
-            <h1>大陸台灣計算機術語速查</h1>
-            <input-with-clear-button v-model="keyword" placeholder="輸入關鍵字..."></input-with-clear-button>
+            <h1>中文計算機術語速查工具</h1>
+            <input-with-clear-button v-model.lazy="keyword" v-debounce:input="350" placeholder="輸入關鍵字..."></input-with-clear-button>
+            <div>
+                <label><input type="checkbox" v-model="enableSG">新加坡</label>
+                <label><input type="checkbox" v-model="enableMO">澳門</label>
+                <label><input type="checkbox" v-model="enableMY">馬來西亞</label>
+            </div>
         </header>
         <div class="content">
             <div class="ref">
-            資料來源：<a
-                href="https://zh.wikibooks.org/zh-tw/%E5%A4%A7%E9%99%86%E5%8F%B0%E6%B9%BE%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%9C%AF%E8%AF%AD%E5%AF%B9%E7%85%A7%E8%A1%A8">
-                大陸台灣計算機術語對照表
-            </a>
+                資料來源：<a href="https://zh.wikipedia.org/wiki/Module:CGroup/IT">
+                    Wiki 字詞轉換處理/公共轉換組</a>
             </div>
             <table>
                 <colgroup>
-                    <col style="width: 40%;">
-                    <col style="width: 30%;">
-                    <col style="width: 30%;">
+                    <col style="width: 250px">
+                    <col style="width: 200px">
+                    <col style="width: 200px">
+                    <col style="width: 200px">
+                    <col style="width: 200px" v-show="enableSG">
+                    <col style="width: 200px" v-show="enableMO">
+                    <col style="width: 200px" v-show="enableMY">
                 </colgroup>
                 <thead>
                     <tr class="header">
                         <th>English</th>
-                        <th>臺灣</th>
-                        <th>中國大陸</th>
+                        <th>zh-tw</th>
+                        <th>zh-cn</th>
+                        <th>zh-hk</th>
+                        <th v-show="enableSG">zh-sg</th>
+                        <th v-show="enableMO">zh-mo</th>
+                        <th v-show="enableMY">zh-my</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="term in filteredTerms" :key="term.EN"
-                        :class=" { 'same': term.TW === term.CN } "
-                    >
-                        <td class="en">{{ term.EN }}</td>
-                        <td class="tw">{{ term.TW }}</td>
-                        <td class="cn">{{ term.CN }}</td>
+                    <tr v-for="term in filteredTerms" :class=" { 'same': term.tw === term.cn } ">
+                        <td class="en">{{ term.en }}</td>
+                        <td class="tw">{{ term.tw ||'' }}</td>
+                        <td class="cn">{{ term.cn || '' }}</td>
+                        <td class="hk">{{ term.hk || '' }}</td>
+                        <td class="sg" v-show="enableSG">{{ term.sg || '' }}</td>
+                        <td class="mo" v-show="enableMO">{{ term.mo || '' }}</td>
+                        <td class="my" v-show="enableMY">{{ term.my || '' }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
     <script>
-        class Temr {
-            constructor(EN, TW, CN) {
-                this.EN = EN;
-                this.TW = TW;
-                this.CN = CN;
+        class Term {
+            constructor(en, tw, cn, hk, sg, hant, hans, mo, my) {
+                this.en = en;
+                this.tw = tw || hant;
+                this.cn = cn || hans;
+                this.hk = hk;
+                this.sg = sg;
+                this.mo = mo;
+                this.my = my;
+                this.fullText = `${en.toLowerCase()} ${tw} ${cn} ${hk} ${sg} ${mo} ${my}`;
             }
         }
+        // REF: https://blog.darkthread.net/blog/vue-model-debounce/
+        var debounceDirective = {
+            beforeMount(el, binding) {
+                let hnd;
+                el.addEventListener('input', () => {
+                    clearTimeout(hnd);
+                    hnd = setTimeout(() => el.dispatchEvent(new Event('change')), binding.value || 500);
+                });
+            }
+        };
         const { createApp } = Vue;
         const vm = createApp({
             data() {
                 return {
                     terms: [],
-                    keyword: ''
+                    keyword: '',
+                    enableSG: false,
+                    enableMO: false,
+                    enableMY: false
                 };
             },
             computed: {
@@ -131,10 +166,7 @@
                     }
                     const lowerKeyword = this.keyword.toLowerCase();
                     return this.terms.filter(term =>
-                        term.EN.toLowerCase().includes(lowerKeyword) ||
-                        term.TW.includes(this.keyword) ||
-                        term.CN.includes(this.keyword)
-                    );
+                        term.fullText.includes(lowerKeyword));
                 }
             },
             async mounted() {
@@ -143,7 +175,7 @@
             methods: {
                 async loadTerms() {
                     try {
-                        const response = await fetch('raw.txt');
+                        const response = await fetch('terms.csv');
                         const text = await response.text();
                         const lines = text.split('\n');
 
@@ -151,9 +183,9 @@
                         for (let i = 1; i < lines.length; i++) {
                             const line = lines[i].trim();
                             if (line) {
-                                const [EN, TW, CN] = line.split('\t');
-                                if (EN && TW && CN) {
-                                    this.terms.push(new Temr(EN, TW, CN));
+                                const [en, tw, cn, hk, sg, hant, hans, mo, my] = line.split('\t');
+                                if (en) {
+                                    this.terms.push(new Term(en, tw, cn, hk, sg, hant, hans, mo, my));
                                 }
                             }
                         }
@@ -162,8 +194,7 @@
                     }
                 }
             }
-        })
-            .mount('#app');
+        }).directive('debounce', debounceDirective).mount('#app');
     </script>
 </body>
 
