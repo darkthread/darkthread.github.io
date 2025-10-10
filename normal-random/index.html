@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Normal Random</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+    <button id="generate">Generate Normal Random Number</button>
+    <div id="chart-container"></div>
+    <script>
+        // use Box-Muller transform to generate normal random numbers
+        function normalRandom(mean = 0, std = 0.33) {
+            let u = 0, v = 0, w = 0, c = 0;
+            do {
+                u = Math.random() * 2 - 1; // 產生 [-1,1) 之間的亂數
+                v = Math.random() * 2 - 1;
+                w = u * u + v * v;
+            } while (w == 0 || w >= 1);
+            c = Math.sqrt(-2 * Math.log(w) / w);
+            return mean + u * c * std;
+        }
+        // generate bounded normal random numbers between -1 and 1
+        function generateBoundedNormal() {
+            let value = normalRandom(0, 0.33);
+            return Math.max(-1, Math.min(1, value));
+        }
+
+        document.getElementById("generate").addEventListener("click", () => {
+            // generate 1000 times and draw bar chart with 3d.js
+            const data = [];
+            for (let i = 0; i < 10000; i++) {
+                data.push(generateBoundedNormal());
+            }
+            drawBarChart(data);
+        });
+
+        function drawBarChart(data) {
+            // 使用 d3.js 繪製長條圖
+            // 先將資料分箱
+            const bins = d3.bin().thresholds(30)(data);
+
+            // 設定圖表尺寸
+            const width = 600, height = 300, margin = { top: 20, right: 30, bottom: 30, left: 40 };
+
+            // 移除舊圖表
+            d3.select("#chart-container").selectAll("*").remove();
+
+            // 建立 SVG
+            const svg = d3.select("#chart-container")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            // X 軸比例尺
+            const x = d3.scaleLinear()
+                .domain([d3.min(data), d3.max(data)])
+                .range([margin.left, width - margin.right]);
+
+            // Y 軸比例尺
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(bins, d => d.length)]).nice()
+                .range([height - margin.bottom, margin.top]);
+
+            // 繪製長條
+            svg.append("g")
+                .selectAll("rect")
+                .data(bins)
+                .join("rect")
+                .attr("x", d => x(d.x0))
+                .attr("y", d => y(d.length))
+                .attr("width", d => x(d.x1) - x(d.x0) - 1)
+                .attr("height", d => y(0) - y(d.length))
+                .attr("fill", "steelblue");
+
+            // X 軸
+            svg.append("g")
+                .attr("transform", `translate(0,${height - margin.bottom})`)
+                .call(d3.axisBottom(x));
+
+            // Y 軸
+            svg.append("g")
+                .attr("transform", `translate(${margin.left},0)`)
+                .call(d3.axisLeft(y));
+        }
+    </script>
+</body>
+
+</html>
