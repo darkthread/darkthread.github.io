@@ -277,9 +277,9 @@
 
                     // 從資料陣列取出可視範圍的項目
                     this.visibleItems = data.slice(this.startIndex, this.endIndex);
+                    container.scrollTop = scrollTop; // 確保捲動位置不變
                     this.$nextTick(() => {
                         this.isScrolling = false;
-                        container.scrollTop = scrollTop; // 確保捲動位置不變
                     });
                 }
             }
