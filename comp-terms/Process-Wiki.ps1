@@ -6,6 +6,7 @@ Get-ChildItem .\wiki\*.txt | ForEach-Object {
         if ($_ -match "Item\('([^']+)', '([^']+)'\),") {
             $term = @{}
             $term.en = $matches[1]
+            $term.en = $term.en.Replace("；(vs", "(vs")
             # if ($matches[2].Contains('=>')) {
             #     return
             # }
@@ -24,19 +25,29 @@ Get-ChildItem .\wiki\*.txt | ForEach-Object {
         }
     } 
 }
+
+
+$ignoreTerms = @{}
+Get-Content .\wiki\ignore-terms -Encoding utf8 | ForEach-Object {
+    $ignoreTerms[$_.Split("`t")[0].TrimStart('+')] = $true
+} 
+
 #$list | Sort-Object en | ConvertTo-Json
 $cols = @('en', 'tw', 'cn', 'hk', 'sg', 'hant', 'hans', 'mo', 'my')
 $union = ($list | Sort-Object en | Select-Object $cols)
 # group by 'en' and merge
-$grouped = $union | Group-Object -Property en | ForEach-Object {
+$grouped = $union | Group-Object -Property en | Where-Object { !$ignoreTerms.ContainsKey($_.Name) } |
+ForEach-Object {
     $obj = @{ en = $_.Name }
     foreach ($col in $cols) {
+        if ($col -eq 'en') { continue }
         $obj[$col] = ($_.Group | ForEach-Object { $_.$col } | Where-Object { $_ } | Select-Object -Unique) -join ';'
     }
     [PSCustomObject]$obj
 }
 
 $csv = ($grouped | Sort-Object en | Select-Object $cols | ConvertTo-Csv -NoTypeInformation -Delimiter "`t") -replace '"', ''
+
 $csv | Set-Content -Path terms.csv -Encoding utf8
 
 Write-Host $stats

@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 comp-terms/wiki/*.txt
+comp-terms/complementary/*.txt

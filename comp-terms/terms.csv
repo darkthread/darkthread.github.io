@@ -4,89 +4,113 @@ en	tw	cn	hk	sg	hant	hans	mo	my
 3D computer					3D電腦	三维计算机		
 3D computer graphics					3D電腦圖形	三维计算机图形		
 3D Touch		三维触控			3D觸控			
+Abstract	摘要；抽象的	摘要；抽象的						
+Abstraction	抽象	抽象						
 Acceptor	受體	受主						
-access	存取;存取權;存取權限	访问;访问权;访问权限						
+access	存取權限;存取 (win)；取用 (mac);存取;存取權	访问权限;访问;访问权						
 access control list	存取控制列表	访问控制表		访问控制表				访问控制表
 access Multiplexer	接取多工器	接入复用器						
 access Point	存取點	接入点						
-account	帳戶;帳號	账户;账号	帳戶;帳號					
+Accessibility	無障礙；協助工具 (win)；輔助功能 (mac)	无障碍；辅助功能 (win/mac)						
+account	帳號;帳戶	账号;账户	帳號;帳戶					
 Action Button					動作按鈕	操作按钮		
+Activate, Activation	啟用，啟動	激活						
 activation	啟用	激活						
 activation function	啟用功能	激活函数						
-Active	主動	有源						
+Active	主動;使用中的；現行的；有效的；啟用的	有源;使用中的；现用的；有效的；激活的						
 Active region	主動區	放大区						
 adapter	配接器	适配器						
+Adapter, Adaptor	介面卡，配接器 (win)；轉接器 (mac)	适配卡，适配器						
 ADC	類比數位轉換器	模拟数字转换器	模擬數碼轉換器					
+Add	加入	添加						
 add-on	附加元件	附加组件						
-address	位址	地址	地址					
+address	位址;位址，地址	地址;位址，地址	地址					
 address bar	網址列	地址栏	地址列					
 addressing	定址	寻址	定址					
 addressing modes	定址模式	寻址模式	定址模式					
-advanced	進階	高级						
+advanced	進階;進階的	高级;高级的						
 advertising area	廣告區	广告位						
 agent-oriented programming	代理人導向程式設計	面向代理编程						
+Aggregation	聚合	聚合						
 AI	人工智慧	人工智能	人工智能	人工智慧				
+AI (Artificial intelligence)	人工智慧	人工智能						
 AirDrop	AirDrop	隔空投送	AirDrop	AirDrop				
 AirPlay		隔空播放			AirPlay			
 album (online)	相簿	相册						相簿
-algorithm	演算法	算法						
+Algorithm	演算法	算法						
 Aligner	曝光機	光刻机	光刻機					
+Allocate	配置	分配						
 allocation unit	單位配置	分配单元						
+Allocator	配置器	分配器						
 always on display	隨顯螢幕	息屏显示	隨顯螢幕				隨顯螢幕	
 Always-On Retina display	隨顯 Retina 顯示器	全天候视网膜显示屏	常亮 Retina 顯示器					
 amplitude	振幅	幅度						
-analog broadcasting;Analog Broadcasting	類比廣播	模拟广播	模擬廣播					
-analog television;Analog Television	類比電視	模拟电视	模擬電視				模擬電視	
-analog;Analog	類比	模拟	模擬					
+analog	類比	模拟	模擬					
+Analog Broadcasting	類比廣播	模拟广播	模擬廣播					
+Analog Television	類比電視	模拟电视	模擬電視				模擬電視	
 analogizer					模擬器	模拟器		
 AND gate	及閘	与门	與門					
 Animoji	Animoji	动话表情	Animoji					
+Annotation	註釋 (win)；註解 (mac)；詮釋 (web)	注释 (win)；注解 (mac)						
 antivirus	防毒	杀毒						
 AOL	美國線上	美国在线						
+App bundle	應用程式套件組合 (win)；App 套件 (mac)	应用程序包 (win)；App 捆绑包 (mac)						
 App Library	App資料庫	App资源库						
 Apple Intelligence		Apple 智能			Apple Intelligence	Apple Intelligence		
 Apple Lossless	Apple 保真壓縮	Apple 保真压缩	Apple 無損壓縮					
 Apple T2 Security Chip	Apple T2 安全晶片	Apple T2 安全芯片	Apple T2 保安晶片					
-application		应用程序			應用程式			应用程式
+Application	應用；應用程式	应用；应用程序;应用程序			應用程式			应用程式
 application programming interface	應用程式介面	应用程序接口						
+Apply	套用	应用						
+Architecture	架構；結構	架构；结构						
 archive	壓縮檔	压缩包						压缩档
 archives					檔案館;檔案室	档案馆;档案室		
+Argument	引數	参数（也称为实际参数，实参）						
+Arity	元數（所需運算元的數量）	参数数量						
 array	陣列	数组						
-array (RAID)	陣列硬碟;陣列伺服器;磁碟陣列;伺服器陣列;硬碟陣列	阵列硬盘;阵列服务器;磁盘阵列;服务器阵列;硬盘阵列		阵列伺服器;伺服器阵列				
+array (RAID)	伺服器陣列;硬碟陣列;磁碟陣列;陣列硬碟;陣列伺服器	服务器阵列;硬盘阵列;磁盘阵列;阵列硬盘;阵列服务器		伺服器阵列;阵列伺服器				
+Artifact	成品 (win/mac)；產出物 (web)	项目 (win)；成品 (mac)						
 Artificial Neural	類神經	人工神经						
 ASIC	特定應用積體電路	特殊应用集成电路	特殊應用集成電路		特殊應用積體電路			
 assembler	組譯	汇编						
 Assembly language	組合語言	汇编语言	匯編語言					
 assembly mnemonic	輔助記憶碼	助记符						
-assignment operator	設定運算子	赋值运算符	設定運算子				設定運算子	
+Assert, Assertion	判斷提示 (win)；宣告 (win/mac)；聲明 (mac)	断言 (win)；声明 (win/mac)；论断 (mac)						
+Assign, Assignment	指派；（程式設計）賦值	分配；（编程）赋值						
+assignment operator	設定運算子;指派運算子	赋值运算符	設定運算子				設定運算子	
+Asynchronize	非同步	异步						
+Asynchronous	非同步的	异步的						
 asynchrony	非同步	异步	非同步				非同步	
-audio file	音訊檔	音频文件;音频档;音频文档	音頻檔					
+Atomic	不可分割的	原子的						
+Attribute	屬性	属性；特性						
+Audio	音訊；音效;音訊	音频	音頻					
+audio file	音訊檔	音频档;音频文档;音频文件	音頻檔					
 audio input	音訊輸入	音频输入	音頻輸入					
 audio output	音訊輸出	音频输出	音頻輸出					
 audio profiles	音訊設定檔	情景模式						
 audio track	音訊軌	音频轨	音頻軌					
-Audio;audio	音訊	音频	音頻					
 audit	稽核	审核						
 augmented reality	擴增實境	增强现实	擴張實境	扩增实境				
+Authenticate, Authentication	驗證，認證	验证，认证						
+Authorize, Authorization	授權	授权						
+Autoboxing	自動裝箱	自动装箱						
 Avalanche breakdown	突崩潰	雪崩击穿						
 Avalanche diode	雪崩二極體	雪崩二极管						
 Avalanche photodiode	雪崩光二極體	雪崩光电二极管						
 average bitrate	平均位元率	平均码率						
 back chaining	反鏈結	反链接						
+Background processes	背景程序，背景處理程序	后台进程						
 background traffic	背景流量	后台流量						
 backward compatible	向下相容		向下相容				向下相容	
 bad sector	壞軌	坏道						
-Baidu Album					百度相冊	百度相册		
-Baidu Cloud					百度雲計算;百度網盤	百度云计算;百度网盘		
-Baidu Search					百度搜索	百度搜索		
-Baidu Video					百度視頻	百度视频		
 band width	頻寬	带宽						
-base class	基礎類別	基类						
+Bandwidth	頻寬	带宽						
+Base class	基底類別;基礎類別	基类						
 base name	主檔名	文件主名						
 Base Station	基地台		基站			基站		
 base type	基本類型	基类型						
 baseband	基頻	基带	基帶					
-batch	批次;批次處理	批量;批处理						
+batch	批次;批次處理;批次（處理）	批量;批处理;批（处理）						
 batch file	批次檔	批处理文件						
 batch programs	批次程式	批处理程序						
 Baud	鮑	波特	鮑		鮑	波特		
@@ -97,89 +121,84 @@ Biasing	偏壓	偏置
 big data	巨量資料	大数据	大數據					
 Bill Gates	蓋茲	盖茨	蓋茨					
 binary	二元		二元				二元	
-binary function	二元函數	双参函数						
+binary function	二元函數;二元函式	双参函数;二元函数						
 binary heap	二元堆積	二叉堆	二叉堆積					
 binary linked list	二元連結串列	二叉链表	二元連結串列				二元連結串列	
-binary search	二分搜尋	二分查找	二分檢索					
+Binary operator	二元運算子	二元运算符						
+Binary search	二元搜尋法;二分搜尋	二分查找	二分檢索					
 binary search tree	二元搜尋樹	二叉搜索树	二叉搜尋樹				二叉搜尋樹	
-binary tree	二元樹	二叉树	二叉樹					
+Binary tree	二元樹	二叉树	二叉樹					
+Bind	繫結 (win)；綁定 (mac)	绑定						
 binding	繫結	绑定						
 Bionic					仿生	仿生		
-bit (12-bit)	12位元	12位						
-bit (128-bit)	128位元	128位						
-bit (16-bit)	16位元	16位						
-bit (18-bit)	18位元	18位						
-bit (24-bit)	24位元	24位						
-bit (31-bit)	31位元	31位						
-bit (32-bit)	32位元	32位						
-bit (36-bit)	36位元	36位						
-bit (4-bit)	4位元	4位						
-bit (48-bit)	48位元	48位						
-bit (60-bit)	60位元	60位						
-bit (64-bit)	64位元	64位						
-bit (8-bit)	8位元	8位						
-bit (80-bit)	80位元	80位						
+bit	位元	比特;位	位元	位元			位元	位元
 bit error	位元錯誤	比特差错						
 bit error rate	位元錯誤率	比特误码率	位元錯誤率				位元錯誤率	
 bit field	位元欄	位段						
 bit pattern	位元型樣	位模式		位模式				位模式
 bit string	位元串	位串						
-Bit;bit	位元	比特	位元	位元			位元	位元
 bitcent					比特分	比特分		
 bitcoin					比特幣	比特币		
 BitComet					比特彗星	比特彗星		
 Bitmap	點陣圖	位图						
-bitrate	位元率;位元速率	比特率	位元率;位元速率				位元率;位元速率	
+bitrate	位元速率;位元率	码率;比特率	位元速率;位元率				位元速率;位元率	
 BitSpirit					比特精靈	比特精灵		
 bitwise	按位元	按位						
 bitwise operation	位元運算	位操作	位元運算	位操作			位元運算	位操作
 black box testing	黑箱測試	黑盒测试						
 Blade Server	刀鋒伺服器	刀片服务器						
 blank screen	黑畫面	黑屏						
-block	封鎖	屏蔽			完全屏蔽	完全屏蔽		
+block	封鎖;封鎖；阻擋;（程式碼）區塊	屏蔽;屏蔽；阻止;（代码）块			完全屏蔽	完全屏蔽		
 block (Unicode)		区块		区块				区块
-block chaining	區塊鏈結;塊鏈結	区块链接;组链接						
+block chaining	塊鏈結;區塊鏈結	组链接;区块链接						
 block cipher	區塊加密法	分组密码						
 block code	區塊碼	分组码						
 block diagram	方塊圖	框图						
+Blocker	封鎖程式 (win)；阻擋器 (mac)	阻止程序 (win)；拦截器 (mac)						
 blog	部落格	博客	網誌					部落格
 Blue Screen	藍白畫面	蓝屏	藍畫面		藍屏			
 Blue Screen of Death	藍白當機	蓝屏死机	藍畫面死機		藍屏死機			
 bluetooth	藍牙	蓝牙	藍牙		藍牙	蓝牙		
 bookstw					博客來	博客来		
+boolean	布林	布尔	布林					
 boolean algebra	布林運算	布尔逻辑						
-Boolean;boolean	布林	布尔	布林					
 Boot Camp	啟動切換	启动转换	開機切換					
 boot disk	啟動磁碟	启动盘						
 boot loader	啟動載入程式	启动引导程序						
 bottom-up	由下而上	自底向上						
+Bounce	退回；彈跳	退回；弹跳						
 Boyce-Codd normal form	BC正規形式	BC范式						
 brain-machine interface	人機介面	脑机接口						脑机介面
 Breakdown voltage	崩潰電壓	击穿电压	擊穿電壓					
+Breakpoint	中斷點	断点						
 Broadband	寬頻	宽带						宽频
 Bubble sort	泡沫排序	冒泡排序						
 buffer	緩衝區	缓冲器						
 buffer overflow	緩衝區溢位	缓存溢出						
 bug	錯誤		錯誤				錯誤	
 Bug fixes	錯誤修正	错误修复						
-build-in	內建	内置		内建				
+Build (noun)	構件；版本（號）	构件；版本（号）						
+Build (verb)	建構 (mac)；建置，組建 (win)	构建						
+build-in	內建	内置;内置 (win)；内建 (mac)		内建				
 Built-in	內建		內建				內建	
-burn	燒錄	刻录						
+Bundle (noun)	組合包 (win)；套件 (mac)；套組	捆绑包						
+Bundle (verb)	整合	整合						
+Burn	燒錄	刻录						
 Bus	匯流排	总线	匯流排					
 Business Model	商業模式	商业模型						
 byte	位元組	字节	位元組				位元組	
 ByteDance					字節跳動	字节跳动		
 Cable	纜線	线缆				线缆		
-cache	快取	缓存	快取;緩衝記憶體				緩衝記憶體;快取	
-cache memory	高速緩衝記憶體;快取記憶體	高速缓冲存储器;缓冲存储器	緩衝記憶體;高速緩衝記憶體				緩衝記憶體;高速緩衝記憶體	
+cache	快取;快取記憶體，快取	高速缓存，缓存;缓存	緩衝記憶體;快取				緩衝記憶體;快取	
+cache memory	快取記憶體;高速緩衝記憶體	高速缓冲存储器;缓冲存储器	緩衝記憶體;高速緩衝記憶體				緩衝記憶體;高速緩衝記憶體	
 cached webpage	頁庫存檔	网页快照						
 calculator	計算機	计算器	計數機				計數機	
+calendar	行事曆	日历	日曆	日历				日历
 calendar program	行事曆程式	日历程序						
-Calendar;calendar	行事曆	日历	日曆	日历				日历
-call	呼叫	调用						
+Call	呼叫	调用						
 Call forwarding	來電轉駁	呼叫转移						
 Call Level Interface (CLI)	呼叫層級介面	调用层接口						
-callback	回呼	回调						
+Callback	回呼	回调						
 camcorder	攝錄影機	摄像机	攝像放像機					
 camera phone	照相手機	照相手机	相機手機					
 campus network	校園網路	校园网	校園網絡				校園網絡	
@@ -187,6 +206,7 @@ capture	擷取		擷取				擷取
 card reader	讀卡機	读卡器	讀卡器					
 CarPlay	CarPlay	CarPlay车载						
 carriage return character	回車字元	回车符						
+Carriage-return	回車字元	回車符						
 Carrier	載子	载流子						
 CDMA	分碼多重進接	码分多址	碼分多址					
 CDN	內容傳遞網路	内容分发网络						
@@ -195,18 +215,20 @@ Cellular	行動網路	蜂窝网络	流動網絡
 Cellular data	蜂巢式資料	蜂窝数据	蜂巢式數據					
 Cellular network	蜂巢式網路	蜂窝网络	蜂巢式網絡					
 Ceramic Shield front	超瓷晶盾面板	超瓷晶面板	陶瓷晶體護面					
-certificate	憑證	证书	證書					
+Certificate	憑證	证书	證書					
 chain		链		链				链
 chaining		链接		链接				链接
 chaining backward	鏈結反向	链接反向						
 chaining forward	鏈結正向	链接正向						
 chaining of commands	命令鏈結	命令链接						
 chaining search	鏈結搜尋	链接搜索						
-Channel;channel	通道;管道;頻道	沟道;信道	頻道	波道				
+channel	管道;頻道;通道	信道;沟道	頻道	波道				
 character	字元	字符						
 character generator	字元產生器	字符生成器						
 character printer	字元列印機	字符打印机						
+Check	查看	查看						
 check bit	核對位元	检验位						
+Check box, Checkbox	核取方塊 (win)；註記框 (mac)	复选框						
 check button	核取按鈕	复选按钮						
 checkbox	核取方塊	复选框						
 checksum	核對和	检验和						
@@ -218,15 +240,16 @@ Chief Technology Officer (CTO)	技術長	首席技术官						总技术长
 child class		子类		子类				子类
 chip	晶片	芯片						晶片
 Cinematic video stabilization	電影級視訊穩定	影院级视频防抖	電影級影片防震					
+Class	類別	类						
 class constructor	類別的建構函數	类的构造函数		类的构造函数				类的构造函数
 class declaration	類別宣告	类声明						
 class definition	類別定義	类定义						
 class destructor	類別的破壞函數	类的析构函数		类的析构函数				类的析构函数
-class instance	類別實例;類別的實例	类实例;类的实例						
+class instance	類別的實例;類別實例	类的实例;类实例						
 class library	類別館	类库						
 class member	類別成員	类成员						
 class method	類別方法	类方法						
-class of C++	C++類別;C++的類別	C++类;C++的类						
+class of C++	C++的類別;C++類別	C++的类;C++类						
 class of Java	Java類別;Java的類別	Java类;Java的类						
 class template	類別模板	类模板						
 class variable	類別變數	类变量	類變量					
@@ -234,12 +257,15 @@ class-based	類別為基	基于类
 class-based programming	類別為基的程式設計	基于类的编程						
 class-orientation	類別導向	面向类						
 classloader	類別載入器	类加载器						
+Click (vs. Tap)	點選 (win)；按一下，點/選按 (mac)	点击 (win)；点按 (mac)						
 client		客户端		客户端				客户端
-clipboard	剪貼簿	剪贴板						剪贴簿
+Client-side	用戶端	客户端						
+clipboard	剪貼簿;剪貼簿 (win)；剪貼板 (mac)	剪贴板						剪贴簿
 Clips	可立拍	可立拍	奇趣拍					
 Clock gating	時脈閘控	时钟门控						
-clock rate	時脈頻率	主频;时钟频率	時鐘頻率	时钟频率				时钟频率
-Clock signal;clock signal	時鐘訊號;時脈訊號	时间脉冲信号;时钟信号						
+clock rate	時脈頻率	时钟频率;主频	時鐘頻率	时钟频率				时钟频率
+clock signal	時脈訊號;時鐘訊號	时钟信号;时间脉冲信号						
+Clone	複製	克隆						
 cloud computing	雲端運算	云计算						
 cloud computing storage	雲端儲存	云存储		云储存				云端储存
 cloud data	雲端數據	云数据						
@@ -249,60 +275,85 @@ Code division	分碼	码分	碼分
 code generator	碼產生器	代码生成器						
 code list					代碼表	代码表		
 code page	頁碼		頁碼				頁碼	
+Cohesion	內聚	内聚						
+Collaborate, Collaboration	（協同）合作	协作						
 collaboration	協同運作	协作						
 Collector	集極	集电极						
-Collector junction	集極接面	集电结;集电极结						
+Collector junction	集極接面	集电极结;集电结						
 color monitor	彩色螢幕		彩色螢幕				彩色螢幕	
 Color Sync Utility	色彩同步工具程式	色彩同步实用工具	「色彩同步」工具程式					
+Combo box	組合方塊；下拉式方塊 (win)	组合框						
 combobox	組合方塊	组合框						
-command line					命令列	命令行		
+Come with	隨附	随附						
+Command	指令	命令						
+Command line	命令列	命令行			命令列	命令行		
+Comment	留言;註解，註釋	评论;注释 (win)；注解，批注 (mac)						
+Commit	提交	提交						
 Common-mode rejection ratio	共模拒斥比	共模抑制比						
 Communicating sequential processes	交談循序程式	通信顺序进程						
-Communication;communication	通訊;通訊學	通信;通信学		通讯;通讯学	通訊			通讯;通讯学
-community	社群							
+Communication	通訊;通訊學	通信;通信学		通讯;通讯学	通訊			通讯;通讯学
+Community	社群	社区						
 compact disc	光碟	光盘		光碟				光碟
 Compact Disc Driver	光碟機	光盘驱动器		光碟机				光碟机
 Compact fluorescent lamp	省電燈泡	节能灯	慳電膽					
-compatible	相容	兼容	相容				相容	
+Compatibility	相容性	兼容性						
+Compatible	相容的;相容	兼容的;兼容	相容				相容	
+Compile time, Compile-time	編譯期	编译期，编译时						
+Compile, Compilation	編譯	编译						
+Compiler	編譯器	编译器						
 complement		补码	補碼	补码			補碼	补码
-complexity class	複雜性類別;複雜度類別	复杂性类;复杂度类						
-component;Component	元件	组件		组件				组件
+complexity class	複雜度類別;複雜性類別	复杂度类;复杂性类						
+Component	組件；元件;元件	组件		组件				组件
+Composition	組合	组合						
+Compress	壓縮	压缩						
 computer	電腦	电子计算机	電腦	电脑			電腦	电脑
 computer architecture	電腦架構	计算机体系结构		电脑架构				电脑架构
 computer programming	程式設計	程序设计						程式设计
 computer science	電腦科學	计算机科学						电脑科学
 computer terminal		终端		终端				终端
 computer-generated imagery		电脑产生图像		电脑合成影像	電腦合成影像			电脑合成影像
-concurrency	並行	并发						
+Concurrency	並行性，並行;並行	并发性，并发;并发						
 concurrency-oriented	平行導向	面向并发						
+Concurrent	並行的；同時的	并发的；同时的						
 concurrent computing	並行計算	并发计算						
+Configuration	配置；設定 (mac)；組態 (win)	配置						
 configuration files	組態檔	配置文件						
 configure/configuration	組態	配置						
+Connect, Connection	連接；（網路、資料庫）連線	连接						
 connection	連線	连接						
 constant	常數	常量						
 constant bitrate	固定位元率	固定码率						
-constructor	建構函式	构造函数		构造函数				构造函数
+Constraint	約束；限制	约束；限制						
+constructor	建構函式;建構子，建構式，建構函式	构造函数		构造函数				构造函数
 contact	聯絡;聯絡人	联系;联系人						联络;联络人
 contacts					通訊錄	通讯录		
+Container	容器	容器						
 content-addressable memory	可定址內容記憶體	内容可寻址存储器;结合存储						
+Context	背景（關係）；環境；上下文；内容	背景（关系）；环境；上下文；内容						
 context switch	上下文交換	上下文切换						
 Continuity	接續互通	连续互通						
+Continuous delivery	持續交付	持续交付						
+Continuous deployment	持續部署	持续部署						
+Continuous integration	持續整合	持续集成						
 Contour	輪廓光	轮廓光	輪廓光				輪廓光	
-control	控制項	控件						
+Control	控制元件，控制項;控制項	控件						
 convert		转换		转换				转换
 Coordinate	座標	坐标						
 copper clad laminate	銅箔基板	覆铜板						
+Copy	複製 (win)；拷貝 (mac)	复制 (win)；拷贝 (mac)						
 copyright	著作權	著作权	版權				著作權	
 copyright information	著作權資訊	著作权信息		著作权信息			著作權資訊	著作权信息
+Coroutine	協程，協同程式	协程，协同程序						
 cost-effective	CP值	性价比	性價比					
+Coupling	耦合	耦合						
 cracker	劊客	溃客	潰客					
-crash	當機	死机	死機	当机				当机
-create	建立							
+crash	當機;當機 (win/mac)；毀損 (win)	死机;崩溃 (win/mac)；故障 (win)	死機	当机				当机
+create	建立	创建						
 create new	新增							
 CRT	映像管	显像管	顯像管					
 current version	目前版本	当前版本						
-cursor	游標	光标						
-custom	自訂	自定义	自訂				自訂	
+Cursor	游標	光标						
+Custom	自訂	自定义	自訂				自訂	
 customization	客製化	定制						
 cut	剪下	剪切						
 Cyber-Physical System	網宇實體系統	信息物理系统						
@@ -310,7 +361,7 @@ cyberbullying	網路霸凌	网络欺凌	網上欺凌
 DAC	數位類比轉換器	数字模拟转换器	數碼模擬轉換器					
 daemon	守護行程	守护进程						
 daisy chaining	菊式鏈結	菊花链接						
-data	資料		數據					
+data	資料	数据	數據					
 data broadcasting	資料廣播		數據廣播			数据广播		
 data center	資料中心	数据中心	數據中心					
 data chaining	資料鏈結	数据链接						
@@ -318,26 +369,33 @@ data cleansing	資料淨化	数据清洗
 data dredging	資料挖掘	数据捕捞	數據捕撈					
 data execution protection	系統記憶體保護	数据执行保护	數據執行保護					
 data frame	資料訊框	数据帧	數據幀					
+Data link layer	資料連結層	数据链路层						
 data mart	資料市集	数据集市	數據市集					
 data mining	資料探勘	数据挖掘	數據探勘					
 data packet	封包	数据包						
 data source	資料來源	数据源	數據源					
+Data structure	資料結構	数据结构						
 data type		数据类型			資料類型			
 data warehouse	資料倉儲	数据仓库	數據倉庫					
-database	資料庫	数据库	資料庫					
+Database	資料庫	数据库	資料庫					
+Database schema	資料庫綱要 (mac)；資料庫結構描述 (win)	数据库架构，数据库模式						
 datagram	資料報	数据报文						
 dead robot					當機器	当机器		
-deadlock	死結	死锁						
-debug	除錯	调试	除錯	调试			除錯	调试
+deadlock	死結;死結；鎖死	死锁						
+debug	除錯;除錯 (win/mac)；偵錯 (win)	调试	除錯	调试			除錯	调试
+Debugger	除錯器	调试器						
 declaration	宣告		宣告				宣告	
+Declare, Declaration	宣告，聲明	声明						
 decode	解碼			解码				解码
 Deep Fusion	深度融合	深度融合	深度融合				深度融合	
 default	預設	默认	預設				預設	
-Definition;definition	解析度	清晰度	清晰度					
+definition	解析度;定義；解析度	清晰度;定义；清晰度	清晰度					
 defragmentation	磁碟重組	磁盘碎片整理						
 defragmentation program	磁碟重組工具	磁盘碎片整理程序						
+Delegate, Delegation	委派	委托						
 denial-of-service (DoS)	阻斷服務	拒绝服务						
 denormalization	解除規格化	反规范化						
+Dependency	相依性；依賴關係	依赖						
 dependent type	依值型別;依存型別	依赖类型;依存类型						
 Depletion	空乏	耗尽	空乏					
 Depletion layer	空乏層	耗尽层						
@@ -347,17 +405,22 @@ derivation list	衍化列	继承列表
 derive	衍生	派生						
 derived class	衍生類別	派生类						
 derived type	衍生類型	派生类型						
+Design pattern	設計模式	设计模式						
 desktop	桌上型	桌面型						
 desktop computer	桌上型電腦	台式机	桌上電腦	台式电脑			桌上電腦	台式电脑
 desktop version	電腦版		電腦版				電腦版	
 destruct	解構	析构						
-destructor	解構函式	析构函数		析构函数				析构函数
-device;Device	裝置;元件	设备;器件		装置				
+destructor	解構函式;解構式，解構函式	析构函数		析构函数				析构函数
+Detect, Detection	偵測	检测						
+Device	裝置;元件	设备;器件		装置				
+Dialog	對話方塊 (win)；對話框 (mac)	对话框						
 dialog box	對話方塊	对话框						
 Dictionary		词典			辭典			
+Digital	數位;數位影像;數位的；數位化	数字;数字图像;数字的；数字化	數碼;數碼圖像	数码;数码图像			數碼	数码
 digital asset	數位資產	数字资产	數碼資產	数码资产				
-Digital Broadcasting;digital broadcasting	數位廣播	数字广播	數碼廣播	数码广播				数码广播
+digital broadcasting	數位廣播	数字广播	數碼廣播	数码广播				数码广播
 digital camera	數位相機	数字相机	數碼相機	数码相机				数码相机
+Digital certificate	數位憑證	数字证书						
 digital certificates	數位憑證	数字证书	數碼證書	数码证书				
 Digital Color Meter	數位測色計	数码测色计	數碼測色計					
 Digital Crown	數位錶冠	数码表冠	數碼錶冠					
@@ -369,28 +432,33 @@ digital mobile	數位行動	数字移动	數碼流動	数码移动				数码移�
 digital mode	數位模式	数字模式	數碼模式	数码模式				数码模式
 digital photo	數位相片	数字照片	數碼相片	数码照片				数码相片
 digital right	數位版權	数字版权	數碼版權					数码版权
-digital signature	數位簽章	数字签名	數碼簽章	数码签名				数码签名
-digital television;Digital Television	數位電視	数字电视	數碼電視	数码电视				数码电视
-digital terrestrial television;Digital Terrestrial Television	數位無線電視;無線數位電視	地面数字电视;数字地面电视	數碼地面電視;地面數碼電視	数码地面电视;地面数码电视			地面數字電視;數碼地面電視	数码地面电视;地面数码电视
-digital video	監視;數位影片;視訊;影片	视频;监控;数字视频	視像;監視;數碼影片;影片	视频;数码视频			視像;影片	视频;数码影音
+Digital signature	數位簽章	数字签名	數碼簽章	数码签名				数码签名
+digital television	數位電視	数字电视	數碼電視	数码电视				数码电视
+digital terrestrial television	數位無線電視;無線數位電視	地面数字电视;数字地面电视	數碼地面電視;地面數碼電視	数码地面电视;地面数码电视			地面數字電視;數碼地面電視	数码地面电视;地面数码电视
+digital video	數位影片;監視;視訊;影片	视频;数字视频;监控	視像;數碼影片;監視;影片	视频;数码视频			視像;影片	视频;数码影音
 digital watermarking	數位浮水印	数字水印	數碼水印	数码水印				数码水印
-digital;Digital	數位影像;數位	数字图像;数字	數碼圖像;數碼	数码图像;数码			數碼	数码
 digitalisation	數位化	数字化	數碼化	数码化				数码化
 dile descriptor		文件描述符			檔案描述子			
 Diode	二極體	二极管						
+Directory	目錄	目录						
 Directory Utility		目录实用工具			目錄工具程式			
 Discrete component	離散元件	分立器件						
-Disk;disk	磁碟	磁盘						磁碟
+Disk	磁碟;碟	磁盘;盘						磁碟
+Disk image	磁碟映像檔	磁盘映像						
+Dispatch	分派	分派；调度						
 display device	顯示器		顯示器				顯示器	
 display memory	顯示記憶體	显示内存						
 Distortion					失真	失真		
+Distribute, Distribution	分發；分配；分散	分发；分配；分布						
 distributed	分散式	分布式						
+Distribution	發布/發行（版本）；發行套件	发行（版本）						
 DM	差量調變	增量调制						
 do Not Track	停止追蹤	请勿追踪						
-document	文件		文件				文件	
+document	文件	文档；文稿	文件				文件	
 document file	文件檔案	文档文件		文档文件				文档文件
 document object model (DOM)	文件物件模型	文档对象模型						
 document-oriented	文件導向	面向文档						
+Domain	網域	域						
 domain-key normal form	DK規格化	DK范式						
 Donor	施體	施主						
 DPCM	脈波差量編碼調變	差分脉冲编码调制						
@@ -399,12 +467,15 @@ drive	磁碟機	磁盘驱动器
 drive - system drive	系統磁碟	系统盘	系統磁碟機					
 drive letter	磁碟機代號	盘符						
 driver	驅動程式	驱动程序						驱动程式
-drop-down menu	下拉式選單	下拉菜单						
+Drop-down list	下拉式清單	下拉列表						
+Drop-down menu	下拉式功能表 (win)；下拉式選單 (mac);下拉式選單	下拉菜单 (win/mac);下拉菜单						
+Drop-down, Dropdown (noun)	下拉式選單	下拉菜单						
+Drop-down, Dropdown (verb)	下拉	下拉						
 DSP	數位訊號處理器	数字信号处理器	數碼訊號處理器					
 Dual-link	雙連結	双通道						
 duck typing	鴨子型別	鸭子类型						
 DVB-H	手持式數位視訊廣播	手持地面无线	手持式數碼視像廣播					
-dynamic binding	動態繫結	动态绑定						
+dynamic binding	動態繫結;動態繫結，動態連結，動態綁定	动态绑定						
 Dynamic Island	動態島	灵动岛						
 dynamic typing	動態型別	动态类型						
 Early effect	爾利效應	厄利效应						
@@ -413,30 +484,40 @@ Electrical ballast	安定器	镇流器	鎮流器
 Electrical engineering	電機工程	电气工程						
 Electron hole	電洞	空穴						
 Electron mobility	電子移動率	电子迁移率						
+Element	元素；元件	元素；元件						
 email	電子郵件	电子邮件		电邮				电邮
 email (mailbox)	電子信箱	邮箱	郵箱					
+Email, E-mail	電子郵件	电子邮件						
 Emitter	射極	发射极						
 Emitter follower	射極隨耦器	射极跟随器						
 Emitter junction	射極接面	发射极结;发射结						
 emoji					繪文字	绘文字		
+Enable	啟用	启用						
+Encapsulation	封裝	封装						
 enclosed	圍繞		圍繞				圍繞	
 enclosed character	圍繞字元	带圈字符						
 end user	終端使用者	最终用户						
 end-user license agreements	終端使用者授權協定	最终用户许可协议						
-enter	Enter		Enter				Enter	
+Enter	確認；進入;Enter	回車鍵	Enter				Enter	
 enter key	確認鍵	回车键		确认键				确认键
 enterprise mobility management	企業行動管理	企业移动管理						
+Entity	實體	实体						
 enumeration	列舉	枚举						
-enumerators	列舉元	枚举器;枚举成员						
+enumerators	列舉元	枚举成员;枚举器						
 Epitaxy	磊晶	外延						
+Equal	相等的	相等的						
+Equality	相等性，相等	相等性，相等						
 equation					方程式	方程式		
 error correcting code	錯誤更正碼	纠错码	除錯碼					
-error detecting code	誤差檢測碼;偵錯碼	差错检测码;检错码						
+error detecting code	偵錯碼;誤差檢測碼	检错码;差错检测码						
 escape	跳脫	转义						
+Escape code	跳脫碼，逸出碼，轉義碼	转义码						
 Etching	蝕刻	刻蚀						
 Ethernet	乙太網路	以太网						
 EULA	終端使用者授權合約	最终用户许可协议						
+Event	事件	事件						
 Exabyte					艾位元組	艾字节		
+Exception	例外	异常						
 exception handling	例外處理	异常处理						
 Excitation table	激發表	激励表						
 exclusive or	互斥或	异或	異或					
@@ -446,9 +527,10 @@ executor					執行者	执行者
 exit/quit	結束	退出						
 exit/quit application	結束應用程式;結束程式	退出应用程序;退出程序	結束應用程序					
 expand	擴充	扩展						
+Explicit	明確的 (win)；顯式 (mac)	显式						
 export	匯出	导出						
 Express Cards	快速卡	快捷交通卡	特快卡					
-expression		表达式		表达式				表达式
+expression	運算式 (win)；表示式 (mac)；表達式	表达式		表达式				表达式
 extended block	擴充區	扩展区	擴充區	扩展区			擴充區	扩展区
 extended Chinese character		扩展汉字			擴充漢字			
 extended reality	延展實境	扩展现实						
@@ -456,7 +538,7 @@ extensible	可延伸	可扩展
 extensible business reporting language	可延伸商用報告語言	可扩展商业报告语言						
 extensible firmware interface	可延伸韌體介面	可扩展固件接口						
 extensible markup language	可延伸標示語言	可扩展置标语言						
-extension		扩展		扩展				扩展
+Extension	擴充（程式、功能）；擴充功能 (win)；延伸功能 (mac);副檔名	扩展（程序、功能）;扩展名;扩展		扩展				扩展
 extension name	副檔名	扩展名						
 External	外接	外置	外置					
 external hard drive	外接硬碟	外置硬盘						
@@ -465,71 +547,92 @@ Face ID		面容ID			Face ID
 Facebook	臉書	脸谱	Facebook	面簿			Facebook	脸书
 FaceTime	FaceTime	FaceTime通话						
 facial recognition	臉部辨識	人脸识别	人面辨識				人面辨識	
+fairchild semiconductor	快捷半導體;快捷半導體公司	仙童半导体;飞兆半导体公司	快捷半導體公司			飞兆半导体		
 FDM	分頻多工	频分复用	頻分複用					
 FDMA	分頻多重進接	频分多址	頻分多址					
+Feature	特色，特點，特徵	特色，特点						
+Feature (vs. Function)	（特殊的）功能	（特殊的）功能						
 feature phone	功能型手機	功能手机	功能電話					
-Feedback;feedback	回饋	反馈	反饋					
+feedback	回饋	反馈	反饋					
 FEOL	前段製程	前道工序						
 fiber distributed data interface	光纖分散式資料介面	光纤分布式数据接口	光纖分散式數據介面					
-field	欄位	字段						
+Field	欄位；域;欄位	字段，栏位；域;字段						
 Field Effect Transistor	場效電晶體	场效应管						
 fifth normal form	第五規格化	第五范式						
+File	檔案	文件						
 File namespace	檔案命名空間	文件命名空间						
-file;File	檔案	文件						
-filename	檔名;檔案名稱;檔案名字	文件名;文件名称;文件名字						
-filename extension	副檔名	文件扩展名;扩展名						
+File system	檔案系統	文件系統						
+filename	檔案名稱;檔名;檔案名字	文件名称;文件名;文件名字						
+filename extension	副檔名	扩展名;文件扩展名						
 film streaming	影片串流	影片流						
-find	尋找	查找						
+Filter	過濾器	过滤器						
+Find	尋找	查找						
 Finder		访达			Finder	访达		
-Firmware;firmware	韌體	固件						
+firmware	韌體	固件						
 first normal form	第一規格化	第一范式						
-flash memory	快閃記憶體	闪存						
+Flag	旗標	标记						
+Flash memory	快閃記憶體	闪存						
 flight mode	飛航模式	飞行模式						
 Flip-flop	正反器	触发器						
 floppy disk	軟碟	软盘		软碟				
 floppy disk drive	軟碟機	软盘驱动器						
 Fluorescent	螢光	荧光	熒光					
+Flush	排清，清除;對齊，齊平	刷新;对齐，齐平						
 Flyover	飛行俯瞰	俯瞰	航覽					
-folder	資料夾	文件夹						
-font	字型	字体						
+Folder	資料夾 (win)；檔案夾 (mac);資料夾	文件夹						
+Font	字型 (win)；字體 (mac);字型	字体						
 footer	頁尾	页脚						
 footnote	章節附註;註腳	尾注;脚注						
 Force Touch	力度觸控	力度触控	力度觸控					
 foreign key	外來鍵	外键						
-form	表單	窗体	表單	窗体			表單	窗体
+Form	表單	表单;窗体	表單	窗体			表單	窗体
+Format (noun)	格式	格式						
+Format (verb)	格式化	格式化						
 forum	論壇	论坛	討論區					
-Forward	順向	正向						
+Forward	順向;轉發，轉送，轉寄	正向;转发，转送，转寄						
 forward chaining	正向鏈結	前向链接						
-forward error correction	正向錯誤校正;前向錯誤更正	前向纠错						
+forward error correction	前向錯誤更正;正向錯誤校正	前向纠错						
 Fourteen-segment display	十四段顯示器	十四段数码管	十四劃管					
 fourth normal form	第四規格化	第四范式						
+Fragment	片段	片段						
+Frame	影格;影格，畫面；框架;訊框	帧;帧；框架	幀	帧			幀	帧
 frame pointer	影格指標	帧指针	框指標					
 frame rate	影格率	帧率	幀率	帧率			幀率	帧率
+Frame rate ；FPS (frames per second)	影格率，畫面更新率	帧率						
 frame synchronization	影格同步化	帧同步	框同步化					
-Frame;frame	影格;訊框	帧	幀	帧			幀	帧
+Framework	框架	框架						
 Frequency division	分頻	频分	頻分					
+Frozen	（軟體或影片）畫面定格；凍結，鎖定	冻结，锁定						
 full high definition (full HD)	超高畫質							
 Full High definition/Full HD	1080P	高清	全高清					
 full screen	全螢幕	全屏	全螢幕				全螢幕	
+Full screen, Fullscreen	全螢幕	全屏						
 full-size smartphone	全螢幕手機	全面屏手机	全螢幕手機					
 fullwidth	全形	全角						
-function	函式	函数	函數					
+Function	函式，函數;函式	函数	函數					
+Function (vs. Feature)	（一般的）功能	（一般的）功能						
 function library	函式庫	函数库						
 functional					函數式	函数式		
 functional programming	函數式程式設計	函数式编程						
 functional programming language	函數式程式語言	函数编程语言		函数编程语言				函数编程语言
+Functionality	功能	功能						
+Game	遊戲	游戏						
 GarageBand		库乐队			GarageBand	库乐队		
 garbage	多餘的資料		多餘的資料				多餘的資料	
 Gate	閘極	栅极						
 Gate circuit	閘電路	门电路	門電路					
-gateway	閘道器	网关		网关				网关
+Gateway	閘道器	网关		网关				网关
 Gateway, Inc.	桀威	捷威						
+General	一般的	通用的						
+Generate	產生，生成	生成						
 generator	產生器	发生器	發生器					
+Generic	通用的	通用的						
+Generics	泛型	泛型						
 get	取得	获取						
 gigabit ethernet	十億位元乙太網路	吉比特以太网						
 Gigabit-class LTE	Gigabit 等級 LTE	千兆级 LTE	Gigabit-class LTE					
 Gigabyte					吉位元組	吉字节		
-global	全域	全局						
+global	全域;全域的；總體的，整體的，通用的	全局;全局的						
 Global System for Mobile Communications Association	全球行動通訊系統協會	全球移动通信系统协会	全球流動通訊系統協會					
 GlobalFoundries	格羅方德	格芯						
 Google				Google	Google			Google
@@ -539,14 +642,16 @@ Google Docs	Google文件;Google 文件	Google文档;Google 文档
 Google Toolbar	Google工具列;Google 工具列	Google工具条;Google 工具条						
 Google Video	Google影片;Google 影片	Google视频;Google 视频						
 GPRS	通用封包無線服務	通用分组无线服务						
+Graph	圖	图						
 graphics	圖學	图形学	圖學	图形学			圖學	图形学
 graphics processing unit	圖形處理器	图形处理器						
 graphing calculator	繪圖計算機	图形计算器						
-greedy algorithm	貪婪演算法;貪婪法	贪心算法;贪心法	貪婪演算法	贪心算法			貪婪演算法	贪心算法
+greedy algorithm	貪婪法;貪婪演算法	贪心算法;贪心法	貪婪演算法	贪心算法			貪婪演算法	贪心算法
 Green Screen	綠白畫面	绿屏	綠畫面		綠屏			
 Green Screen of Death	綠白當機	绿屏死机	綠畫面死機		綠屏死機			
 gridlines	格線	网格线						
 group	群組	组群						
+Group box	群組方塊	分组框，群组框						
 group notice	群組提示	组提示						
 GSM mobile	GSM行動	GSM移动	GSM流動					
 GUI	圖形化使用者介面	图形用户界面						
@@ -554,28 +659,30 @@ GUID Partition Table	GUID磁碟分割表	全局唯一标识分区表
 hackathon					黑客松	黑客松		
 hacker	駭客	黑客	黑客					骇客
 halfwidth	半形	半角						
-handle	控制代碼	句柄						
-handler	處理常式	处理函数						
+Handle	控制代碼	句柄						
+Handler	處理常式，處理程式，處理器;處理常式	处理程序，处理器;处理函数						
 Handoff		接力			Handoff	接力		
 Haptic Touch	觸覺回饋觸控	触感触控	觸感觸控					
 Hard baking??	硬烤	硬烘干						
 hard disk	硬碟	硬盘						
 hard disk drive (HDD)	硬碟機	硬盘驱动器						
 hard-coded	寫死	硬编码						
-hardware	硬體	硬件	硬件					
-hash	雜湊	散列	雜湊				雜湊	
+Hardware	硬體	硬件	硬件					
+Hash	雜湊	哈希;散列	雜湊				雜湊	
 HDMI	高畫質多媒體介面	高清多媒体接口	高清多媒體介面					
 head crash	磁頭損壞	磁头划碰						
 header	檔頭;頁首	标头;页眉						
-header file	標頭檔	头文件		头文件				头文件
+Header file	標頭檔	头文件		头文件				头文件
+Heap	堆積	堆						
 heapsort	堆積排序	堆排序						
 hearts	傷心小棧	红心大战						
+Help	使用說明；說明；幫助	帮助						
 Help and Support	說明與支援	帮助与支持						
 help document	說明文件	帮助文档						
 Heterojunction	異質接面	异质结						
 Hierarchical View	多層次樹狀介面	分层视图;分层树形视图						
-hierarchy	階層	层次结构						
-High definition	高畫質	高清	高清					
+Hierarchy	階層	层次结构						
+High definition	高畫質;高解析度，高畫質	高清;高清晰度，高清	高清					
 high definition (HD)	高畫質;高解析	高清;高清晰	高清;高清晰					
 high fidelity (Hi-Fi)	高傳真	高保真	高傳真	高保真			高傳真	高保真
 High-intensity discharge	高強度氣體放電燈	金卤灯						
@@ -586,35 +693,44 @@ high-resolution audio	高音質音訊	高清音频	高清音頻
 high-resolution sound quality	高音質	高清音质	高清音質					
 highlight	突出顯示;突顯		突出顯示;突顯				突出顯示;突顯	
 holographic	全像	全息						
+home	家庭	家庭	家居	家庭				家庭
 home address		家庭地址		家庭地址				家庭地址
 Home button	主畫面按鈕	主屏幕按钮	主畫面按鈕					
-Home;home	家庭	家庭	家居	家庭				家庭
+Home folder	主資料夾 (win)；個人專屬檔案夾 (mac)	主文件夹 (win)；个人文件夹 (mac)						
+Home page	首頁，主頁	主页						
 Hong Kong Supplementary Character Set					香港增補字符集	香港增补字符集		
 hook	勾點	钩子						
+Host file	主機檔案，host 檔案	主机文件						
 hosting	代管	托管	寄存				寄存	
 Hudong Baike					互動百科	互动百科		
-HyperText Markup Language	超文件標示語言	超文本置标语言;超文本标记语言						
+HyperText Markup Language	超文件標示語言	超文本标记语言;超文本置标语言						
 I support					我支持	我支持		
-icon	圖示	图标						
+Icon	圖示 (win)；圖像 (mac);圖示	图标						
 ID	身分	身份	身份					
+IDE	整合式開發環境	集成开发环境						
 iDEN	整合數位強化網路	集成数字增强网络						
-identifier	識別碼	标识符						
+Identifier	識別字;識別碼	标识符						
+Idle	閒置	闲置						
 if and only if	若且唯若	当且仅当						
 IGBT	絕緣閘雙極電晶體	绝缘栅双极晶体管						
-image		镜像		镜像				镜像
+image	影像；圖像，圖片；映像檔	镜像;影像；图像，图片；映像		镜像				镜像
 Image Capture	影像擷取	图像捕捉	影像截取					
 image file	圖檔	图像文件						
 image macro	哏圖	梗图	梗圖					
+Immutable	不可變的；無法更改的	不可变的；不可更改的						
 imperative programming	指令式程式設計	命令式编程						
-implement		实现		实现				实现
+implement	實作	实现		实现				实现
+Implementation	實作（品）	实现						
+Implicit	隱含的 (win)；隱式 (mac)	隐式						
 import	匯入	导入	匯入	导入			匯入	导入
 incandescent lamp	白熾燈	白炽灯	鎢絲膽					
 inch wafers					吋晶	吋晶		
 Incognito mode	無痕模式	隐身模式						无痕模式
-indent	縮排	缩进						
+Indent	縮排	缩进						
 Industry and Information Technology					工業和信息化	工业和信息化		
+Info	資訊	简介						
 info (information)		信息;资讯		资讯	資訊			资讯
-information	資訊	信息		资讯				资讯
+Information	資訊	信息		资讯				资讯
 information age	資訊時代	信息时代	資訊年代			资讯时代		
 Information and Communication Technology	資訊及通訊科技	信息和通信技术						
 Information Engagement	資訊參與	信息接触						资讯接触
@@ -625,24 +741,32 @@ Information Science	資訊學	信息科学;信息学	資訊科學					资讯科�
 information security	資訊安全	信息安全	資訊保安					资讯安全
 Information Technology	資訊科技	信息技术		资讯科技				资讯工艺
 Information theory	資訊理論	信息论		信息论				
+Inheritance	繼承	继承						
+Initialization	初始化	初始化						
 injection		注入		注入				注入
-inline	行內	内联						
+Inline	行內；內嵌;行內	内联						
 installation package	安裝套件	安装包						
+Instance	實體；實例	实例						
 instance method		实例方法		实例方法				实例方法
-integrate	整合	集成						
-integrated circuit;Integrated circuit	積體電路	集成电路	集成電路					
+Integrate	整合	集成						
+Integrated	整合式，整合的	集成的						
+integrated circuit	積體電路	集成电路	集成電路					
 Integrated Development Environment (IDE)	整合式開發環境	集成开发环境						
 Integrated Device Electronics (IDE)	整合裝置電路	集成设备电路						
+Integrity	完整性	完整性						
 intellectual property	智慧財產權	知识产权	知識產權					
 intellectualize	智慧化	智能化	智能化					
 intelligence	智慧型			智慧型				智慧型
 Inter-Process	行程間	进程间	行程間					
 Inter-Process Communication	行程間通訊	进程间通信	行程間通訊					
+Interact, Interaction	互動	交互						
 interactive entertainment		互动娱乐		互动娱乐				互动娱乐
 interacts	互動	交互						
+interface	介面	接口						
 interface (frontstage)	介面		介面				介面	
-interface;Interface	介面	接口						
 internal link	內部連結		內部連結				內部連結	
+Internal Storage	內部儲存	内存 (仅手机等便携装置，民间称谓)						
+Internationalization (I18N)	國際化	国际化						
 Internet	網際網路	互联网	互聯網				互聯網	
 Internet bar	網咖	网吧	網吧					
 Internet Content Provider (ICP)	線上內容提供者	互联网内容提供商	互聯網內容供應商	互联网内容供应商				互联网内容供应商
@@ -651,54 +775,77 @@ Internet forum	網路論壇
 Internet Key Exchange	網際網路金鑰交換	因特网密钥交换	互聯網金鑰交換					
 Internet Service Provider (ISP)	網際網路服務提供者	互联网服务提供商	互聯網服務供應商	互联网服务供应商				互联网服务供应商
 Interpreted language	直譯語言	解释型语言						
-interpreter	直譯器	解释器						
-Intranet	內部網路	内联网;内部网络;内部网	內聯網					
-invoke		调用		调用				调用
+Interpreter	直譯器	解释器						
+Intranet	內部網路	内部网络;内联网;内部网	內聯網					
+Invoke	呼叫 (mac)；執行，叫用 (win)	调用		调用				调用
 Ion implantation	離子佈植	离子注入						
 IP core	矽智財	IP核						
+Iterate	疊代；；反覆（運算）	迭代；；重复、循环（访问）						
+Iteration	疊代	迭代						
+Iterator	疊代器	迭代器						
 Jet Black	曜石黑色	亮黑色	亮黑色					
 JFET	接面場效電晶體	结型场效应管						
 judge	解題系統	评测系统						
 Junction capacitance	接面電容	结电容						
 Junctional	接面型	结型						
-kernel	核心							
-key	金鑰	密钥						
+Kernel	核心	内核						
+Key	金鑰，密鑰;金鑰	密钥						
+Keybind	快速鍵	快捷键						
 keyboard layout	鍵盤配置	键盘布局						
 keygen	序號產生器	注册机						
+Lag	延遲	延迟						
 Landline	固網電信	固定电话	固網電話					
 landscape	橫螢幕	横屏幕	橫螢幕				橫螢幕	
 language package	語言套件	语言包						
 Language-Oriented Programming	語言導向程式設計	面向语言的程序设计						
 laptop/notebook computer	筆記型電腦	笔记本电脑	手提電腦	手提电脑			手提電腦	手提电脑
-Laser;laser	雷射	激光	激光	镭射				雷射
+laser	雷射	激光	激光	镭射				雷射
 LaserDisc	雷射影碟	激光视盘	鐳射影碟	镭射碟				镭射影碟
 Latch	閂鎖	锁存器	鎖存器					
 launch bar	啟動列	启动栏						
+Layout	布局，配置	布局，配置						
+Lazy loading	惰性載入；消極式載入；延遲載入；懶載入	延迟加载；懒加载						
 Leakage cable	洩波電纜	泄漏电缆				泄漏电缆		
 LeCloud					樂視雲計算	乐视云计算		
-library	函式庫	库	函式庫	库			函式庫	库
+Lexer, Lexical analyzer	詞法分析器	词法分析器						
+Lexical analysis	詞法分析	词法分析						
+Library	程式庫，函式庫;函式庫	程序库，函数库;库	函式庫	库			函式庫	库
 LiDAR Scanner	光學雷達掃描儀	激光雷达扫描仪	LiDAR 感測器					
 Lightning	Lightning	闪电		Lightning	Lightning	闪电		
 Lightning connector	Lightning	闪电接口		Lightning	Lightning	闪电接头		
 like	按讚	点赞	讚好					
-link	連結;鏈結	链接	連結	链接			連結	链接
-linked list	鏈結串列	链表	連結串列				連結串列	
+Link	連結;鏈結	链接	連結	链接			連結	链接
+Link time	連結期	链接期						
+linked list	鏈結串列;連結串列	链表	連結串列				連結串列	
+Linker	連結器	链接器						
 Liquid Retina HD	Liquid Retina HD	Liquid 视网膜高清	Liquid Retina HD					
+List	清單；列表	列表						
+Listener	監聽器	监听器						
+Literal constant	字面常數，字面常值	字面常量						
+Literals	字面值，定數，常值	字面值，字面量						
 Live Photo	原況照片	实况照片	原況相片			实况照片		
 Live Text	原況文字	实况文本	原況文字					
 livelock	活結	活锁						
 load	載入	加载	載入	加载			載入	加载
+Load time	載入期	加载期						
+Loader	載入器	加载器						
+Local	區域的，本地的；本機	局部的，本地的；本地（主機）						
 Local Area Network	區域網路	局域网	區域網絡					
+Local variable	區域變數	局部变量						
 localization	在地化	本地化	本地化					
+Localization (L10N)	在地化	本地化						
+Lock	鎖定	锁定						
 Lock Screen	鎖定畫面	锁定屏幕	鎖定畫面					
-log	紀錄檔	日志						
+Log	記錄;紀錄檔	日志						
 log in					登入	登录		
+Log in, Login	登入	登录						
 log out		退出		退出				退出
+Log out, Logout	登出	退出；注销						
 logic device	邏輯裝置	逻辑器件						
-logic gate;Logic gate	邏輯閘	逻辑门	邏輯門					
+Logic gate	邏輯閘	逻辑门	邏輯門					
 logic synthesis	邏輯合成	逻辑综合						
 Logical volume management	邏輯捲軸管理	逻辑卷管理						
-loop	迴圈	循环	循環					
+Loop	迴圈；重複；循環;迴圈	循环	循環					
 lossless	無失真	无损						
 lossless compression	無失真壓縮	无损压缩	無損壓縮					
 lossy compression	失真壓縮	有损压缩						
@@ -712,7 +859,7 @@ LSI	大型積體電路	大规模集成电路
 Macao Information System Character Set					澳門資訊系統字集	澳门资讯系统字集		
 Macao Supplementary Character Set					澳門增補字符集	澳门增补字符集		
 machine code	機器碼	机器代码	機械碼				機械碼	
-macro		宏		宏				宏
+macro	巨集	宏		宏				宏
 macro virus	巨集病毒	宏病毒						
 macroblock	大區塊	宏块	大區塊	宏块			大區塊	宏块
 Magic Board	巧控板	妙控板	精妙板					
@@ -724,35 +871,36 @@ mainframe	大型電腦	大型机
 mainstream media	主流媒體	主流媒体	主流傳媒					
 managed code	受控代碼	托管代码	受控代碼	托管代码			受控代碼	托管代码
 map marker	地圖標示	地图标示						
+Map, Mapping	對應；映射	映射						
 mapping	對映	映射						
 marketing	行銷	营销						
-Markup Language	標示語言;標記式語言	标记语言;置标语言						
-mask;Mask	遮罩;光罩	掩模	遮罩				遮罩	
+Markup Language	標示語言;標記式語言	置标语言;标记语言						
+Mask	光罩;遮罩	掩模	遮罩				遮罩	
 Master Boot Record	主開機紀錄	主引导记录						
-match	符合		符合				符合	
+match	符合;配對；符合；配合；比對；匹配	匹配	符合				符合	
+medium	媒介	介质	媒介		媒介		媒介	
 medium dependent interface	媒體相依介面	介质相关接口						
-medium;Medium	媒介	介质	媒介		媒介		媒介	
 megabyte					百萬位元組	兆字节		
 Memoji	Memoji	拟我表情	Memoji					
-memory	記憶體	存储器						
+memory	記憶體	存储器;内存						
 memory card	記憶卡	存储卡						
 memory chip	記憶晶片	存储芯片						
-memory leak	記憶體漏失;記憶體流失	内存泄漏						
-menu	選單	菜单						
+memory leak	記憶體流失;記憶體漏失	内存泄漏						
+menu	選單;選單；功能表	菜单						
 merge	合併		合併				合併	
-message	訊息	消息;信息						
+message	訊息	信息;消息；信息;消息						
 message authentication code	訊息鑑別碼	消息认证码						
 message box	訊息方塊	消息框						
 message-oriented	訊息導向	面向消息						
 message-oriented middleware	訊息導向中介層	面向消息的中间件						
-meta-programming	元程式設計;超程式設計	超编程;元编程	元程式設計;超程式設計				元程式設計;超程式設計	
-metadata	元資料	元数据	元數據					
+meta-programming	元程式設計;超程式設計	元编程;超编程	元程式設計;超程式設計				元程式設計;超程式設計	
+metadata	元資料;中繼資料 (win)；後設資料 (mac)；詮釋資料	元数据	元數據					
 metal Oxide Semiconductor	金氧半導體	金属氧化物半导体						
 metropolitan Area Network	都會網路	城域网						
 micro-bitcoin					微比特	微比特		
-micro-blog	微型部落格;微部落格	微型博客;微博;微博客	微型博客;微博客	微博				
-microcontroller;Microcontroller	單晶片;微控制器	单片机						
-middleware	中介軟體	中间件						
+micro-blog	微部落格;微型部落格	微博客;微型博客;微博	微博客;微型博客	微博				
+Microcontroller	微控制器;單晶片	单片机						
+middleware	中介軟體;中介層，中介軟體	中间件;中间件，中间软件						
 Midnight Green	夜幕綠	暗夜绿	午夜綠					
 MIDP	行動資訊裝置設定檔	移动信息设备配置文件	流動資訊器材定義檔					
 midrange	中階	中级;中端						
@@ -762,6 +910,7 @@ minesweeper	踩地雷	扫雷
 mixed reality	混合實境	混合现实		混合实境				混合实境
 Mixed-singal	混訊	混合信号						
 Mixed-singal integrated circuits	混合訊號積體電路	混合信号集成电路						
+Mobile	行動	移动						
 mobile agent	行動代理	移动代理	流動代理					
 mobile app	行動應用	移动应用	流動應用					流动应用
 mobile broadcasting	行動廣播	移动广播	流動廣播					流动广播
@@ -769,7 +918,7 @@ mobile browser	行動瀏覽器	移动浏览器	流動瀏覽器
 mobile client	行動用戶端	移动客户端	流動用戶端					
 mobile code	行動程式碼	移动代码	流動程式碼					
 mobile commerce	行動商務		流動商務			移动商务		
-mobile communication;Mobile communication	行動通訊	移动通信	流動通訊					
+Mobile communication	行動通訊	移动通信	流動通訊					
 mobile company	電信公司	移动公司	流動公司					
 mobile computer	行動電腦	移动计算机	流動電腦					
 mobile computing	行動運算	移动计算	流動運算					
@@ -787,23 +936,26 @@ mobile phone	行動電話	移动电话	流動電話					行动电话
 mobile platform	行動平台	移动平台	流動平台					
 mobile product	行動產品	移动产品	流動產品					
 mobile software	行動軟體	移动软件	流動軟件					
-mobile technology	行動科技;行動技術	移动科技;移动技术	流動科技;流動技術					
+mobile technology	行動技術;行動科技	移动技术;移动科技	流動技術;流動科技					
 mobile telecom	行動電信	移动电信	流動電訊					
 mobile telecom operator	行動電信業者	移动电信运营商	流動電訊營辦商					
 mobile television	行動電視	移动电视	流動電視					
-mobile terminal	行動端;行動終端	移动端;移动终端	流動端;流動終端					
+mobile terminal	行動終端;行動端	移动终端;移动端	流動終端;流動端					
 mobile version	行動版	移动版	流動版					
 Mobileline	行動電話	移动电话	流動電話					
 mobility	行動性	移动性	流動性					
 modem	數據機	调制解调器		调制解调器				调制解调器
-modifier	修飾詞	修饰符						
-modulation;Modulation	調變	调制	調制					
-module	模組	模块	模組	模块			模組	模块
+Moderate, Moderation	審核	审核						
+modifier	修飾詞;修飾子，修飾詞	修饰符						
+modulation	調變	调制	調制					
+Module	模組	模块	模組	模块			模組	模块
 monolithic kernel	單核心	宏内核	整塊性核心					
+Monomorphism	單型	单态						
 MOSFET	金屬氧化物半導體場效電晶體	金属氧化物半导体场效应管						
 most derived class	最末層衍生類別	最底层派生类						
 motherboard	主機板	主板						
-mouse	滑鼠	鼠标		滑鼠				滑鼠
+Mouse	滑鼠	鼠标		滑鼠				滑鼠
+Mouse pointer	滑鼠指標	鼠标指针						
 multi-channel network	多頻道聯播網	多频道网络						
 multi-part archive	分割壓縮	分卷压缩						
 multi-tasking					多工			
@@ -811,8 +963,11 @@ multiagent system	多代理系統	多主体系统
 multihoming	內送流量備援容錯機制	多宿主						
 Multimedia Messaging Service	多媒體簡訊	彩信	多媒體短訊	多媒体简讯				多媒体短讯
 Multiplexer	數據多工器	数据选择器						
+Multitasking	多工（處理）	多任务（处理）						
 multithreading		多线程		多线程				多线程
 Multivibrator	複振器	多谐振荡器						
+Mutable	可變的	可变的						
+Mutex	互斥	互斥						
 mutual information	相互資訊	互信息	相互資訊	互信息			相互資訊	互信息
 My Document	我的文件	我的文档						
 namespace	命名空間	命名空间	命名空間	命名空间			命名空間	命名空间
@@ -821,11 +976,14 @@ NAND logic	反及邏輯	与非逻辑	與非邏輯
 nanometer	奈米				納米	纳米		
 narrowband	窄頻	窄带						
 National Administration of Surveying, Mapping and Geoinformation					國家測繪地理信息局	国家测绘地理信息局		
-native	原生		原生				原生	
+native	原生	原生	原生				原生	
 Natural	自然光	自然光	自然光				自然光	
+Navigate, Navigation	導覽	导航						
 navigation bar	導覽列	导航条						
+Navigator	導覽器	导航器						
 near-field communication	近場通訊		近場通訊			近场通信		
 nest	巢狀	嵌套						
+Nested	巢狀的	嵌套的						
 Net disk	網路硬碟	网盘						
 Netbook	小筆電	上网本	NetBook					
 Netizen	網友							
@@ -836,6 +994,7 @@ network database	網狀式資料庫	网状数据库	網絡資料庫
 Network Neighbourhood	網路上的芳鄰	网上邻居						
 Network operator	網路業者	网络运营商	網絡營辦商					
 Network Utility	網路工具程式	网络实用工具	網絡工具程式					
+New	新增	新建						
 Nine-segment display	九段顯示器	九段数码管	九劃管					
 Nixie tube	數位管	数字管	數碼管			数码管		
 Noise	雜訊	噪声	雜訊	杂讯				杂讯
@@ -844,13 +1003,14 @@ NOR logic	反或邏輯	或非逻辑	或非邏輯
 normalization	規格化	规范化	規範化					
 Norton Ghost	諾頓魅影系統	诺顿克隆精灵						
 NOT gate gate	反閘	非门	非門					
+Notarization	公證	公证						
 NSB	國家安全局							
 null list	空串列	空列表						
 null string	空字串	空串						
 NVIDIA	輝達	英伟达						
-object		对象						
-object code	目的碼	目标代码	目標碼					
-object file	目的檔	目标文件	目標文件	目标文件				目标文件
+Object	物件	对象						
+Object code	目的碼	目标代码	目標碼					
+Object file	目的檔，目的碼檔;目的檔	目标文件	目標文件	目标文件				目标文件
 Object-oriented	物件導向	面向对象						
 Object-oriented programming	物件導向程式設計	面向对象编程						
 octree	八元樹	八叉树	八叉樹					
@@ -860,30 +1020,36 @@ offline	離線		離線				離線
 on the Internet	網路	网络	網上					
 On-Line Analytical Processing	連線分析處理	联机分析处理						
 On-Line Transaction Processing	線上異動處理	联机交易处理						
-online	線上	在线			連線			
+Online	線上	在线			連線			
 online hard drive	網路硬碟	网络硬盘	網絡硬碟					网络硬碟
 online shopping	網路購物	网络购物	網絡購物					
 online video	網路影片	在线视频	線上影片					
 open	開啟	开启						
 Open Handset Alliance	開放手機聯盟	开放手持设备联盟						
 Open Mobile Alliance	開放行動聯盟	开放移动联盟	流動通訊開放制式聯盟					
-operand	運算元	操作数						
-operating system	作業系統	操作系统						
+operand	運算元	操作数;操作数，运算元						
+Operating system	作業系統	操作系统						
 operation object	運算物件	操作对象						
-operator	運算子	运算符	運算子	运算符	運算符號	运算符号	運算子	运算符
+operator	運算子	运算符;操作符，运算符	運算子	运算符	運算符號	运算符号	運算子	运算符
 optical image stabilization	光學影像穩定	光学图像防抖	光學影像防震					
 Optical Network Terminals	光纖網路終端	光网络终端						
 optimal					最佳			
 optimal binary search tree	最佳化二元搜尋樹	最优二叉搜索树						
 optimization					最佳化	优化		
+Optimize, Optimization	最佳化	优化						
+Option	選項	参数						
 OR gate	或閘	或门	或門					
 outport	匯出	导出						
-overflow	溢位	溢出		溢出				溢出
-overload	多載	重载		重载				重载
-override	覆寫	改写						
-p-n junction;P-n junction;P-N junction	p-n接面;P-n接面;P-N接面	p-n结;P-n结;P-N结	p-n結;P-n結;P-N結					
+overflow	溢位;溢位（上限溢位）	溢出;溢出（上溢出）		溢出				溢出
+Overlay	嵌入介面	叠加面板						
+overload	多載，覆載，重載;多載	重载		重载				重载
+Override	覆寫，重寫;覆寫	覆盖，重写;改写						
+p-n junction	p-n接面;P-n接面;P-N接面	p-n结;P-n结;P-N结	p-n結;P-n結;P-N結					
 Pacific Blue	太平洋藍色	海蓝色	太平洋藍色					
+Pack	封裝，壓縮	打包，压缩						
 package		包		包				包
+Package (noun)	套件，軟體包	（程序、软件）包						
+Package (verb)	封裝	打包，封装						
 package management system	軟體套件管理系統	软件包管理系统	軟件套件管理系統					
 package of software	軟體套件	软件包	軟件套件					
 Packet	封包	分组						
@@ -891,55 +1057,63 @@ packet switch	封包交換	分组交换
 page view	瀏覽量	访问量						
 paint		画图		画图				画图
 palette	調色盤	调色板						
+Pane	窗格 (win)；面板 (mac)	窗格 (win)；面板 (mac)						
 paradigm	範式	范型						
 parallel	並列	并行						
 parallel computing	平行計算	并行计算						
 parallel port	並列埠	并行端口	並列埠				並列埠	
+Parallelism	平行性，平行	并行性，并行						
+Parameter	參數	参数（也称为形式参数，形参）						
 parameter list	參數列	参数列表;参数表						
 parent class	父類別	父类						
-parser	剖析器	分析器						
-partition	分割區	分区	分區					
+Parse	分析；剖析；解析	解析						
+parser	剖析器;語法剖析器	分析器;语法分析器						
+partition	分割區;分割；（硬碟）分割區	分区;分割；（硬盘）分区	分區					
 Passive filter	被動式濾波器	无源滤波器						
 Password Authentication Protocol	通行碼鑑別協定	密码认证协议						
-paste	貼上	粘贴						
-patch	修補程式	补丁						
-pattern	範式	模式						
+Paste	貼上	粘贴						
+Patch	更新檔 (win)；修補程式 (mac);修補程式	补丁 (win)；修补程序 (mac);补丁						
+Pattern	模式；樣式;範式	模式；样式;模式						
 Peer-to-Peer	對等	点对点	點對點					
 perfect code	完整码	完备码						
-performance	效能	性能						
+Performance	效能	性能						
 permission		权限		权限				权限
-persistence	永續性	持久性						
+Persistence	持續性;永續性	持久性						
 Personal Area Network	個人區域網路	个人网						
 personal digital assistant	個人數位助理	个人数码助理	個人數碼助理					
 Personal message	私訊	私信						
 personal website	個人網站	个人网站	個人網站					
 Petabyte					拍位元組	拍字节		
-photo	相片	照片						
+photo	相片;照片	照片						
 photocopy	影印	复印						
 Photodiode	光電二極體	光电二极管						
 Photolithography	微影	光刻						
 Photomask	光罩	光掩模						
 Photoresist	光阻劑	光刻胶						
 Photos	照片	照片	相片					
-Photovoltaics	太陽能光電	光伏;太阳能光伏						
+Photovoltaics	太陽能光電	太阳能光伏;光伏						
 physical address	實體位址	物理地址						
-physical layer	實體層	物理层						
+Physical layer	實體層	物理层						
 physical memory	實體記憶體	物理内存						
+Picklist	挑選清單 (win)；選取列表 (mac)	选择列表						
 picture viewer	圖片檢視器	图片查看器			圖片檢視器			
 Pinch off	夹止	夹断						
 pipeline	管線	流水线	管線				管線	
 pipelining	管線	流水线	管線化				管線化	
 pixel		像素	像素	像素			像素	像素
-placeholder	預留位置	占位符						
+Placeholder	佔位符號，；預留位置 (win)；暫存區 (mac);預留位置	占位符						
 Plug and Play	隨插即用	即插即用						
 plug-in	外掛程式	插件		插件				插件
-PN junction;Pn junction;pn junction	PN接面;Pn接面;pn接面;P-N接面	PN结;Pn结;pn结;P-N结	PN結;Pn結;pn結					
-Podcast;podcast	播客	播客			Podcast			
+Pluggability	可拔插性	可插入性						
+Plugin	外掛程式 (win)；外掛模組 (mac)	插件 擴展						
+PN junction	PN接面;Pn接面;pn接面;P-N接面	PN结;Pn结;pn结;P-N结	PN結;Pn結;pn結					
+Podcast	播客	播客			Podcast			
+Point & Click (noun)	點按	点按						
 point and click		点击	點擊	点击			點擊	点击
 pointer	指標	指针						
 polymorphism	多型	多态						
 Popups	彈出式視窗	弹出窗口						
-port	埠	端口	埠				埠	
+port	埠;（連接）埠	端口	埠				埠	
 port forwarding	通訊埠轉發	端口转发						
 portable	可攜式	便携式	可攜式	便携式			可攜式	便携式
 portable application	可攜式軟體	绿色软件	可攜式軟件				可攜式軟件	
@@ -949,62 +1123,75 @@ portable hard drive	行動硬碟	移动硬盘	流動硬碟
 portal	入口網站	门户网站;门户系统	入門網站;入門系統					
 Portrait Lighting	人像光線	人像光效	人像燈光				人像燈光	
 post	貼文	帖子		贴文				贴文
-power bank	行動電源	移动电源	流動充電器					
+power bank	行動電源	移动电源;移动电源，充电宝	流動充電器					
 Power factor	功率因素	功率因数	功率因數					
-Power inverter	變流器	逆变器;逆變器;脉冲逆变器						
+Power inverter	變流器	脉冲逆变器;逆變器;逆变器						
 Power line frequency	電源頻率	工频						
 PPTV					PP視頻	PP视频		
 preference	偏好設定		參數設置				參數設置	
 preference settings	偏好設定	首选项	參數設置					偏好设置
 prefix	字首	前缀						
 presentation	簡報	演示稿						
+Presentation layer	表現層	表示层						
+Preset	預設	预设						
 print	列印	打印						
 print preview	預覽列印	打印预览						
-printer	印表機	打印机						
+printer	印表機;列印機，印表機	打印机						
 Private Relay	私密轉送	专用代理	私密轉送				私密轉送	
 procedural generation		过程生成		过程生成				过程生成
 procedural programming	程序導向;程序化;程序式	面向过程;过程化;过程式						
+Procedure	程序	过程						
+process	行程;行程；程序;製程	进程	行程	进程			行程	进程
 process control block	過程控制段	进程控制块	行程控制表					
 process group	行程群組	进程组						
-process;Process	製程;行程	进程	行程	进程			行程	进程
 product key	產品金鑰	产品密钥						
-profile	設定檔	配置文件						
-Program;program	程式	程序						
+Profile	設定檔 (win)；描述檔 (mac);評測;設定檔	配置文件 (win)；描述文件 (mac);评测;配置文件						
+Profile (or Personal profile)	個人檔案	个人资料						
+Profiler	（效能）分析工具	（性能）分析器						
+program	程式	程序						
 programmable	可程式化	可编程		可编程				可编程
 Programmable Array Logic	可程式化陣列邏輯	可编程阵列逻辑						
 Programmable Gate Array	可程式化邏輯閘陣列	可编程逻辑门阵列						
 Programmable Logic Array	可程式化邏輯陣列	可编程逻辑阵列						
-programmer	程式設計師	程序员;程序编写员						
+programmer	程式設計師	程序编写员;程序员						
 programming language	程式語言	编程语言	程式語言	编程语言			程式語言	编程语言
 Programming paradigm	程式設計範式	编程范型						
-project	專案	项目;工程	計劃	项目			計劃	计划
+project	專案	项目;工程;项目，工程	計劃	项目			計劃	计划
 project page	計畫頁	项目页						
 Protective relay	保護電驛	保护继电器						
 protocol	協定	协议						
 prototype-based programming	原型程式設計	基于原型的编程						
+Provision, Provisioning	佈建	预配						
 proximity sensor	鄰近感測器	接近传感器						
+Proxy (or Proxy server)	代理伺服器	代理服务器						
+Pseudo code	虛擬碼	伪代码						
 Pseudocode	虛擬碼	伪代码	偽代碼					
 PSK	相位移鍵	移相键控						
 Public land mobile network	公用陸上行動網路	公共陆基移动网	公地流動網路					
+Pull-down list	下拉式清單	下拉列表						
 pull-down lists	下拉式清單	下拉列表						
 Pulse	脈波	脉冲	脈衝					
 purge	清除快取	清理缓存	清除快取				清除快取	
 push	推播	推送						
 QR code		QR码	QR碼	QR码			QR碼	QR码
 quadtree	四元樹	四叉树	四叉樹					
-quality	品質	质量	質素	质量			質素	质量
+Quality	品質	质量	質素	质量			質素	质量
 queue	佇列	队列						
 QuickPath	快滑	速滑	快滑					
 QuickTake video	影片快錄	视频快录	閃錄影片					
+Quit unexpectedly	(App)閃退	意外退出						
 Race harzard	競爭危害	竞争冒险						
-radio button	無線電鈕	单选按钮						
+Radian	徑度	弧度						
+Radio button	選項按鈕 (win)；圓形按鈕 (mac);無線電鈕	单选按钮						
 radio-frequency identification	無線射頻辨識	射频识别	無線射頻辨識	射频识别				
 RAM	唯讀記憶體	只读存储器						
+RAM (Random Access Memory)	隨機存取記憶體	随机存取存储器						
 random number	亂數	随机数						
 random-access					隨機存取	随机存取		
 random-access memory	隨機存取記憶體	随机存储器						
 rate of coincident code					重碼率	重码率		
-read-only	唯讀	只读						
+Read	讀取	读						
+Read-only	唯讀	只读						
 read-only memory	唯讀記憶體	只读存储器						
 readme	讀我檔案	自述文件						
 real mode	真實模式	实模式	真實模式	实模式			真實模式	实模式
@@ -1013,6 +1200,7 @@ reboot	重新啟動	重启		重启				重启
 recognition	辨識	识别						
 Reconfigurable computing	可重組計算	可重构计算						
 recover		恢复		恢复				恢复
+Recovery	復原，還原	还原 (win)，恢复 (mac)						
 recovery disc	還原光碟	恢复光盘						
 recovery record	恢復記錄	恢复记录	修復記錄					
 recursion	遞迴	递归	遞歸					
@@ -1021,79 +1209,92 @@ Red Screen	紅白畫面	红屏	紅畫面		紅屏
 Red Screen of Death	紅白當機	红屏死机	紅畫面死機		紅屏死機			
 redirect	重新導向	重定向						
 redirect page	重新導向頁面	重定向页	重新導向頁面				重新導向頁面	
-reference	參照	引用		引用				引用
+Redirect, Redirection	重新導向；轉址	重定向						
+Reference	參照，參考;參照	参考;引用		引用				引用
 References					參考資料	参考资料		
 refresh	重新整理	刷新						
 refresh rate	重新整理頻率	刷新率						
-register	暫存器	寄存器						
+Register	暫存器；註冊;暫存器	寄存器；注册;寄存器						
 registry	登錄檔	注册表						
-regular expression	正規表示式	正则表达式	正則表達式					
+regular expression	正規表示式;正規表示式；正規表示法；正規表達式；規則運算式	正则表达式	正則表達式					
 regular language	正規語言	正则语言	正則語言	正则语言				正则语言
 reinstallation	重新安裝	重装						
 relational		关系		关系				关系
 relational database	關聯式資料庫	关系数据库						
-release	釋出	发行;发布		发布				发布
+release	釋出;（發行、發布）版本	发行;（发行、发布）版本;发布		发布				发布
 remote	遠端	远程						
 remote desktop protocol	遠端桌面協定	远程桌面协议						
 remote procedure call	遠端程序呼叫	远程过程调用						
 removable	抽取式	可移动						
 rename	重新命名	重命名						
-render		渲染	渲染	渲染			渲染	渲染
+render	算繪；渲染	渲染	渲染	渲染			渲染	渲染
 repeating group	重複群	重复组						
 reply					回覆;答覆	回复;答复		
 Republic of Gamers	玩家共和國	玩家国度						
 reset	重設	重置						
-resolution	解析度	分辨率	解像度					
-response	回應							
+Resolution	解析度	分辨率	解像度					
+Response	回應	响应						
+Response body	回應本文	响应正文						
+Response header	回應標頭	响应头						
+Restore	還原 (win)，回復 (mac)	还原 (win)，恢复 (mac)						
 Retina HD	Retina HD	视网膜高清	Retina HD					
+Return	回傳，傳回；恢復	返回；恢复						
 Reverse	逆向	反向						
+Revoke, Revocation	撤銷	撤销						
 Rich Internet application	多樣化網際網路應用程式	丰富互联网应用程序	多樣化互聯網應用程式					
 Ripple	漣波	纹波						
-rollback	轉返	回滚						
+Rollback	復原;轉返	回滚，回退;回滚						
 rolling update					滾動更新	滚动更新		
-routine	常式	例程						
-run	執行		執行				執行	
+routine	常式	例程;程序						
+Run	執行	运行	執行				執行	
 running in the background	背景執行	后台运行						
+Runtime environment (RTE), Runtime system	執行環境；執行系統	运行环境；运行系统						
+Runtime, Run-time	執行期；執行環境	运行期，运行时；运行环境						
 Safari	Safari	Safari浏览器						
 sample	範例	示例						
-Sampling	取樣	采样						
+Sampling	取樣	采样;取样						
 sampling rate	取樣率	采样率	取樣率	采样率			取樣率	采样率
 Sampling Theorem	取樣定理	采样定理						
 SanDisk	新帝	闪迪	SanDisk		新帝國	新帝国		
-save	儲存		儲存				儲存	
+save	儲存	保存	儲存				儲存	
 Scalar	純量	标量						
 scanner	掃描器	扫描仪						
-schedule	排程	调度						
-scheduler	排程器	调度器						
+Schedule	排程	调度						
+scheduler	排程器;排程器，排程程式	调度器;调度器，调度程序						
 Schmitt trigger	施密特觸發器	施密特触发器						
 Schottky	蕭特基	肖特基						
+Scope	（作用、有效）範圍，域	（作用、有效）范围，域						
 screen	螢幕	屏幕	螢幕					
 Screen Sharing		屏幕共享			螢幕共享			
 screensaver	螢幕保護裝置	屏幕保护程序	螢幕保護裝置					
 screenshot	螢幕擷取	截屏	螢幕擷取					
-script	指令碼	脚本						
+script	指令碼;指令碼 (win)；工序指令 (mac)	脚本						
 script kiddie					腳本小子	脚本小子		
 scripting language	手稿語言	脚本语言						
 scroll	捲動	滚动						
-scroll bar	捲軸	滚动栏;滚动条						
+Scroll bar	捲軸	滚动条;滚动栏						
 scroll box	捲動方塊	滚动框						
 SDK	軟體開發套件	软件开发工具包	軟件開發套件					
+SDK (Software Development Kit)	軟體開發工具包 (win)；軟體開發套件 (mac)	软件开发工具包 (win)；软件开发套件 (mac)						
 SDM	空間多工	空分复用	空分複用					
 SDMA	分空間多重進接	空分多址	空分多址					
 search	搜尋	搜索						
 search box	搜尋方塊	搜索框						
+Search engine	搜尋引擎	搜索引擎						
 search key	搜尋鍵碼	搜索关键字						
 second normal form	第二正規化	第二范式						
 sector	磁區	扇区						
 Secure Sockets Layer	安全通訊協定	安全套接层						
+Security	安全性	安全性						
 security software	安全軟體	安全软件	保安軟件					
 Security updates	安全性更新	安全性更新	保安更新					
+Segment	區段	段						
 Semantic Web	語意網	语义网						
 semantics	語意	语义						
 semaphore	號誌	信号量	訊號量					
 send	傳送	发送						
 send SMS	傳簡訊	发短信	傳短訊	发简讯				发短讯
-sensor;Sensor	感測器	传感器			感測器	传感器		
+sensor	感測器	传感器			感測器	传感器		
 Sequencing	定序	测序						
 Sequential logic					序向邏輯	时序逻辑		
 Serial	序列	串行						
@@ -1101,15 +1302,18 @@ Serial computing	序列計算	串行计算
 Serial port					序列埠	串行端口;串口		
 server	伺服器	服务器						伺服器
 server message block	伺服器訊息區塊	服务器消息块						
-server-side	伺服器端	服务端	伺服器端	服务端			伺服器端	
+Server-side	伺服器端	服务器端，服务端;服务端	伺服器端	服务端			伺服器端	
 service framework	服務架構	服务框架						
 Service plan	服務專案	服务套餐	服務計劃	服务配套				
-session	對談	会话						
+session	對談;工作階段，作業階段;（電腦網路）對談/話，會談/話；連線階段	会话						
 session hijacking	連線劫持	会话劫持						
 session ID	交談識別碼	会话标识						
 Session Identity	交談識別碼	会话标识						
-set-top box;Set-top box	機上盒;數位電視機上盒	机顶盒	機頂盒;數碼電視解碼器	电视解码器		机顶盒	機頂盒	数码电视解码器
+Session layer	會議層	会话层						
+Set up	設定	设置						
+set-top box	機上盒;數位電視機上盒	机顶盒	機頂盒;數碼電視解碼器	电视解码器		机顶盒	機頂盒	数码电视解码器
 setting	設定	设置	設置					
+Settings	設定	设置						
 Seven-segment display	七段顯示器	七段数码管	七劃管					
 Shannon	夏農	香农	山農					
 share	共享	共享	共用					
@@ -1117,17 +1321,20 @@ shared folder	共用資料夾	共享文件夹		共享文件夹				共享文件�
 shareware	共享軟體	共享软件						
 shield	遮蔽	屏蔽						
 short video	短影音	短视频	短影音					
-shortcut	捷徑	快捷方式						
+Shortcut	捷徑	快捷;快捷方式						
 shortcut key	快速鍵	快捷键						
 Shortcuts	捷徑	快捷指令						
+Sign in, sign-in	登入	登录						
+Sign out, sign-out	登出	退出，注销						
 signal	訊號	信号	訊號	信号;讯号			訊號	信号;讯号
 Signal-to-noise ratio	訊號雜訊比	信噪比						
 Signal-to-noise ratio, SNR	訊雜比	信噪比	訊噪比					
 Signaling System Number 7	第七號發信系統	七号信令系统	七號信令系統					
-signature	簽章	签名						
+signature	簽章;簽章；簽名	签名						
 Silicon	矽	硅						
 Silicon controlled rectifier	矽控整流器	可控硅						
 simulated reality	模擬實境	模拟现实						
+Simulation	模擬	模拟						
 Sina Blog					新浪博客	新浪博客		
 Sina Video					新浪視頻	新浪视频		
 Sine signal	正弦訊號	正弦信号						
@@ -1137,9 +1344,9 @@ Site Identity Button	網站識別鈕	站点标识按钮
 Sixteen-segment display	十六段顯示器	十六段数码管	十六劃管					
 sixth normal form	第六規格化	第六范式						
 skin	外觀		佈景主題				佈景主題	
-slider	滾軸	滑块						
+slider	滾軸;滑桿	滑块						
 Slot	時槽	时隙						
-smart	智慧型	智能	智能	智慧				
+Smart	智慧;智慧型	智能	智能	智慧				
 smart card	智慧卡	智能卡	智能卡	智慧卡				
 Smart Keyboard	聰穎鍵盤	智能键盘	智慧型鍵盤					
 Smart Keyboard Folio	鍵盤式聰穎雙面夾	键盘式智能双面夹	智慧型摺套連鍵盤					
@@ -1149,6 +1356,8 @@ Smartone					數碼通	数码通
 smartphone	智慧型手機	智能手机	智能電話		智能手機	智能电话		
 smartwatch	智慧型手錶	智能手表	智能手錶	智慧手表				
 SMS	簡訊	短信	短訊	简讯			短訊	短讯
+SMS (Short Message Service)	簡訊	短信						
+Snip	擷圖	截图						
 Social account	社群帳號	社交账号	社交帳號					
 social media	社群媒體	社交媒体	社交媒體					
 social network	社群網路	社交网络	社交網絡					
@@ -1166,40 +1375,45 @@ solid archive	結實壓縮	固实压缩
 Sony Mobile	索尼行動	索尼移动	索尼流動					
 Sony Mobile Communications	索尼行動通訊	索尼移动通信	索尼流動通訊					
 Sound card	音效卡	声卡						
-source code	原始碼	源代码	原始碼	原始码			原始碼	原始码
+source code	原始碼	源代码;源代码，源码	原始碼	原始码			原始碼	原始码
 source file	原始檔	源文件						
 Space Gray	太空灰	深空灰	太空灰					
 Splash, Water, and Dust Resistant	防潑、抗水與防塵	防溅、抗水、防尘	防濺、耐水及防塵					
 Split View	分割顯示	分屏浏览						
 Spotlight	Spotlight	聚焦	Spotlight					
 spread-spectrum	展頻;展譜	扩频;扩谱						
-spreadsheet	電子試算表	电子表格;表格		表格				表格
+spreadsheet	電子試算表	表格;电子表格		表格				表格
 SSD	固態硬碟	固态盘						
-stack	堆疊	堆栈						
+stack	堆疊	堆栈;栈						
 stack frame	堆疊框	堆栈帧	堆疊幀				堆疊幀	
 stack-oriented	堆疊導向	面向堆栈						
 Stage	舞台燈光	舞台光	舞台燈光				舞台燈光	
 Stage Mono	舞台燈光黑白	单色舞台光	黑白舞台燈光				黑白舞台燈光	
-Standard definition;standard definition	標準畫質	标清	標清					
+standard definition	標準畫質	标清	標清					
+Star rating	星級評等 (win)；星號評等 (mac)	星级评分						
 Starting	啟動器	启辉器	士撻膽					
-statement	語句	语句	陳述式					
+Statement	敘述，陳述（句）;語句	语句	陳述式					
 static typing	靜態型別	静态类型						
 status bar	狀態列	状态栏						
+Stepper	步進器	步进器						
 Stickies		便笺			便條紙			
 sticky keys	相黏鍵	粘滞键						
 storage	儲存	存储	儲存				儲存	
 stored procedure	儲存程序	存储程序	儲存程序	存储程序			儲存程序	存储程序
-stream	串流	流	串流	流			串流	流
+Stream	串流；資料流;串流	（数据）流;流	串流	流			串流	流
 stream cipher	串流加密法	流密码						
 streaming media	串流媒體	流媒体						串流媒体
-string	字串	字符串						
+String	字串	字符串						
+String interpolation	字串插值	字符串插值						
 strong typing	強型別	强类型						
 Student ID	Student ID	学生卡	學生證					
 Studio	攝影棚燈光	摄影室灯光	影樓燈光				影樓燈光	
+Stuttering	（軟體或影片的畫面）斷斷續續	-						
+Subclass	子類別	子类						
 submit		提交		提交				提交
 subnet	子網路	子网	子網絡					
 subnet mask	子網路遮罩	子网掩码	子網絡遮罩					
-subroutine	次常式	子例程						
+subroutine	次常式;副程式	子例程						
 Substrate	基板	衬底						
 Subthreshold	次臨界	亚阈值						
 suffix	字尾	后缀						
@@ -1207,25 +1421,33 @@ Sumavision					數碼視訊	数码视讯
 Sun Microsystems	昇陽電腦	Sun微系统	太陽電腦					
 super computer	超級電腦	超级计算机						
 Super Retina XDR	超 Retina XDR	超视网膜 XDR	超級 Retina XDR					
+Superclass	父類別	超类						
 Superposition theorem	重疊定理	叠加定理						
 support	支援	支持						
 support he					支持他;他支持	支持他;他支持		
 support me					支持我	支持我		
-support she					支持她;她支持	支持她;她支持		
+support she					她支持;支持她	她支持;支持她		
 support vector					支持向量	支持向量		
 supporter					支持者	支持者		
+Suspend	暫停（權限）	暂停（权限）						
+Synchronize	同步	同步						
+Synchronous	同步的	同步的						
+Syntactic analysis	語法分析；語法剖析	语法分析						
 syntax highlighting	語法突顯	语法高亮	語法突顯	语法高亮			語法突顯	语法高亮
 system (format)	格式		格式				格式	
 System in package, SiP	封裝體系	封装内系统						
 System Information	系統資訊	系统信息	系統資料					
 System on a chip, SoC	單晶片系統	单片系统						
 System Preferences		系统偏好设置			系統偏好設定			
-tab	分頁;索引標籤	标签页;选项卡						
+Tab	索引標籤，分頁，標籤（頁）;索引標籤;分頁	标签（页）;选项卡;标签页						
 tablet computer					平板電腦	平板电脑		
+Tag	標記	标签						
 tail recursion	尾端遞迴	尾部递归						
+Tap (vs. Click)	輕觸 (win)；點一下 (mac)	触碰 (win)；轻点 (mac)						
 Tape-out	下線	流片						
 target	目標軟體	目标软件	目標軟件					
 target user	目標使用者	目标用户						
+Task	工作	任务						
 task bar	工作列	任务栏						
 task manager	工作管理員	任务管理器						
 task switch	工作切換	任务切换						
@@ -1233,7 +1455,7 @@ TDM	分時多工	时分复用	時分複用
 TDMA	分時多重進接	时分多址	時分多址					
 Telephoto	望遠	长焦	長焦距					
 Television channel					電視頻道	电视频道		
-template	模板	模板	模板	模板			模板	模板
+Template	範本;模板	模板	模板	模板			模板	模板
 Tencent Blog					騰訊博客	腾讯博客		
 Tencent Cloud					騰訊雲計算	腾讯云计算		
 Tencent Video					騰訊視頻	腾讯视频		
@@ -1245,13 +1467,15 @@ ternary tree	三元樹	三叉树	三叉樹
 terrestrial	無線		無線				無線	
 terrestrial broadcasting	無線廣播	地面广播	地面廣播					
 terrestrial television	無線電視	地面电视	地面電視					
-text	文字		文字				文字	
+Text	文字	文本	文字				文字	
+Text box	文字框	文本框						
 text editor	文字編輯器	文本编辑器						
 text file	文字檔案	文本文件						
 textbox	文字方塊	文本框	文本框					
 TextEdit		文本编辑			文字編輯			
 theme	佈景主題							
 third normal form	第三正規化	第三范式						
+Thread	執行緒	线程						
 threads	執行緒	线程	線程					
 throw	丟擲	抛出	投擲					
 Thrystor	閘流體	晶闸管						
@@ -1263,25 +1487,31 @@ Time Machine		时间机器			時光機
 timeout					逾時	超时		
 Tips	提示	提示	貼士					
 title bar	標題列	标题栏						
-token	權杖;符記	令牌;权标						
+Token	權杖；代幣;權杖;符記;標記 (win)；代號 (mac)	权杖；代幣;令牌;权标;标记 (win)；令牌 (mac)						
 toolbar	工具列	工具栏						
+Top-up	加值，儲值	充值						
 touch	輕觸	触摸						
 Touch ID		触控ID			Touch ID			
 TouchPad	觸控板	触摸板						
-touchscreen	觸控式螢幕;觸控螢幕	触摸屏;触屏	輕觸式螢幕;輕觸螢幕					
+touchscreen	觸控螢幕;觸控式螢幕	触屏;触摸屏	輕觸螢幕;輕觸式螢幕					
 track	磁軌	磁道						
 traditional (Chinese)		繁体	繁體	繁体			繁體	繁体
 Transistor	電晶體	晶体管						
 Transmission gate	傳輸閘	传输门	傳輸門					
+Traverse	走訪	遍历						
+Tray (or System tray)	系統匣	系统托盘						
+Tree	樹	树						
 Trinitron	特麗霓虹	特丽珑						
 troubleshooting	疑難排解	疑难解答						
 True Tone	原彩顯示	原彩显示	原色調顯示					
 TrueDepth	原深感測	原深感	原深感測					
 TrueDepth camera	原深感測相機	原深感摄像头	原深感測鏡頭					
+Tuple	元組	元组						
 Turing completeness	圖靈完備	图灵完备	圖靈完備	图灵完备			圖靈完備	图灵完全
 Turn-by-Turn	轉向導航路線	逐向导航	逐步導航					
+Tutorial	教學	教程						
 two-dimensional code	二維條碼	二维码	二維條碼	二维码			二維條碼	二维码
-type		类型		类型				类型
+type	型別，型態	类型		类型				类型
 type checking	型別檢查	类型检查						
 type system	型別系統	类型系统						
 Ultra High definition	超高畫質	超高清	超高清					
@@ -1292,6 +1522,7 @@ underline	底線	下划线
 undo	復原	撤销	復原				復原	
 unified shader model	統一著色器架構	统一渲染架构						
 uninstall	解除安裝	卸载	解除安裝				解除安裝	
+Universal	通用的	通用的						
 Universal Access		辅助功能			輔助使用			
 Universal motor	交流整流子電動機	单相串励电动机						
 Universal Serial Bus	通用序列匯流排	通用串行总线;通用序列总线	通用序列匯流排	通用串行总线			通用序列匯流排	通用串行总线
@@ -1300,7 +1531,7 @@ upload	上傳	上传	上載
 UPS	不斷電系統	电源保护						
 URL shortening	縮網址	缩略网址						
 USB Digital TV tuner	USB數位電視棒	USB数字电视棒	高清USB手指					
-USB flash drive	USB隨身碟;隨身碟	U盘	USB手指	U盘			USB手指	U盘
+USB flash drive	隨身碟;USB隨身碟	U盘	USB手指	U盘			USB手指	U盘
 USB TV Tuner	USB電視棒	USB电视棒	USB電視手指					
 USB-IF	USB開發者論壇	USB开发者论坛						
 user	使用者	用户	用戶	用户			用戶	用户
@@ -1311,13 +1542,13 @@ user-generated content/user-created content	使用者供應內容				用戶生�
 userbox	使用者方塊	用户框	用戶框					
 username	使用者名稱	用户名	用戶名	用户名				用户名
 Utility frequency	電源頻率	工频						
-variable	變數	变量	變量					
+Variable	變數	变量	變量					
 variable bitrate	變動位元率	可变码率	動態編碼率					
 vector	向量		向量				向量	
 vector graphics	向量圖形	矢量图形						
 vestigial sideband	殘邊帶	残余边带						
 VGA connector	視訊連接頭	视频接口	影像端子					
-Video	視訊	视频	視像					
+Video	視訊;影片；視訊	视频	視像					
 video card	顯示卡	显卡	顯示卡	显卡			顯示卡	显卡
 video conference	視訊會議	视频会议	視像會議					
 video document	視訊檔案	视频文档						
@@ -1330,7 +1561,7 @@ video processor	影像處理器	视频处理器
 video streaming	影音串流	影音流						
 video track	視訊軌	视频轨	視頻軌					
 videotape	錄影帶	录像带	錄影帶				錄影帶	
-view	檢視	查看						
+view	檢視;檢視；顯示；視圖	查看;查看；顯示；视图						
 virtual function	虛擬函式	虚函数						
 virtual machine	虛擬機器	虚拟机						
 virtual memory	虛擬記憶體	虚拟内存						
@@ -1342,10 +1573,11 @@ visit webpage	造訪網頁	访问网页
 visit website	造訪網站	访问网站						
 visual	視覺化	可视化						
 VLSI	超大型積體電路	超大规模集成电路						
+Voice	語音	语音						
 Voice Memo	語音備忘錄	语音备忘录	錄音機					
 VoiceOver		旁白			旁白	旁白		
 volatile (memory)	揮發性	易失性						
-volume		卷		卷				卷
+Volume	磁碟區 (win)；卷宗 (mac)	卷 (win)；宗卷 (mac);卷		卷				卷
 von Neumann	馮·諾伊曼	冯·诺依曼	馮紐曼					
 Wallet	錢包	钱包	銀包					
 wallpaper	桌布	壁纸						
@@ -1360,9 +1592,10 @@ webcomics	網路漫畫	网络漫画	網絡漫畫
 Western Digital	威騰電子	西部数据						
 Wide Area Network	廣域網路	广域网						
 wide screen	寬螢幕	宽屏	闊螢幕				闊螢幕	
-widget	小工具	小组件						
+Widget	視窗元件；小工具;小工具	窗口部件；小部件;小组件						
 Wikidata					維基數據	维基数据		
 Wikimedia Commons					維基共享資源	维基共享资源		
+Wildcard	萬用字元	通配符						
 wildcard character	萬用字元	通配符		万用字元				
 Wind River	溫瑞爾	风河						
 window	視窗	窗口						
@@ -1373,9 +1606,11 @@ wizard	精靈	向导
 word process	文書處理	文字处理						
 word processor	文書處理器	文字处理器						
 workgroup	工作群組	工作组						
+Workspaces	工作區；工作空間	工作区						
 World Internet Conference					世界互聯網大會	世界互联网大会		
 World Wide Web	全球資訊網	万维网	萬維網					
 World Wide Web Consortium	全球資訊網協會	万维网联盟	萬維網聯盟					
+Write	寫入	写						
 write protection	防寫	写保护						
 write-only	唯寫	只写						
 write-only memory	唯寫記憶體	只写存储器						
