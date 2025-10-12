@@ -25,8 +25,18 @@
 
         header {
             display: flex;
-            align-items: center;
-            gap: 25px;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+                align-items: center;
+                gap: 25px;
+                margin-bottom: 0;
+            }
         }
 
         .content {
@@ -39,10 +49,14 @@
             }
         }
 
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
 
             td,
             th {
@@ -92,42 +106,44 @@
             <div class="ref">
                 資料來源：
                 <a href="https://zh.wikipedia.org/wiki/Module:CGroup/IT">
-                    維基百科：字詞轉換處理/公共轉換組</a> / 
+                    維基百科：字詞轉換處理/公共轉換組</a> /
                 <a href="https://zh.wikibooks.org/zh-tw/%E5%A4%A7%E9%99%86%E5%8F%B0%E6%B9%BE%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%9C%AF%E8%AF%AD%E5%AF%B9%E7%85%A7%E8%A1%A8">維基教科書：大陸台灣計算機術語對照表</a>
             </div>
-            <table>
-                <colgroup>
-                    <col style="width: 250px">
-                    <col style="width: 200px">
-                    <col style="width: 200px">
-                    <col style="width: 200px">
-                    <col style="width: 200px" v-show="enableSG">
-                    <col style="width: 200px" v-show="enableMO">
-                    <col style="width: 200px" v-show="enableMY">
-                </colgroup>
-                <thead>
-                    <tr class="header">
-                        <th>English</th>
-                        <th>zh-tw</th>
-                        <th>zh-cn</th>
-                        <th>zh-hk</th>
-                        <th v-show="enableSG">zh-sg</th>
-                        <th v-show="enableMO">zh-mo</th>
-                        <th v-show="enableMY">zh-my</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="term in filteredTerms" :class=" { 'same': term.tw === term.cn } ">
-                        <td class="en">{{ term.en }}</td>
-                        <td class="tw">{{ term.tw ||'' }}</td>
-                        <td class="cn">{{ term.cn || '' }}</td>
-                        <td class="hk">{{ term.hk || '' }}</td>
-                        <td class="sg" v-show="enableSG">{{ term.sg || '' }}</td>
-                        <td class="mo" v-show="enableMO">{{ term.mo || '' }}</td>
-                        <td class="my" v-show="enableMY">{{ term.my || '' }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table>
+                    <colgroup>
+                        <col style="width: 250px">
+                        <col style="width: 200px">
+                        <col style="width: 200px">
+                        <col style="width: 200px">
+                        <col style="width: 200px" v-show="enableSG">
+                        <col style="width: 200px" v-show="enableMO">
+                        <col style="width: 200px" v-show="enableMY">
+                    </colgroup>
+                    <thead>
+                        <tr class="header">
+                            <th>English</th>
+                            <th>zh-tw</th>
+                            <th>zh-cn</th>
+                            <th>zh-hk</th>
+                            <th v-show="enableSG">zh-sg</th>
+                            <th v-show="enableMO">zh-mo</th>
+                            <th v-show="enableMY">zh-my</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="term in filteredTerms" :class=" { 'same': term.tw === term.cn } ">
+                            <td class="en">{{ term.en }}</td>
+                            <td class="tw">{{ term.tw ||'' }}</td>
+                            <td class="cn">{{ term.cn || '' }}</td>
+                            <td class="hk">{{ term.hk || '' }}</td>
+                            <td class="sg" v-show="enableSG">{{ term.sg || '' }}</td>
+                            <td class="mo" v-show="enableMO">{{ term.mo || '' }}</td>
+                            <td class="my" v-show="enableMY">{{ term.my || '' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <script>
