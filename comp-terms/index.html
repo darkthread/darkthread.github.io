@@ -71,6 +71,106 @@
                 background-color: #f2f2f2;
             }
         }
+
+        /* 寬度小於 768px 時啟用卡片式佈局 */
+        @media (max-width: 768px) {
+            header {
+                /* 改為直向排列 */
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+
+                h1 {
+                    font-size: 1.3em;
+                    margin: 0;
+                }
+                /* 說明連結改為右上角 */
+                .doc {
+                    position: absolute;
+                    top: 6px;
+                    right: 12px;
+                    z-index: 100;
+                }
+            }
+            /* 參照來源位置微調 */
+            .content .ref {
+                margin-top: 12px;
+                text-align: left;
+                font-size: 80%;
+            }
+            /* 隱藏表格標題列 */
+            table thead {
+                display: none;
+            }
+
+            /* 將表格、列與欄都轉換為 Block 排版 */
+            table {
+                display: block;
+                 tbody, tr, td {
+                    display: block;
+                }
+            }
+
+            /* tr 使用 Grid 佈局，並設定成兩欄顯示 */
+            table tbody {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            /* tr 樣式設計成一張卡片 */
+            table tr {
+                margin-bottom: 0;
+                border: 2px solid #ddd;
+                border-radius: 8px;
+                padding: 12px;
+                background: white;
+                box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+            }
+            
+            table td {
+                border: none;
+                padding: 2px 0;
+                text-align: left;
+                position: relative;
+                padding-left: 64px;
+                min-height: 1.2em;
+            }
+
+            /* 在每個儲存格前顯示欄位標籤 */
+            table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 64px;
+                font-weight: bold;
+                color: #666;
+                font-size: 0.9em;
+            }
+            /* 英文欄位：藍色、字體放大、粗體 */
+            table td.en {
+                font-size: 1.1em;
+                font-weight: bold;
+                padding-left: 0;
+                padding-bottom: 8px;
+                margin-bottom: 8px;
+                border-bottom: 1px solid #eee;
+                /* 前方不需標籤 */
+                &::before {
+                    display: none;
+                }
+            }
+
+            /* 針對相同值樣式調整 */
+            table tr.same td.tw,
+            table tr.same td.cn {
+                opacity: 0.5;
+                font-style: italic;
+            }
+            /* 隱藏空白欄位(zh-hk...) */
+            table td.empty {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -78,22 +178,24 @@
     <div id="app">
         <header>
             <h1>中文計算機術語速查工具</h1>
-            <input-with-clear-button v-model.lazy="keyword" v-debounce:input="350" placeholder="輸入關鍵字..."></input-with-clear-button>
+            <div class="doc">
+                <a href="https://blog.darkthread.net/blog/chinese-it-term-translation-instant-lookup/">說明</a>
+            </div>
+            <input-with-clear-button v-model.lazy="keyword" v-debounce:input="350"
+                placeholder="輸入關鍵字..."></input-with-clear-button>
             <div>
                 <label><input type="checkbox" v-model="enableSG">新加坡</label>
                 <label><input type="checkbox" v-model="enableMO">澳門</label>
                 <label><input type="checkbox" v-model="enableMY">馬來西亞</label>
-            </div>
-            <div>
-                <a href="https://blog.darkthread.net/blog/chinese-it-term-translation-instant-lookup/">說明</a>
             </div>
         </header>
         <div class="content">
             <div class="ref">
                 資料來源：
                 <a href="https://zh.wikipedia.org/wiki/Module:CGroup/IT">
-                    維基百科：字詞轉換處理/公共轉換組</a> / 
-                <a href="https://zh.wikibooks.org/zh-tw/%E5%A4%A7%E9%99%86%E5%8F%B0%E6%B9%BE%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%9C%AF%E8%AF%AD%E5%AF%B9%E7%85%A7%E8%A1%A8">維基教科書：大陸台灣計算機術語對照表</a>
+                    維基百科：字詞轉換處理/公共轉換組</a> /
+                <a
+                    href="https://zh.wikibooks.org/zh-tw/%E5%A4%A7%E9%99%86%E5%8F%B0%E6%B9%BE%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%9C%AF%E8%AF%AD%E5%AF%B9%E7%85%A7%E8%A1%A8">維基教科書：大陸台灣計算機術語對照表</a>
             </div>
             <table>
                 <colgroup>
@@ -118,13 +220,13 @@
                 </thead>
                 <tbody>
                     <tr v-for="term in filteredTerms" :class=" { 'same': term.tw === term.cn } ">
-                        <td class="en">{{ term.en }}</td>
-                        <td class="tw">{{ term.tw ||'' }}</td>
-                        <td class="cn">{{ term.cn || '' }}</td>
-                        <td class="hk">{{ term.hk || '' }}</td>
-                        <td class="sg" v-show="enableSG">{{ term.sg || '' }}</td>
-                        <td class="mo" v-show="enableMO">{{ term.mo || '' }}</td>
-                        <td class="my" v-show="enableMY">{{ term.my || '' }}</td>
+                        <td class="en" data-label="English">{{ term.en }}</td>
+                        <td class="tw" data-label="zh-tw">{{ term.tw ||'' }}</td>
+                        <td class="cn" data-label="zh-cn">{{ term.cn || '' }}</td>
+                        <td class="hk" data-label="zh-hk" :class="{'empty': !term.hk}">{{ term.hk || '' }}</td>
+                        <td class="sg" data-label="zh-sg" :class="{'empty': !term.sg}" v-show="enableSG">{{ term.sg || '' }}</td>
+                        <td class="mo" data-label="zh-mo" :class="{'empty': !term.mo}" v-show="enableMO">{{ term.mo || '' }}</td>
+                        <td class="my" data-label="zh-my" :class="{'empty': !term.my}" v-show="enableMY">{{ term.my || '' }}</td>
                     </tr>
                 </tbody>
             </table>
