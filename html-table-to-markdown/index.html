@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Table to Markdown Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #fafafa;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border: 1px solid #e5e5e5;
+        }
+
+        .header {
+            background: #fff;
+            color: #333;
+            padding: 40px 30px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 0.95em;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #000;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: #e5e5e5;
+            color: #333;
+            border: 1px solid #d0d0d0;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #d0d0d0;
+            border-color: #b8b8b8;
+        }
+
+        button:active {
+            background: #c0c0c0;
+        }
+
+        button:disabled {
+            background: #f5f5f5;
+            color: #999;
+            border-color: #e5e5e5;
+            cursor: not-allowed;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            font-size: 0.85em;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #000;
+        }
+
+        .preview-area {
+            border: 1px solid #ddd;
+            padding: 20px;
+            min-height: 200px;
+            background: #fff;
+            overflow-x: auto;
+        }
+
+        .preview-area table {
+            border-collapse: collapse;
+            width: 100%;
+            background: white;
+        }
+
+        .preview-area th,
+        .preview-area td {
+            border: 1px solid #e5e5e5;
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        .preview-area th {
+            background: #fafafa;
+            color: #000;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .preview-area tr:hover {
+            background: #fafafa;
+        }
+
+        .message {
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: none;
+            border-left: 3px solid #000;
+            background: #f5f5f5;
+        }
+
+        .message.success {
+            background: #f0f9f0;
+            color: #2c662d;
+            border-left-color: #2c662d;
+        }
+
+        .message.error {
+            background: #fef0f0;
+            color: #9f1239;
+            border-left-color: #9f1239;
+        }
+
+        .message.info {
+            background: #f5f5f5;
+            color: #333;
+            border-left-color: #333;
+        }
+
+        .stats {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            flex: 1;
+            min-width: 120px;
+            padding: 20px 16px;
+            background: #fafafa;
+            border: 1px solid #e5e5e5;
+            text-align: center;
+        }
+
+        .stat-box .label {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-box .value {
+            font-size: 2em;
+            font-weight: 600;
+            color: #000;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 10px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 HTML Table to Markdown Converter</h1>
+            <p>Paste HTML content from clipboard and convert tables to Markdown format</p>
+        </div>
+
+        <div class="content">
+            <div id="message" class="message"></div>
+
+            <div class="section">
+                <h2>Input HTML</h2>
+                <div class="btn-group">
+                    <button onclick="pasteFromClipboard()">📋 Paste from Clipboard</button>
+                    <button onclick="convertToMarkdown()">🔄 Convert to Markdown</button>
+                    <button onclick="clearAll()">🗑️ Clear All</button>
+                </div>
+                <textarea id="htmlInput" placeholder="Click 'Paste from Clipboard' to read HTML content or paste manually..."></textarea>
+            </div>
+
+            <div class="section" id="statsSection" style="display: none;">
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="label">Tables Found</div>
+                        <div class="value" id="tableCount">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="label">Rows</div>
+                        <div class="value" id="rowCount">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="label">Columns</div>
+                        <div class="value" id="colCount">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Preview</h2>
+                <div id="preview" class="preview-area">
+                    <p style="color: #999; text-align: center; padding: 40px;">No content to preview</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Markdown Output</h2>
+                <div class="btn-group">
+                    <button onclick="copyToClipboard()">📄 Copy to Clipboard</button>
+                    <button onclick="downloadMarkdown()">💾 Download as .md</button>
+                </div>
+                <textarea id="markdownOutput" placeholder="Markdown output will appear here..." readonly></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showMessage(text, type = 'info') {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        async function pasteFromClipboard() {
+            try {
+                let content = '';
+                let isHtml = false;
+
+                // Try to read clipboard with multiple formats
+                try {
+                    const clipboardItems = await navigator.clipboard.read();
+                    for (const item of clipboardItems) {
+                        // Check for text/html first (priority)
+                        if (item.types.includes('text/html')) {
+                            const blob = await item.getType('text/html');
+                            content = await blob.text();
+                            isHtml = true;
+                            showMessage('HTML content pasted from clipboard!', 'success');
+                            break;
+                        }
+                        // Fallback to text/plain
+                        else if (item.types.includes('text/plain')) {
+                            const blob = await item.getType('text/plain');
+                            content = await blob.text();
+                            showMessage('Plain text pasted from clipboard', 'success');
+                            break;
+                        }
+                    }
+                } catch (err) {
+                    // Fallback to readText() for browsers that don't support read()
+                    content = await navigator.clipboard.readText();
+                    showMessage('Content pasted from clipboard', 'success');
+                }
+
+                if (content) {
+                    document.getElementById('htmlInput').value = content;
+                    
+                    // Auto-convert if it looks like HTML
+                    if (content.trim().includes('<table')) {
+                        setTimeout(() => convertToMarkdown(), 500);
+                    }
+                } else {
+                    showMessage('Clipboard is empty', 'error');
+                }
+            } catch (err) {
+                showMessage('Failed to read clipboard. Please paste manually (Ctrl+V)', 'error');
+                console.error('Clipboard error:', err);
+            }
+        }
+
+        function convertToMarkdown() {
+            const htmlInput = document.getElementById('htmlInput').value;
+            
+            if (!htmlInput.trim()) {
+                showMessage('Please paste some HTML content first', 'error');
+                return;
+            }
+
+            try {
+                // Create a temporary DOM element to parse HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlInput;
+
+                // Find all tables
+                const tables = tempDiv.querySelectorAll('table');
+                
+                if (tables.length === 0) {
+                    showMessage('No tables found in the HTML content', 'error');
+                    document.getElementById('preview').innerHTML = '<p style="color: #999; text-align: center; padding: 40px;">No tables found</p>';
+                    document.getElementById('markdownOutput').value = '';
+                    document.getElementById('statsSection').style.display = 'none';
+                    return;
+                }
+
+                let markdown = '';
+                let totalRows = 0;
+                let maxCols = 0;
+
+                tables.forEach((table, tableIndex) => {
+                    if (tableIndex > 0) {
+                        markdown += '\n\n';
+                    }
+
+                    const rows = Array.from(table.querySelectorAll('tr'));
+                    if (rows.length === 0) return;
+
+                    // Find header row (either in thead or first tr with th elements)
+                    let headerRow = null;
+                    let dataStartIndex = 0;
+
+                    const thead = table.querySelector('thead');
+                    if (thead) {
+                        headerRow = thead.querySelector('tr');
+                        dataStartIndex = 0;
+                    } else {
+                        const firstRow = rows[0];
+                        if (firstRow.querySelectorAll('th').length > 0) {
+                            headerRow = firstRow;
+                            dataStartIndex = 1;
+                        }
+                    }
+
+                    // If no header found, use first row as header
+                    if (!headerRow && rows.length > 0) {
+                        headerRow = rows[0];
+                        dataStartIndex = 1;
+                    }
+
+                    // Process header
+                    if (headerRow) {
+                        const headers = Array.from(headerRow.querySelectorAll('th, td'));
+                        const headerTexts = headers.map(h => cleanText(h.textContent));
+                        const colCount = headerTexts.length;
+                        maxCols = Math.max(maxCols, colCount);
+
+                        markdown += '| ' + headerTexts.join(' | ') + ' |\n';
+                        markdown += '| ' + headers.map(() => '---').join(' | ') + ' |\n';
+                    }
+
+                    // Process data rows
+                    const tbody = table.querySelector('tbody');
+                    const dataRows = tbody ? Array.from(tbody.querySelectorAll('tr')) : rows.slice(dataStartIndex);
+
+                    dataRows.forEach(row => {
+                        const cells = Array.from(row.querySelectorAll('td, th'));
+                        const cellTexts = cells.map(cell => cleanText(cell.textContent));
+                        markdown += '| ' + cellTexts.join(' | ') + ' |\n';
+                        totalRows++;
+                    });
+                });
+
+                document.getElementById('markdownOutput').value = markdown;
+                
+                // Update preview
+                document.getElementById('preview').innerHTML = htmlInput;
+                
+                // Update stats
+                document.getElementById('tableCount').textContent = tables.length;
+                document.getElementById('rowCount').textContent = totalRows;
+                document.getElementById('colCount').textContent = maxCols;
+                document.getElementById('statsSection').style.display = 'block';
+
+                showMessage(`Successfully converted ${tables.length} table(s) to Markdown!`, 'success');
+            } catch (err) {
+                showMessage('Error converting HTML to Markdown: ' + err.message, 'error');
+                console.error('Conversion error:', err);
+            }
+        }
+
+        function cleanText(text) {
+            return text
+                .replace(/\s+/g, ' ')  // Replace multiple spaces with single space
+                .replace(/\|/g, '\\|')  // Escape pipe characters
+                .trim();
+        }
+
+        async function copyToClipboard() {
+            const markdown = document.getElementById('markdownOutput').value;
+            
+            if (!markdown) {
+                showMessage('Nothing to copy', 'error');
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(markdown);
+                showMessage('Markdown copied to clipboard!', 'success');
+            } catch (err) {
+                // Fallback for older browsers
+                const textarea = document.getElementById('markdownOutput');
+                textarea.select();
+                document.execCommand('copy');
+                showMessage('Markdown copied to clipboard!', 'success');
+            }
+        }
+
+        function downloadMarkdown() {
+            const markdown = document.getElementById('markdownOutput').value;
+            
+            if (!markdown) {
+                showMessage('Nothing to download', 'error');
+                return;
+            }
+
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'table-' + new Date().toISOString().slice(0, 10) + '.md';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showMessage('Markdown file downloaded!', 'success');
+        }
+
+        function clearAll() {
+            document.getElementById('htmlInput').value = '';
+            document.getElementById('markdownOutput').value = '';
+            document.getElementById('preview').innerHTML = '<p style="color: #999; text-align: center; padding: 40px;">No content to preview</p>';
+            document.getElementById('statsSection').style.display = 'none';
+            showMessage('All content cleared', 'info');
+        }
+
+        // Allow manual paste and auto-convert
+        document.getElementById('htmlInput').addEventListener('paste', () => {
+            setTimeout(() => {
+                const content = document.getElementById('htmlInput').value;
+                if (content.includes('<table')) {
+                    convertToMarkdown();
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>
