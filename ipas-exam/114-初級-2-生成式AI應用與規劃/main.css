@@ -1,9 +1,10 @@
+
 .ff0{font-family:sans-serif;visibility:hidden;}
-@font-face{font-family:ff1;src:url(f1.woff)format("woff");}.ff1{font-family:ff1;line-height:0.901855;font-style:normal;font-weight:normal;visibility:visible;}
-@font-face{font-family:ff2;src:url(f2.woff)format("woff");}.ff2{font-family:ff2;line-height:1.714844;font-style:normal;font-weight:normal;visibility:visible;}
-@font-face{font-family:ff3;src:url(f3.woff)format("woff");}.ff3{font-family:ff3;line-height:1.714844;font-style:normal;font-weight:normal;visibility:visible;}
-@font-face{font-family:ff4;src:url(f4.woff)format("woff");}.ff4{font-family:ff4;line-height:1.346191;font-style:normal;font-weight:normal;visibility:visible;}
-@font-face{font-family:ff5;src:url(f5.woff)format("woff");}.ff5{font-family:ff5;line-height:1.364258;font-style:normal;font-weight:normal;visibility:visible;}
+.ff1{line-height:0.901855;font-style:normal;font-weight:normal;visibility:visible;}
+.ff2{line-height:1.714844;font-style:normal;font-weight:normal;visibility:visible;}
+.ff3{line-height:1.714844;font-style:normal;font-weight:normal;visibility:visible;}
+.ff4{line-height:1.346191;font-style:normal;font-weight:normal;visibility:visible;}
+.ff5{line-height:1.364258;font-style:normal;font-weight:normal;visibility:visible;}
 .m0{transform:matrix(0.250000,0.000000,0.000000,0.250000,0,0);-ms-transform:matrix(0.250000,0.000000,0.000000,0.250000,0,0);-webkit-transform:matrix(0.250000,0.000000,0.000000,0.250000,0,0);}
 .v0{vertical-align:0.000000px;}
 .ls8{letter-spacing:-24.000000px;}
@@ -61,7 +62,7 @@
 .fc0{color:rgb(0,0,0);}
 .fs2{font-size:36.000000px;}
 .fs3{font-size:39.840000px;}
-.fs1{font-size:48.000000px;}
+.fs1{font-size:40.000000px;}
 .fs0{font-size:63.840000px;}
 .fs4{font-size:72.000000px;}
 .y1{bottom:0.000000px;}

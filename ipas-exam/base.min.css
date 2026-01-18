@@ -21,3 +21,14 @@
   font-style: normal;
   font-display: swap; /* 改善載入效能 */
 }
+
+body {
+    font-family:
+        "DFKai-SB",        /* Windows 標楷體 */
+        "BiauKai",         /* macOS 早期楷體 (舊版 mac 可能有) */
+        "Kaiti TC",        /* macOS 新版的繁體楷體 */
+        "STKaiti",         /* 一些系統上的楷體 (簡體系) */
+        "KaiTi", "楷体",
+        serif;   
+        
+}
