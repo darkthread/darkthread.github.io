@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz From Text</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    html,
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button {
+      margin-right: 6px;
+    }
+
+    h2 {
+      color: blue;
+      height: 3em;
+    }
+
+    .no {
+      margin-top: 12px;
+      color: dodgerblue;
+      font-size: 14pt;
+    }
+
+    ul {
+      padding: 24px;
+    }
+
+    li {
+      margin-bottom: 6px;
+      cursor: pointer;
+
+      /* &:hover {
+        color: blueviolet;
+      } */
+
+    }
+
+    .no-select {
+      user-select: none;
+    }
+
+    .show-answer {
+      cursor: pointer;
+      background-color: #eee;
+
+      .answer {
+        color: green;
+
+        button {
+          background-color: lightgreen;
+        }
+      }
+
+      .wrong {
+        color: brown;
+
+        button {
+          background-color: lightcoral;
+        }
+      }
+    }
+
+    .fail-list {
+      margin-top: 24px;
+
+      span {
+        margin-right: 6px;
+        cursor: pointer;
+      }
+    }
+
+    #app {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hint {
+      color: darkgreen;
+    }
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <div>
+      <button @click="prevQuestion">前一題</button>
+      <button @click="nextQuestion">下一題</button>
+      <input type="text" v-model="questionNo" @keyup.enter="review(questionNo)" size="10" placeholder="ex: 007"
+        style="height: 1.4em">
+      <button @click="review(questionNo)">跳題</button>
+      <button @click="copyQuestion(false)">複製題目</button>
+      <button @click="copyQuestion(true)">複製題目+答案</button>
+      <button @click="clearFailList()">清除答錯清單</button>
+    </div>
+    <div class="no">{{quizName}} - {{questions[currIdx].N}}</div>
+    <h2>
+      {{questions[currIdx].Q}}
+    </h2>
+    <ul v-bind:class="{'show-answer':showAnswer}" @click="autoNext" class="no-select">
+      <li v-for="choice in questions[currIdx].O"
+        v-bind:class="{'answer':choice.isAnswer,'wrong':choice.isSelected && !choice.isAnswer}">
+        <button @click.stop="pickChoice(choice)">{{choice.C}}</button> <span
+          @click.stop="pickChoice(choice)">{{choice.T}}</span>
+      </li>
+      <div v-if="showAnswer" style="margin-top: 12px; color: gray">{{questions[currIdx].H}}</div>
+    </ul>
+    <div class="hint" v-show="!start">
+      答題後點擊選項區可進入下一題，下方會出現答錯的題目，點擊可重新回答。
+    </div>
+    <div class="fail-list">
+      <span v-if="failList.length">答錯清單：</span>
+      <span v-for="failNo in failList" @click="review(failNo)">{{failNo}}</span>
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", async function (event) {
+      const fileName = location.search ? location.search.substring(1) : 'deep-learning';
+      const fileUrl = fileName + '.js';
+      try {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = fileUrl;
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      } catch (e) { alert('載入題庫失敗，請確認網址是否正確'); }
+      const data = window.quizData;
+      data.forEach(q => {
+        q.O = q.O.map(o => {
+          const m = /([A-D])\) (.+)/.exec(o);
+          return {
+            C: m[1],
+            T: m[2],
+            isAnswer: m[1] == q.A
+          }
+        });
+      });
+      const IDX_KEY = `${fileName}-CurrIdx`;
+      const LIST_KEY = `${fileName}-FailList`;
+      if (location.hash == '#reset') {
+        localStorage.removeItem(IDX_KEY);
+        localStorage.removeItem(LIST_KEY);
+      }
+      const app = Vue.createApp({
+        data() {
+          return {
+            quizName: window.quizName,
+            questions: data,
+            currIdx: localStorage.getItem(IDX_KEY) || 0,
+            showAnswer: false,
+            failList: JSON.parse(localStorage.getItem(LIST_KEY)) || [],
+            questionNo: '',
+            start: false
+          }
+        },
+        watch: {
+          currIdx() {
+            localStorage.setItem(IDX_KEY, this.currIdx);
+          },
+          failList: {
+            handler(newVal) {
+              localStorage.setItem(LIST_KEY, JSON.stringify(newVal));
+            },
+            deep: true
+          }
+        },
+        methods: {
+          pickChoice(choice) {
+            this.start = true;
+            if (this.showAnswer) {
+              this.nextQuestion();
+              return;
+            }
+            choice.isSelected = true;
+            const currNo = this.questions[this.currIdx].N;
+            if (!choice.isAnswer) {
+              this.failList.push(currNo);
+            }
+            else {
+              this.failList = this.failList.filter(o => o != currNo);
+            }
+            this.showAnswer = true;
+          },
+          review(no) {
+            const idx = this.questions.findIndex(q => q.N == no);
+            if (idx >= 0) {
+              this.currIdx = idx;
+              this.showAnswer = false;
+              this.reset();
+            }
+          },
+          autoNext() {
+            if (this.showAnswer) {
+              this.nextQuestion();
+            }
+          },
+          reset() {
+            this.questions[this.currIdx].O.map(o => o.isSelected = false);
+          },
+          updateQuestionNo() {
+            this.questionNo = this.questions[this.currIdx].N;
+          },
+          nextQuestion() {
+            this.reset();
+            this.currIdx++;
+            if (this.currIdx >= this.questions.length) {
+              this.currIdx = 0;
+            }
+            this.updateQuestionNo();
+            this.showAnswer = false;
+          },
+          prevQuestion() {
+            this.reset();
+            this.currIdx--;
+            if (this.currIdx < 0) {
+              this.currIdx = this.questions.length - 1;
+            }
+            this.updateQuestionNo();
+            this.showAnswer = false;
+          },
+          clearFailList() {
+            if (confirm('確定要清除答錯清單嗎？')) {
+              this.failList = [];
+            }
+          },
+          copyQuestion(includeAnswer = false) {
+            const q = this.questions[this.currIdx];
+            const text = `Answer and explain why you choose it, in zh-tw.
+\`\`\`
+{ 
+  Q: "${q.Q}",
+  O: [
+    ${q.O.map(o => `"${o.C}) ${o.T}"`).join(',\n    ')}
+  ]${includeAnswer ? `,
+  A: "${q.A}", 
+  H: "${q.H}"` : ''},
+}
+\`\`\`
+`;
+            navigator.clipboard.writeText(text);
+          }
+        }
+      });
+      app.mount('#app');
+    });
+  </script>
+</body>
+
+</html>
