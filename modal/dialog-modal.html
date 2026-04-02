@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>HTML5 dialog Modal 視窗</title>
+    <style>
+        table.form {
+            width: 300px;
+            border-collapse: collapse;
+            th, td { padding: 6px; border: 1px solid #c8d2dc; }         
+            select { width: 100%; padding: 4px; }  
+            .hdr {
+                white-space: nowrap;
+                width: 100px;
+                .tip-button::after {
+                    content: 'ℹ';
+                    color: darkcyan;
+                    font-style: normal;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        dialog#tips-dialog {
+            padding: 0; /* 讓 backdrop 點擊可正確觸發 e.target === dialog */
+            border: 0;
+            border-radius: 12px;
+            width: min(720px, 90vw);
+            max-height: 85vh;
+            overflow: auto;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+            &::backdrop {
+                background: rgba(0, 0, 0, 0.45); /* 半透明遮罩，由瀏覽器原生渲染 */
+            }
+            .content {
+                padding: 1rem;
+            }
+            .close-button {
+                float: right;
+                &::after {
+                    display: block;
+                    content: '✖';
+                    font-size: 0.8rem;
+                    text-align: center;
+                    font-style: normal;
+                    width: 1.2rem;
+                    height: 1.2rem;
+                    background-color: red;
+                    color: #fff;
+                    border: 0;
+                    cursor: pointer;
+                    border: 1px solid #c8d2dc;
+                    border-width: 0 1px 1px 0;
+                }
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                th, td {
+                    padding: 0.5rem 0.6rem;
+                    border: 1px solid #c8d2dc;
+                    text-align: center;
+                    vertical-align: top;
+                    white-space: nowrap;
+                }
+                td:last-child {
+                    text-align: left;
+                    white-space: normal;
+                }
+                th {
+                    background: #eef4fb;
+                }
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <table class="form">
+        <tr>
+            <td class="hdr">
+                日文等級
+                <i class="tip-button" onclick="document.getElementById('tips-dialog').showModal()"></i>
+            </td>
+            <td>
+                <select>
+                    <option value="N1">N1</option>
+                    <option value="N2">N2</option>
+                    <option value="N3">N3</option>
+                    <option value="N4">N4</option>
+                    <option value="N5">N5</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <dialog id="tips-dialog" onclick="if(event.target===this)this.close()">
+        <div class="content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>級數</th>
+                        <th>程度</th>
+                        <th>
+                            說明
+                            <i class="close-button" onclick="document.getElementById('tips-dialog').close()"></i>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>N1</td>
+                        <td>高階</td>
+                        <td>可理解廣泛情境的日語，如閱讀新聞、評論、論說文等複雜文章，並能流利會話。</td>
+                    </tr>
+                    <tr>
+                        <td>N2</td>
+                        <td>中高階</td>
+                        <td>能理解日常生活中廣泛情境的日語，以及程度較高的報紙、雜誌文章。</td>
+                    </tr>
+                    <tr>
+                        <td>N3</td>
+                        <td>中級</td>
+                        <td>日常生活場景的日語理解能力，銜接基礎與高階的過渡級數。</td>
+                    </tr>
+                    <tr>
+                        <td>N4</td>
+                        <td>初級</td>
+                        <td>理解課堂學習的基本日語，並能進行基本的日常對話。</td>
+                    </tr>
+                    <tr>
+                        <td>N5</td>
+                        <td>入門</td>
+                        <td>掌握最基礎的五十音、單字、簡單句子，能進行非常簡單的生活會話。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </dialog>
+</body>
+
+</html>
