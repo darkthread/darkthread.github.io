@@ -1,6 +1,7 @@
-const cssA = 'x6';
-const cssN = 'x8';
-const cssQ = 'xc';
+const cssVars = (document.body.getAttribute('data-css-vars') ?? 'x6,x8,xc').split(',');
+const cssA = cssVars[0]; // 答案欄位
+const cssN = cssVars[1]; // 題號欄位
+const cssQ = cssVars[2]; // 選項欄位
 
 // 等待 DOM 載入完成後再執行
 document.addEventListener('DOMContentLoaded', function () {
@@ -101,6 +102,25 @@ document.addEventListener('DOMContentLoaded', function () {
         #result {
             color: white;
         }
+
+        .q-option{
+            cursor: pointer;
+            &:hover {
+                text-decoration: underline;
+                color: blue;
+            }
+        }
+
+        [cloak] .x6 { display: none; }
+
+        @font-face {
+        font-family: 'Digital7';
+        src: url('../digital_7mono.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap; /* 改善載入效能 */
+        }
+
     `;
     document.head.appendChild(style);
 
@@ -209,15 +229,22 @@ function updateStats() {
 }
 
 
+
 function scanQuestions() {
-    const last = [...document.querySelectorAll('.c.x1.y1.w2.h0')].pop();
-    if (last) last.parentNode.insertBefore(last, last.parentNode.firstChild);
+    // 最後一頁的 .h0 會覆蓋在最上方，移除之
+    [...document.querySelectorAll('.pc .h0')].pop().remove();
+    // 尋找題號欄
+    let i = 0;
     [...document.querySelectorAll(`.${cssN}`)]
         .map(el => {
+            // 偵測是否以題號開頭（例如 "1."、"2." 等）
             const m = el.textContent.trim().match(/^\d+\.?$/);
+            i++;
             if (m) {
+                // 前一欄 td 為答案欄位
                 const qAns = el.previousElementSibling;
                 el.classList.add('q-no');
+                // 下一欄為題目內容
                 const qBody = el.nextElementSibling;
                 if (qBody) {
                     qBody.classList.add(`q-body`);
@@ -237,6 +264,8 @@ function scanQuestions() {
             }
         });
     document.body.removeAttribute('cloak');
+
+    // 處理跨頁題目
     [...document.querySelectorAll(`.${cssQ}`)]
         .filter(el => !el.classList.contains('q-body'))
         .map(el => {
