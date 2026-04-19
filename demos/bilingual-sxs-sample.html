@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        /* ── Tokens ──────────────────────────────────── */
+        :root {
+            --c-text:        #212529;
+            --c-orig:        #343a40;
+            --c-trans:       #1a5276;
+            --c-muted:       #495057;
+            --c-border:      #dee2e6;
+            --c-border-soft: #e9ecef;
+            --c-border-hint: #adb5bd;
+            --c-bg-hint:     #f8f9fa;
+            --c-bg-code:     #e9ecef;
+            --c-focus:       #ffeeba;
+        }
+
+        /* ── Base ────────────────────────────────────── */
+        body {
+            font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.8;
+            color: var(--c-text);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--c-border);
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ── Paragraph ───────────────────────────────── */
+        .paragraph {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--c-border-soft);
+
+            p span {
+                margin-right: 0.5rem;
+                cursor: pointer;
+            }
+
+            p.orig {
+                color: var(--c-orig);
+                font-size: 1rem;
+                margin: 0 0 0.5rem;
+            }
+
+            p.trans {
+                color: var(--c-trans);
+                font-size: 1rem;
+                margin: 0 0 0.5rem;
+            }
+
+            .hint {
+                font-size: 0.875rem;
+                color: var(--c-muted);
+                background: var(--c-bg-hint);
+                border-left: 4px solid var(--c-border-hint);
+                padding: 0.5rem 1rem;
+                margin: 0;
+
+                ul {
+                    margin: 0.25rem 0 0;
+                    padding-left: 1.25rem;
+                }
+
+                li {
+                    margin-bottom: 0.25rem;
+                    cursor: default;
+                }
+
+                code {
+                    background: var(--c-bg-code);
+                    padding: 0.1rem 0.3rem;
+                    border-radius: 3px;
+                    font-size: 0.85em;
+                }
+
+                strong {
+                    color: var(--c-orig);
+                    display: block;
+                }
+            }
+        }
+
+        /* ── Toolbar ─────────────────────────────────── */
+        .toolbar {
+            position: fixed;
+            top: 1rem;
+            right: 1.5rem;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            opacity: 0.35;
+
+            &:hover { opacity: 1; }
+
+            button {
+                padding: 0.45rem 0.9rem;
+                min-width: 5rem;
+                border: 1px solid var(--c-border-hint);
+                border-radius: 10px;
+                background: #fff;
+                color: var(--c-muted);
+                font-size: 0.85rem;
+                cursor: pointer;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+                transition: background 0.2s, color 0.2s;
+            }
+
+            button.active {
+                background: var(--c-trans);
+                color: #fff;
+                border-color: var(--c-trans);
+            }
+
+            button:disabled {
+                background: var(--c-border-soft);
+                color: var(--c-border-hint);
+                border-color: var(--c-border-soft);
+                cursor: not-allowed;
+            }
+        }
+
+        /* ── Highlight ───────────────────────────────── */
+        p.orig mark           { background: lightpink; color: inherit; }
+        .mapping p span.focus { background: var(--c-focus); }
+
+        /* ── Visibility Toggles ──────────────────────── */
+        .hint, p.orig, p.trans, span.map-trans { display: none; }
+
+        .show-hint .hint    { display: block; }
+        .show-orig p.orig   { display: block; }
+        .show-trans p.trans { display: block; }
+
+        .interleave span.map-trans { display: inline; color: var(--c-trans); }
+        .interleave .trans         { display: none; }
+    </style>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div
+            :class="{ 'show-hint': showOrig && showHint, 'show-orig': showOrig, 'show-trans': showTrans && !interleave, 'mapping': bilingual && mapping, 'interleave': bilingual && interleave }">
+            <div class="toolbar">
+                <button :class="{ active: showOrig }" :disabled="!bilingual && showOrig" @click="toggle('showOrig')">原文</button>
+                <button :class="{ active: showTrans }" :disabled="!bilingual && showTrans" @click="toggle('showTrans')">翻譯</button>
+                <button :class="{ active: showHint }" v-show="showOrig" @click="toggle('showHint')">提示</button>
+                <button class="active" v-show="bilingual && interleave" @click="mode = 'mapping'">對照</button>
+                <button class="active" v-show="bilingual && mapping" @click="mode = 'interleave'">穿插</button>
+            </div>
+            <h1>{{ title }}</h1>
+            <div class="paragraph" v-for="(para, pidx) in paragraphs" :key="pidx">
+                <p class="orig">
+                    <span v-for="(sentence, sidx) in para.O" :key="sidx"
+                        :class="{ focus: focusIdx === `s-${pidx}-${sidx}` }"
+                        @mouseenter="focusIdx = `s-${pidx}-${sidx}`" @mouseleave="focusIdx = ''" :title="para.T[sidx]">
+                        <span v-html="highlightWord(sentence)"></span>
+                        <span class="map-trans">{{ para.T[sidx] }}</span>
+                    </span>
+
+
+                </p>
+                <p class="trans">
+                    <span v-for="(sentence, sidx) in para.T" :key="sidx"
+                        :class="{ focus: focusIdx === `s-${pidx}-${sidx}` }"
+                        @mouseenter="focusIdx = `s-${pidx}-${sidx}`" @mouseleave="focusIdx = ''"
+                        v-html="sentence"></span>
+                </p>
+                <div class="hint">
+                    <ul>
+                        <li v-for="(hint, hIndex) in para.H" :key="hIndex" @mouseenter="hoveredWord = hint.E"
+                            @mouseleave="hoveredWord = ''">
+                            <strong>{{ hint.W }}</strong> {{ hint.D }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    title: '',
+                    paragraphs: [],
+                    hoveredWord: '',
+                    focusIdx: '',
+                    showOrig: true,
+                    showTrans: true,
+                    showHint: true,
+                    mode: 'mapping'
+                };
+            },
+            computed: {
+                bilingual() {
+                    return this.showOrig && this.showTrans;
+                },
+                mapping() {
+                    return this.bilingual && this.mode === 'mapping';
+                },
+                interleave() {
+                    return this.bilingual && this.mode === 'interleave';
+                }
+            },
+            methods: {
+                highlightWord(text) {
+                    if (!this.hoveredWord) return text;
+                    const escaped = this.hoveredWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    return text.replace(new RegExp(`(${escaped})`, 'gi'), '<mark>$1</mark>');
+                },
+                async toggle(key) {
+                    // 找出目前viewport最上方的 .paragraph
+                    const anchor = [...document.querySelectorAll('.paragraph')]
+                        .find(el => el.getBoundingClientRect().top >= 0);
+                    const anchorTop = anchor ? anchor.getBoundingClientRect().top : null;
+
+                    this[key] = !this[key];
+
+                    await this.$nextTick();
+
+                    if (anchor && anchorTop !== null) {
+                        const newTop = anchor.getBoundingClientRect().top;
+                        window.scrollBy(0, newTop - anchorTop);
+                    }
+                }
+            }
+        });
+        const vm = app.mount('#app');
+    </script>
+    <script>
+        vm.title = "sample";
+        document.title = vm.title;
+        vm.paragraphs = [
+  {
+    "O": [
+      "## Jensen Huang：NVIDIA 的未來、實體 AI 與代理程式的興起"
+    ],
+    "T": [
+      "## Jensen Huang：NVIDIA 的未來、實體 AI 與代理程式的興起"
+    ],
+    "H": []
+  },
+  {
+    "O": [
+      "Special episode this week.",
+      "We've preempted the weekly show and there's only three people we preempt the show for: President Trump, Jesus, and Jensen.",
+      "And uh, I'll let you pick which order we do that.",
+      "Uh, but what an amazing run you've had and a great event.",
+      "Uh, every industry is here. Every tech company is here. Every AI company is here. Incredible. Incredible. Extraordinary."
+    ],
+    "T": [
+      "本週是特別集。",
+      "我們搶先預告了每週節目，而我們只會為三個人這樣做：川普總統、耶穌，和 Jensen。",
+      "呃，我讓你來選我們的排列順序。",
+      "呃，但你的表現真是驚人，這次活動也非常精彩。",
+      "呃，每個產業都在這裡。每家科技公司都在這裡。每家 AI 公司都在這裡。不可思議。不可思議。太驚人了。"
+    ],
+    "H": [
+      {
+        "W": "preempt",
+        "E": "preempted",
+        "D": "「搶佔、取代」，原指在廣播中臨時取消原定節目以播出特別內容。此處指為了特別來賓而暫停原本的每週節目。"
+      },
+      {
+        "W": "what an amazing run",
+        "E": "what an amazing run you've had",
+        "D": "感嘆句型 'What + a/an + adj + N + S + V'，表示驚嘆。run 在此指「一段持續的成功表現」。"
+      }
+    ]
+  },
+  {
+    "O": [
+      "And one of the great announcements of the past year has been Groq.",
+      "When you made the purchase of Groq, did you realize how insufferable Chamath would become?",
+      "I had, I had an inkling that that, that... we're his friends.",
+      "We have to deal with him every week.",
+      "I know it.",
+      "You had to deal with him for the six-week close.",
+      "I know it's like two weeks. Two weeks.",
+      "It's all coming back to me now. It's, it's making me rather uncomfortable."
+    ],
+    "T": [
+      "而過去一年最重大的消息之一就是 Groq。",
+      "當你決定收購 Groq 的時候，你有沒有意識到 Chamath 會變得多令人難以忍受？",
+      "我有、我有一種預感……我們是他的朋友嘛。",
+      "我們每週都得應付他。",
+      "我知道。",
+      "你得在六週的交割期間跟他打交道。",
+      "我知道那感覺像兩週。兩週。",
+      "一切都湧上心頭了。這讓我相當不自在。"
+    ],
+    "H": [
+      {
+        "W": "insufferable",
+        "E": "insufferable",
+        "D": "形容詞，意為「令人無法忍受的、極度討厭的」。此處帶有開玩笑的語氣，暗示 Chamath 因為投資 Groq 而變得過度得意、令人受不了。"
+      },
+      {
+        "W": "an inkling",
+        "E": "an inkling",
+        "D": "名詞，意為「隱約的感覺、些許的預感」。常見搭配：have an inkling (that...)。"
+      },
+      {
+        "W": "the six-week close",
+        "E": "the six-week close",
+        "D": "指收購案從簽約到完成的「交割期」（closing period），此處為六週。close 作名詞使用，指交易的完成結案。"
+      },
+      {
+        "W": "It's all coming back to me now",
+        "E": "It's all coming back to me now",
+        "D": "慣用語，意為「一切都回憶起來了」，表達過去的記憶逐漸湧現。此處用於幽默地表示回想起與 Chamath 相處的不愉快經歷。"
+      }
+    ]
+  },
+  {
+    "O": [
+      "### NVIDIA 的戰略與 Dynamo 作業系統"
+    ],
+    "T": [
+      "### NVIDIA 的戰略與 Dynamo 作業系統"
+    ],
+    "H": []
+  },
+  {
+    "O": [
+      "The thing is, uh, many of our strategies are, are presented in, in broad daylight at GTC years in advance of when we do it.",
+      "Two and a half years ago, I introduced the operating system of the AI factory and it's called **Dynamo**.",
+      "Dynamo, as you know, is a piece of instrument, a machine that was created by Siemens to turn essentially water into electricity.",
+      "And Dynamo, uh, powered the factory of the last industrial revolution.",
+      "So I thought it was the perfect name for the operating system of the next industrial revolution, the factory of that.",
+      "And so inside Dynamo, the fundamental technology is **disaggregated inference**."
+    ],
+    "T": [
+      "事情是這樣的，呃，我們許多策略都是在 GTC 上公開展示的，而且是在我們實際執行之前好幾年就提出了。",
+      "兩年半前，我介紹了 AI 工廠的作業系統，它叫做 **Dynamo**。",
+      "如你所知，Dynamo 是一種儀器、一台由西門子發明的機器，基本上就是將水力轉換成電力。",
+      "而 Dynamo 驅動了上一次工業革命的工廠。",
+      "所以我認為它是下一次工業革命的作業系統、那個工廠的完美名稱。",
+      "因此在 Dynamo 內部，其根本技術就是**解構式推論（disaggregated inference）**。"
+    ],
+    "H": [
+      {
+        "W": "in broad daylight",
+        "E": "in broad daylight",
+        "D": "慣用語，原意為「光天化日之下」，此處引申為「公開地、毫不隱藏地」，強調策略是完全透明地展示的。"
+      },
+      {
+        "W": "years in advance of",
+        "E": "years in advance of when we do it",
+        "D": "介詞片語 'in advance of' 意為「在……之前」，此處指在實際執行之前好幾年。"
+      },
+      {
+        "W": "disaggregated inference",
+        "E": "disaggregated inference",
+        "D": "專業術語。disaggregate 意為「分解、拆解」，inference 指 AI 模型的推論運算。整體指將推論流程拆分到不同硬體上執行，以提升效率與彈性。"
+      },
+      {
+        "W": "Dynamo",
+        "E": "Dynamo",
+        "D": "原指 19 世紀的發電機（dynamo），由西門子公司發明，可將機械能轉為電能。Jensen 以此命名 NVIDIA 的 AI 工廠作業系統，隱喻其為新一代工業革命提供動力。"
+      }
+    ]
+  },
+  {
+    "O": [
+      "Jensen, I, I know you're, you're super technical.",
+      "Absolutely.",
+      "I know it. I'll let you take this one.",
+      "Go ahead and define it for the audience. I don't want to step on you.",
+      "Yeah, thank you. I, I, I know you wanted to jump in there for a second, but it's, it's this aggregating inference, which means the, the pipeline, the processing pipeline of inference is extremely complicated.",
+      "In fact, it is the most complicated computing problem today.",
+      "Incredible scale, lots of mathematics of different shapes and sizes."
+    ],
+    "T": [
+      "Jensen，我、我知道你是超級技術派的。",
+      "當然。",
+      "我知道。這題讓你來回答。",
+      "請你為觀眾解釋一下。我不想搶你的風頭。",
+      "好的，謝謝。我、我、我知道你想要插話，但這就是解構式推論，意思是推論的處理管線（pipeline）極其複雜。",
+      "事實上，它是當今最複雜的運算問題。",
+      "規模驚人，涉及各種不同形態和大小的數學運算。"
+    ],
+    "H": [
+      {
+        "W": "step on you",
+        "E": "step on you",
+        "D": "慣用語 'step on someone' 在此指「搶某人的風頭、搶先發言」，而非字面上的「踩到你」。"
+      },
+      {
+        "W": "jump in",
+        "E": "jump in there",
+        "D": "片語動詞，意為「插嘴、加入討論」。口語中常用來表示臨時參與對話。"
+      },
+      {
+        "W": "pipeline",
+        "E": "the processing pipeline of inference",
+        "D": "技術術語，指資料或任務依序經過多個處理階段的「管線」流程。在 AI 推論中，指從接收輸入到產生輸出的完整處理流程。"
+      },
+      {
+        "W": "of different shapes and sizes",
+        "E": "of different shapes and sizes",
+        "D": "慣用語，意為「各式各樣的」。此處指推論運算涉及多種不同類型和規模的數學計算。"
+      }
+    ]
+  },
+  {
+    "O": [
+      "And we came up, came up with the idea that you would change, you would, you would disaggregate parts of the processing such that some of it can run on some GPUs, rest of it can run on different GPUs, and that led to us realizing that maybe even disaggregated computing could make sense.",
+      "That we could have different heterogeneous nature of computing; that same sensibility led us to **Mellanox**.",
+      "You know today NVIDIA's computing is spread across GPUs, CPUs, switches, scale-up switches, scale-out switches, networking processors, and now we're going to add Groq to that and we're going to put the right workload on the right chips.",
+      "You know, we just really evolved from a GPU company to an AI factory company."
+    ],
+    "T": [
+      "然後我們想到了一個概念：可以將處理過程的各個部分拆開，讓其中一些在某些 GPU 上執行，其餘的在不同的 GPU 上執行，這讓我們意識到，也許解構式運算（disaggregated computing）也是可行的。",
+      "我們可以擁有不同的異質運算架構；同樣的思維引領我們走向了 **Mellanox**。",
+      "如今 NVIDIA 的運算分散在 GPU、CPU、交換器、縱向擴展交換器、橫向擴展交換器、網路處理器上，現在我們還要加入 Groq，把合適的工作負載放在合適的晶片上。",
+      "你知道的，我們真的從一家 GPU 公司進化成了一家 AI 工廠公司。"
+    ],
+    "H": [
+      {
+        "W": "came up with",
+        "E": "came up with the idea",
+        "D": "片語動詞 'come up with'，意為「想出、提出（點子或方案）」。"
+      },
+      {
+        "W": "disaggregate",
+        "E": "disaggregate parts of the processing",
+        "D": "動詞，意為「將……拆解、分離」。此處指將推論的處理流程拆分到不同的硬體元件上。"
+      },
+      {
+        "W": "heterogeneous",
+        "E": "heterogeneous nature of computing",
+        "D": "形容詞，意為「異質的、由不同種類組成的」。heterogeneous computing 指結合不同類型處理器（如 GPU、CPU、專用晶片）的運算架構。"
+      },
+      {
+        "W": "sensibility",
+        "E": "that same sensibility",
+        "D": "名詞，此處意為「思維方式、洞察力」，指同樣的設計理念與判斷力。"
+      },
+      {
+        "W": "Mellanox",
+        "E": "Mellanox",
+        "D": "以色列高速網路設備公司，NVIDIA 於 2020 年完成收購。其 InfiniBand 技術是 AI 資料中心高速互連的關鍵技術。"
+      },
+      {
+        "W": "scale-up / scale-out",
+        "E": "scale-up switches, scale-out switches",
+        "D": "scale-up（縱向擴展）指在單一節點內增強效能；scale-out（橫向擴展）指透過增加更多節點來擴充容量。兩者是資料中心架構的基本擴展策略。"
+      }
+    ]
+  },
+  {
+    "O": [
+      "### 推論爆炸與 AI 工廠的成本效益"
+    ],
+    "T": [
+      "### 推論爆炸與 AI 工廠的成本效益"
+    ],
+    "H": []
+  },
+  {
+    "O": [
+      "I mean, I think that was probably the biggest takeaway that I had.",
+      "You're seeing this fundamental disaggregation where we've gone from a GPU and now you have this complexion of all these different options that will eventually exist.",
+      "The thing that you guys said on stage, or you said on stage, was I, I would like the high-value inference people to take a listen to this, and **25% of your data center space**, you said, should be allocated to this Groq LPU GPU combo to about 25% of the Vera Rubins in the, in the data center."
+    ],
+    "T": [
+      "我的意思是，我覺得這大概是我最大的收穫。",
+      "你正在見證這種根本性的解構——我們從單一 GPU 出發，而如今有了各式各樣不同選項的組合，這些最終都會成為現實。",
+      "你們在台上說的，或者說你在台上說的，是——我希望做高價值推論的人仔細聽好——你的**資料中心 25% 的空間**應該分配給 Groq LPU 與 GPU 的組合，大約佔資料中心裡 Vera Rubin 的 25%。"
+    ],
+    "H": [
+      {
+        "W": "takeaway",
+        "E": "the biggest takeaway",
+        "D": "名詞，意為「重點、心得、收穫」，指從某件事中得到的最重要啟示或結論。"
+      },
+      {
+        "W": "complexion",
+        "E": "this complexion of all these different options",
+        "D": "此處 complexion 非指「膚色」，而是較少見的用法，意為「整體面貌、組成樣態」，指由各種不同選項構成的整體架構。"
+      },
+      {
+        "W": "LPU",
+        "E": "Groq LPU GPU combo",
+        "D": "LPU（Language Processing Unit）是 Groq 公司開發的專用推論處理器，專為大型語言模型的推論加速而設計。此處指將 LPU 與傳統 GPU 搭配使用。"
+      },
+      {
+        "W": "Vera Rubin",
+        "E": "Vera Rubins",
+        "D": "NVIDIA 下一代 GPU 架構的代號，以美國天文學家 Vera Rubin 命名。此處用複數形式指該架構的 GPU 產品。"
+      }
+    ]
+  },
+  {
+    "O": [
+      "So can you tell us about how the industry looks at this idea of now basically creating this next generation form of disaggregated prefill decode disag?",
+      "Yeah, and take a step back and at the time that we added this, we went from large language model processing to **agentic processing**.",
+      "Now when you're running an agent, you're accessing working memory, you're accessing long-term memory.",
+      "You're using tools.",
+      "You're really beating up on storage really hard.",
+      "You have agents working with other agents.",
+      "Some of the agents are very large models.",
+      "Some of them are smaller models.",
+      "Some of them are diffusion models.",
+      "Some of them are auto-regressive models.",
+      "And so there are all kinds of different types of models inside this data center."
+    ],
+    "T": [
+      "那麼你能告訴我們，業界如何看待這個「建立下一代分離式預填—解碼架構（disaggregated prefill decode）」的構想？",
+      "好的，讓我們退一步來看：當我們加入這個架構的時候，我們從大型語言模型處理轉變為**代理式處理（agentic processing）**。",
+      "現在當你在執行一個代理程式時，你會存取工作記憶，也會存取長期記憶。",
+      "你會使用各種工具。",
+      "你會非常大量地消耗儲存資源。",
+      "你會有代理程式跟其他代理程式協同運作。",
+      "有些代理程式是非常大型的模型。",
+      "有些是較小的模型。",
+      "有些是擴散模型。",
+      "有些是自迴歸模型。",
+      "因此，在這個資料中心裡有各式各樣不同類型的模型。"
+    ],
+    "H": [
+      {
+        "W": "disaggregated prefill decode",
+        "E": "disaggregated prefill decode disag",
+        "D": "分離式預填—解碼架構，將 AI 推論中的 prefill（預填）階段和 decode（解碼）階段拆分到不同硬體上執行，以提高效率與彈性。disag 是 disaggregated 的口語縮寫。"
+      },
+      {
+        "W": "agentic processing",
+        "E": "agentic processing",
+        "D": "代理式處理，指由 AI 代理（agent）主導的運算方式，代理能自主決策、呼叫工具、存取記憶，不同於傳統的單次推論。"
+      },
+      {
+        "W": "working memory / long-term memory",
+        "E": "working memory, you're accessing long-term memory",
+        "D": "工作記憶與長期記憶，借用認知科學術語。工作記憶指代理執行當下任務時暫存的上下文；長期記憶指跨對話持久保存的知識庫。"
+      },
+      {
+        "W": "beating up on",
+        "E": "beating up on storage really hard",
+        "D": "口語慣用語，意為「大量消耗、重度使用」，此處指代理式工作負載對儲存系統造成很大壓力。"
+      },
+      {
+        "W": "diffusion models / auto-regressive models",
+        "E": "diffusion models. Some of them are auto-regressive models",
+        "D": "擴散模型與自迴歸模型是兩種主要的生成式 AI 架構。擴散模型（如 Stable Diffusion）透過逐步去噪生成內容；自迴歸模型（如 GPT）逐步預測下一個 token。"
+      }
+    ]
+  },
+  {
+    "O": [
+      "We created **Vera Rubin** to be able to run this extraordinarily diverse workload.",
+      "My sense is, and so we added what used to be a one-rack company, we now added four more racks, right?",
+      "So, NVIDIA's TAM, if you will, increased from what, whatever it was to probably something, call it, you know, 33% 50% higher.",
+      "Now, part of that 33% or 50%, a lot of it is going to be storage processors.",
+      "It's called **BlueField**.",
+      "Some of it will be, a lot of it, I'm hoping, will be Groq processors, and some of it will be CPUs.",
+      "And they're all, and a lot of it's going to be networking processors.",
+      "And so all of this is going to be running basically the computer of the AI revolution called agents, right?",
+      "The operating system of, of, um, modern, modern industry."
+    ],
+    "T": [
+      "我們打造了 **Vera Rubin** 來執行這種極為多樣化的工作負載。",
+      "我的理解是，我們從過去只有一個機櫃的公司，現在又增加了四個機櫃，對吧？",
+      "所以 NVIDIA 的潛在市場規模（TAM），可以說從原本的數字增長了大約 33% 到 50%。",
+      "而這 33% 或 50% 的增長中，很大一部分將會是儲存處理器。",
+      "它叫做 **BlueField**。",
+      "其中一部分——我希望很大一部分——會是 Groq 處理器，還有一些會是 CPU。",
+      "而且還有很大一部分會是網路處理器。",
+      "所以這一切基本上都將運行在被稱為「代理」的 AI 革命電腦上，對吧？",
+      "也就是現代產業的作業系統。"
+    ],
+    "H": [
+      {
+        "W": "Vera Rubin",
+        "E": "Vera Rubin",
+        "D": "NVIDIA 的下一代 GPU 架構代號，以美國天文學家 Vera Rubin 命名，主打多樣化 AI 工作負載。"
+      },
+      {
+        "W": "TAM",
+        "E": "NVIDIA's TAM",
+        "D": "Total Addressable Market（潛在市場總規模），指一個產品或服務在理論上能觸及的最大市場價值。"
+      },
+      {
+        "W": "one-rack company",
+        "E": "one-rack company",
+        "D": "指 NVIDIA 過去只提供伺服器機櫃中的 GPU 加速卡，現在擴展到提供整套多機櫃解決方案（含儲存、網路等）。"
+      },
+      {
+        "W": "BlueField",
+        "E": "BlueField",
+        "D": "NVIDIA 的資料處理器（DPU），專門處理資料中心的網路、儲存與安全卸載任務，減輕 CPU 負擔。"
+      },
+      {
+        "W": "if you will",
+        "E": "if you will",
+        "D": "口語插入語，意為「如果你願意這麼說的話」、「可以這麼說」，用來緩和或標示非精確的說法。"
+      },
+      {
+        "W": "call it",
+        "E": "call it, you know, 33% 50% higher",
+        "D": "口語用法，意為「大概算是」，用來給出粗略估計。"
+      }
+    ]
+  },
+  {
+    "O": [
+      "### 嵌入式應用、機器人與三個運算系統"
+    ],
+    "T": [
+      "### 嵌入式應用、機器人與三個運算系統"
+    ],
+    "H": []
+  },
+  {
+    "O": [
+      "What about embedded applications?",
+      "So you know my daughter's teddy bear at home wants to talk to her.",
+      "What goes in there?",
+      "Is it a custom ASIC or does there end up becoming much more kind of a broader set of TAM with developing tools that are maybe different for different use cases at the edge and an embedded application?",
+      "We think that there's three computers in the problem at the, at the largest, at the largest scale when you stick, take a step back.",
+      "There's one computer that's really about training the AI model, developing, creating the AI; another computer for evaluating it."
+    ],
+    "T": [
+      "那嵌入式應用呢？",
+      "你知道的，我女兒家裡的泰迪熊想要跟她說話。",
+      "裡面需要放什麼？",
+      "它會是一顆客製化的 ASIC，還是最終會出現一個更廣泛的潛在市場，搭配針對邊緣端和嵌入式應用中不同使用情境而開發的工具？",
+      "我們認為，從最大的格局退一步來看，這個問題裡有三台電腦。",
+      "一台電腦專門用於訓練 AI 模型、開發和創建 AI；另一台則用於評估 AI。"
+    ],
+    "H": [
+      {
+        "W": "embedded applications",
+        "E": "embedded applications",
+        "D": "嵌入式應用，指在專用硬體裝置中運行的軟體系統，如智慧家電、穿戴裝置、玩具等，通常有功耗和體積限制。"
+      },
+      {
+        "W": "ASIC",
+        "E": "custom ASIC",
+        "D": "Application-Specific Integrated Circuit（特定應用積體電路），為特定用途客製設計的晶片，效能高但缺乏通用性。"
+      },
+      {
+        "W": "TAM",
+        "E": "broader set of TAM",
+        "D": "Total Addressable Market（潛在市場總規模），此處指邊緣 AI 可能帶來更大的市場機會。"
+      },
+      {
+        "W": "at the edge",
+        "E": "at the edge",
+        "D": "「在邊緣端」，指在靠近使用者或資料來源的裝置上運行（相對於雲端資料中心）。"
+      },
+      {
+        "W": "take a step back",
+        "E": "take a step back",
+        "D": "慣用語，意為「退一步來看」、「從更大的格局思考」。"
+      }
+    ]
+  },
+  {
+    "O": [
+      "Depending on the type of problem you're having, like for example, you look around, there's all kinds of robots and cars and things like that.",
+      "You have to evaluate these robots inside a virtual gym that represents the physical world.",
+      "So it has to be software that obeys the laws of physics.",
+      "And that's a second computer. We call that **Omniverse**.",
+      "The third computer is the computer at the edge, the robotics computer.",
+      "That robotics computer, one of them could be a self-driving car. Another one's a robot.",
+      "Another one could be a teddy bear. Little tiny one for a teddy bear.",
+      "One of the most important ones is one that we're working on that basically turns the telecommunications base stations into part of the AI infrastructure.",
+      "So now all of the, it's a $2 trillion industry.",
+      "All of that in time will be transformed into an extension of the AI infrastructure.",
+      "And so radios, radios will become edge devices, factories, warehouses, you name it.",
+      "And so, so there are three, these three basic computers.",
+      "All of them, you know, are going to be necessary."
+    ],
+    "T": [
+      "取決於你面對的問題類型，比如你看看周圍，有各式各樣的機器人、汽車之類的東西。",
+      "你必須在一個代表物理世界的虛擬訓練場中評估這些機器人。",
+      "所以它必須是遵循物理定律的軟體。",
+      "這就是第二台電腦，我們稱之為 **Omniverse**。",
+      "第三台電腦是在邊緣端的電腦，也就是機器人電腦。",
+      "那台機器人電腦，其中一種可能是自動駕駛汽車，另一種是機器人。",
+      "另一種可能是泰迪熊，給泰迪熊用的小小一台。",
+      "其中最重要的一個是我們正在開發的，它基本上把電信基地台轉變為 AI 基礎設施的一部分。",
+      "所以現在所有這些——這是一個兩兆美元的產業。",
+      "這一切最終都將被轉變為 AI 基礎設施的延伸。",
+      "所以無線電設備、基地台都會變成邊緣裝置，工廠、倉庫，凡是你想得到的都是。",
+      "所以，這三台基本的電腦就是這樣。",
+      "它們每一台都是不可或缺的。"
+    ],
+    "H": [
+      {
+        "W": "virtual gym",
+        "E": "virtual gym that represents the physical world",
+        "D": "虛擬訓練場，指用來模擬真實物理環境的數位空間，讓機器人能在安全的虛擬環境中訓練和評估。"
+      },
+      {
+        "W": "obeys the laws of physics",
+        "E": "obeys the laws of physics",
+        "D": "「遵循物理定律」，指模擬軟體必須正確模擬重力、碰撞、摩擦等物理現象，才能讓訓練結果轉移到真實世界。"
+      },
+      {
+        "W": "Omniverse",
+        "E": "Omniverse",
+        "D": "NVIDIA 的 3D 模擬與協作平台，用於建立物理精確的虛擬世界，主要應用於數位孿生與機器人訓練。"
+      },
+      {
+        "W": "telecommunications base stations",
+        "E": "telecommunications base stations",
+        "D": "電信基地台，行動通訊網路中的無線收發設備，此處 Huang 認為這些基地台未來可兼作 AI 邊緣運算節點。"
+      },
+      {
+        "W": "you name it",
+        "E": "you name it",
+        "D": "口語慣用語，意為「凡是你想得到的都算」、「不勝枚舉」，用來表示列舉範圍很廣。"
+      },
+      {
+        "W": "$2 trillion industry",
+        "E": "$2 trillion industry",
+        "D": "指全球電信產業的規模約兩兆美元，Huang 認為這整個產業都將轉型成為 AI 基礎設施的一部分。"
+      }
+    ]
+  },
+  {
+    "O": [
+      "### 推論爆炸與萬億倍增長"
+    ],
+    "T": [
+      "### 推論爆炸與萬億倍增長"
+    ],
+    "H": []
+  },
+  {
+    "O": [
+      "Jensen, last, uh, last year, I think you were ahead of the, the rest of the world in, in, in saying inference isn't going to a thousand.",
+      "Just last year, yes.",
+      "Is it, is it going to **1 millionx**, is it going to **1 billionx**?",
+      "Yeah. Right. And I think people at the time thought it was pretty hyperbolic because the world was still focused on pre-scaling, on training.",
+      "Here we are now. Inference has exploded. We're inference constrained.",
+      "Um, you announced an inference factory that I think is leading edge that's going to be 10x better in terms of throughput to the next factory, but yet if you, if I listen to what the chatter is out there, it's that your inference factory is going to cost 40 or 50 billion and the alternatives, the custom ASICs, AMD others are going to cost 25 to 30 billion and you're going to lose share.",
+      "So why don't you talk to us, what are you seeing, how do you think about share and does it make sense for all these folks to pay something that's a 2x premium to what others are marketing? "
+    ],
+    "T": [
+      "Jensen，去年，呃，去年，我覺得你走在全世界前面，說推論需求不會只成長到一千倍。",
+      "就在去年，是的。",
+      "它會成長到 **100 萬倍**嗎？會成長到 **10 億倍**嗎？",
+      "是的，沒錯。我認為當時大家覺得這說法太誇張了，因為全世界還在關注預訓練的擴展、訓練階段。",
+      "但現在我們看到了，推論已經爆炸性成長，我們正面臨推論能力的瓶頸。",
+      "嗯，你發表了一座我認為是最頂尖的推論工廠，在吞吐量方面比下一代工廠好 10 倍，但如果你聽聽外面的說法，他們說你的推論工廠要花 400 到 500 億美元，而替代方案——客製化 ASIC、AMD 等——只要 250 到 300 億，而且你會失去市佔率。",
+      "那你何不跟我們聊聊，你看到了什麼，你怎麼看待市佔率，讓所有人付出比其他廠商行銷價格高出 2 倍的溢價，這合理嗎？"
+    ],
+    "H": [
+      {
+        "W": "hyperbolic",
+        "E": "hyperbolic",
+        "D": "意為「誇大的、極度誇張的」，原指數學中的雙曲線，在日常用語中形容言論過度誇大。"
+      },
+      {
+        "W": "pre-scaling",
+        "E": "pre-scaling",
+        "D": "指 AI 領域中「預訓練階段的規模擴展」，即在模型訓練階段不斷加大參數量與資料量的趨勢。"
+      },
+      {
+        "W": "inference constrained",
+        "E": "inference constrained",
+        "D": "「受推論能力限制的」，指目前瓶頸不在訓練，而在推論（模型部署後實際運算）的產能不足。"
+      },
+      {
+        "W": "leading edge",
+        "E": "leading edge",
+        "D": "意為「最前沿的、領先的」，常用於科技產業描述最先進的技術。"
+      },
+      {
+        "W": "custom ASICs",
+        "E": "custom ASICs",
+        "D": "Application-Specific Integrated Circuits，特定應用積體電路，指為特定用途（如 AI 推論）客製化設計的晶片。"
+      },
+      {
+        "W": "chatter",
+        "E": "chatter",
+        "D": "原意為「閒聊、碎碎唸」，此處指市場上流傳的各種議論與傳聞。"
+      },
+      {
+        "W": "2x premium",
+        "E": "2x premium",
+        "D": "「兩倍溢價」，指價格比競爭對手高出一倍。premium 在商業語境中指額外加價的部分。"
+      }
+    ]
+  },
+  {
+    "O": [
+      "The big takeaway, the big idea is that you should not equate the price of the factory and the price of the tokens, the cost of the tokens.",
+      "It is very likely that the $50 billion factory, and in fact, I can prove it, that the **$50 billion factory will generate for you the lowest cost tokens**.",
+      "And the reason for that is because we produce these tokens at extraordinary efficiency, 10 times, you know, the difference between 50 billion... Now it turns out 20 billion is just land, power, and shell. Right. Right. ",
+      "And then on top of that, you have storage anyways, networking anyways, you got CPUs anyways, you got servers anyways, you got cooling anyways.",
+      "The difference between that GPU being 1x price or halfx price is not between 50 billion and 30 billion.",
+      "Pick your favorite number, but let's say between 50 billion and 40 billion.",
+      "That is not a large percentage when the $50 billion data center is actually **10 times the throughput**, right?",
+      "Jess, that's the reason why I said that even for most chips, if you can't keep up with the state of the technology and the pace that we're running, even when the chips are free, it's not cheap enough. "
+    ],
+    "T": [
+      "最大的重點、最核心的概念是：你不應該把工廠的價格等同於 token 的價格、token 的成本。",
+      "500 億美元的工廠，事實上我可以證明，**500 億美元的工廠會為你產生最低成本的 token**。",
+      "原因是我們以極高的效率生產這些 token，效率高出 10 倍，你知道，50 億的差距……結果是其中 200 億只是土地、電力和外殼而已。沒錯，沒錯。",
+      "除此之外，你本來就需要儲存設備、網路設備、CPU、伺服器、散熱系統。",
+      "那顆 GPU 是原價還是半價，差別並不是 500 億和 300 億之間。",
+      "你可以選你喜歡的數字，但假設是 500 億和 400 億之間。",
+      "當 500 億美元的資料中心實際上擁有 **10 倍的吞吐量**時，那個差距的百分比並不大，對吧？",
+      "Jess，這就是為什麼我說，對大多數晶片而言，如果你跟不上技術的最新水準和我們前進的速度，即使晶片免費，也不夠便宜。"
+    ],
+    "H": [
+      {
+        "W": "takeaway",
+        "E": "takeaway",
+        "D": "意為「重點、要點」，指從一段討論或演講中歸納出的核心訊息。常見用法：the big takeaway is...（最大的重點是……）。"
+      },
+      {
+        "W": "equate",
+        "E": "equate",
+        "D": "意為「等同、畫上等號」，equate A and B 表示把 A 和 B 視為相同的東西。"
+      },
+      {
+        "W": "tokens",
+        "E": "tokens",
+        "D": "在 AI 領域中，token 是語言模型處理文字的最小單位，可以是一個字、一個詞或一個子詞。此處指推論服務的產出單位。"
+      },
+      {
+        "W": "shell",
+        "E": "shell",
+        "D": "此處指資料中心建築的「外殼結構」，包含建築本體但不含內部設備。"
+      },
+      {
+        "W": "throughput",
+        "E": "throughput",
+        "D": "「吞吐量」，指系統在單位時間內能處理的資料或任務量，是衡量效能的重要指標。"
+      },
+      {
+        "W": "even when the chips are free, it's not cheap enough",
+        "E": "even when the chips are free, it's not cheap enough",
+        "D": "非常有力的修辭手法：即使晶片完全免費，整體成本仍然不夠低——因為其他基礎設施成本（電力、冷卻、網路等）依然存在，而效能差距無法彌補。"
+      }
+    ]
+  },
+  {
+    "O": [
+      "### CEO 的決策與「超難題」戰略"
+    ],
+    "T": [
+      "### CEO 的決策與「超難題」戰略"
+    ],
+    "H": []
+  },
+  {
+    "O": [
+      "Yeah. Can I, can I just ask a general strategy question?",
+      "Yeah. I mean, you're running the most valuable company in the world.",
+      "This thing is going to do 350 plus billion of revenue next year, 200 billion of free cash flow.",
+      "It's compounding at these crazy rates. How do you decide what to do?",
+      "Like how do you actually get the information?",
+      "I mean it's famous now these sort of emails that people are meant to send you but how do you really decide to get an intuition of how to shape the market, where to really double down, where to maybe pull back, where to actually go into a green field? How, how does that information get to you? How do you decide these things?"
+    ],
+    "T": [
+      "嗯，我可以問一個策略方面的大方向問題嗎？",
+      "好的。我是說，你在經營全世界最有價值的公司。",
+      "這家公司明年營收將超過 3,500 億美元，自由現金流達 2,000 億。",
+      "它以這種瘋狂的速度複利成長。你怎麼決定要做什麼？",
+      "你實際上是怎麼獲取資訊的？",
+      "我是說，現在大家都知道那些據說要寄給你的電子郵件，但你到底怎麼建立起對市場走向的直覺——該在哪裡加倍投入、該在哪裡收手、該在哪裡開拓全新領域？這些資訊是怎麼傳達到你那裡的？你怎麼做這些決策？"
+    ],
+    "H": [
+      {
+        "W": "free cash flow",
+        "E": "free cash flow",
+        "D": "「自由現金流」，指企業在支付營運費用和資本支出後，可自由運用的現金。是衡量企業財務健康的重要指標。"
+      },
+      {
+        "W": "compounding",
+        "E": "compounding",
+        "D": "「複利成長」，原為金融術語，指收益持續滾入本金再產生收益的累積效應。此處形容公司營收高速疊加成長。"
+      },
+      {
+        "W": "double down",
+        "E": "double down",
+        "D": "原為賭場術語（21 點中加倍下注），引申為「加倍投入、全力以赴」。商業語境中表示在某個領域大幅增加投資。"
+      },
+      {
+        "W": "pull back",
+        "E": "pull back",
+        "D": "意為「收手、退縮、減少投入」，與 double down 形成對比。"
+      },
+      {
+        "W": "green field",
+        "E": "green field",
+        "D": "「綠地」，商業用語中指全新的、尚未開發的市場或領域（greenfield market），意味著從零開始建立。"
+      },
+      {
+        "W": "intuition",
+        "E": "intuition",
+        "D": "「直覺」，指不依賴邏輯推理、而是憑經驗和感覺做出判斷的能力。在商業決策中常與數據分析互補。"
+      }
+    ]
+  },
+  {
+    "O": [
+      "In a final analysis, that's the job of the CEO, yeah.",
+      "And our job is to define the strategy, define the vision, define the strategy.",
+      "We're informed of course by amazing computer scientists, amazing technologists, great people all over the company, but we have to shape that future well.",
+      "Part of it has to do with: is this something that's **insane hard to do**?",
+      "If it's not hard to do, we should back away from it.",
+      "And the reason for that is if, if it's easy to do, obviously, um, lots of competitors, a lot of competitors.",
+      "Is this something that has never been done before that's insanely hard to do?",
+      "And that somehow taps into the special superpowers of our company.",
+      "And so I have to find this confluence of things that meets the standard.",
+      "And in the end, we also know that a lot of **pain and suffering** is going to go into it.",
+      "Yeah. There are no great things that are invented because it was just easy to do and just like first try, here we are.",
+      "And so if it's super hard to do, nobody's ever done it before, it's very likely that you're going to have a lot of pain and suffering and so you better enjoy it."
+    ],
+    "T": [
+      "歸根究柢，這就是 CEO 的工作，是的。",
+      "我們的職責是定義策略、定義願景、定義策略。",
+      "當然，我們會參考公司裡優秀的電腦科學家、優秀的技術專家和各方面傑出人才的意見，但我們必須好好塑造那個未來。",
+      "其中一部分取決於：這件事是不是**極度困難**？",
+      "如果不難做，我們就應該退出。",
+      "原因很簡單，如果容易做，顯然會有很多競爭者，非常多競爭者。",
+      "這件事是不是從來沒有人做過、而且極度困難？",
+      "而且它是否恰好能發揮我們公司獨特的超能力？",
+      "所以我必須找到這些條件的交匯點，符合這個標準。",
+      "最終，我們也知道這過程會伴隨大量的**痛苦與煎熬**。",
+      "是的。沒有任何偉大的事物是因為它很容易做、第一次嘗試就成功而被發明出來的。",
+      "所以如果它超級難做，從來沒有人做過，你很可能會經歷大量的痛苦與煎熬——所以你最好樂在其中。"
+    ],
+    "H": [
+      {
+        "W": "in a final analysis",
+        "E": "In a final analysis",
+        "D": "意為「歸根究柢、最終分析起來」，是正式用語，用於總結論點。"
+      },
+      {
+        "W": "back away from",
+        "E": "back away from it",
+        "D": "意為「退出、遠離」，指主動選擇不參與某件事。"
+      },
+      {
+        "W": "taps into",
+        "E": "taps into",
+        "D": "意為「利用、發揮」，tap into something 表示善用某種資源或能力。"
+      },
+      {
+        "W": "superpowers",
+        "E": "superpowers",
+        "D": "字面意為「超能力」，此處比喻公司獨有的核心競爭優勢和技術專長。"
+      },
+      {
+        "W": "confluence",
+        "E": "confluence",
+        "D": "原意為「河流的匯合處」，引申為「多種因素的交匯、交集」。此處指多個條件同時滿足的理想狀態。"
+      },
+      {
+        "W": "pain and suffering",
+        "E": "pain and suffering",
+        "D": "「痛苦與煎熬」，常見的英文搭配詞組，原為法律用語（精神損害），此處形容研發過程中的艱辛。"
+      },
+      {
+        "W": "you better enjoy it",
+        "E": "you better enjoy it",
+        "D": "口語中 you better = you had better，語氣帶有忠告意味：「你最好樂在其中」。Jensen 用此表達對工作熱情的重視。"
+      }
+    ]
+  }
+];
+    </script>
+</body>
+
+</html>
