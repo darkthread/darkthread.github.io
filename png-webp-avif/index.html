@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圖片壓縮品質比較</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; }
+
+  header {
+    padding: 16px 24px; background: #16213e; border-bottom: 1px solid #0f3460;
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+    & h1 { font-size: 1.1rem; font-weight: 600; color: #a0c4ff; white-space: nowrap; }
+  }
+
+  .seg-group {
+    display: flex; border-radius: 6px; overflow: hidden; border: 1px solid #0f3460;
+    & button {
+      padding: 6px 16px; background: #16213e; color: #a0c4ff;
+      border: none; cursor: pointer; font-size: 0.85rem; transition: background 0.15s;
+      &:not(:last-child) { border-right: 1px solid #0f3460; }
+      &.active { background: #0f3460; color: #fff; font-weight: 600; }
+      &:hover:not(.active) { background: #1a2a4a; }
+    }
+  }
+
+  .autoplay-btn {
+    margin-left: auto; padding: 6px 18px; border-radius: 6px;
+    border: 1px solid #0f3460; background: #16213e; color: #a0c4ff;
+    cursor: pointer; font-size: 0.85rem; transition: background 0.15s;
+    &.playing { background: #c0392b; color: #fff; border-color: #c0392b; }
+    &:hover:not(.playing) { background: #1a2a4a; }
+  }
+
+  main { padding: 20px 24px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+  h2 { font-size: 1.4rem; color: #4a9eff; letter-spacing: 0.03em; min-height: 1.8em; text-align: center; }
+
+  .quality-bar {
+    display: flex; flex-wrap: wrap; gap: 2px; justify-content: center;
+    & button {
+      padding: 5px 12px; border-radius: 6px; border: 1px solid #0f3460;
+      background: #16213e; color: #a0c4ff; cursor: pointer; font-size: 0.8rem;
+      transition: all 0.15s; white-space: nowrap;
+      &:hover:not(.active) { background: #1a2a4a; }
+      &.active { background: #0f3460; color: #fff; font-weight: 700; border-color: #4a9eff; }
+      .size { display: block; font-size: 0.65rem; color: yellow; }
+    }
+  }
+
+  .img-wrap {
+    border: 2px solid #0f3460; border-radius: 8px; overflow: auto;
+    background: #0a0a1a; line-height: 0; max-width: 100%; max-height: 75vh;
+    & img { display: block; width: auto; height: auto; }
+  }
+
+  .progress-bar {
+    width: 100%; max-width: 900px; height: 3px; background: #0f3460;
+    border-radius: 2px; overflow: hidden;
+    & .progress-fill { height: 100%; background: #4a9eff; width: 0%; transition: width 0.05s linear; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>WebP / AVIF 壓縮品質比較</h1>
+  <div class="seg-group" id="srcGroup">
+    <button data-src="vscode" class="active">畫面擷圖</button>
+    <button data-src="istock">照片影像</button>
+  </div>
+  <div class="seg-group" id="fmtGroup">
+    <button data-fmt="webp" class="active">WebP</button>
+    <button data-fmt="avif">AVIF</button>
+  </div>
+  <button class="autoplay-btn" id="autoBtn">▶ 自動播放</button>
+</header>
+
+<main>
+  <div class="quality-bar" id="qualityBar"></div>
+  <h2 id="qualityLabel">—</h2>
+  <div class="img-wrap"><img id="mainImg" src="" alt="preview"></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</main>
+
+<script>
+let data = {};
+let currentSrc = 'vscode';
+let currentFmt = 'webp';
+let currentIndex = 0;
+let autoTimer = null;
+let progressTimer = null;
+let progressStart = 0;
+const INTERVAL = 1000;
+
+async function init() {
+  const res = await fetch('list.json');
+  data = await res.json();
+  bindControls();
+  renderQuality();
+}
+
+function bindControls() {
+  document.querySelectorAll('#srcGroup button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentSrc = btn.dataset.src;
+      document.querySelectorAll('#srcGroup button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentIndex = 0;
+      renderQuality();
+    });
+  });
+  document.querySelectorAll('#fmtGroup button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentFmt = btn.dataset.fmt;
+      document.querySelectorAll('#fmtGroup button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentIndex = 0;
+      renderQuality();
+    });
+  });
+  document.getElementById('autoBtn').addEventListener('click', toggleAutoplay);
+}
+
+function getEntries() {
+  return Object.entries(data[currentSrc][currentFmt]);
+}
+
+function renderQuality() {
+  const entries = getEntries();
+  const bar = document.getElementById('qualityBar');
+  bar.innerHTML = '';
+  entries.forEach(([label, file], idx) => {
+    const btn = document.createElement('button');
+    btn.innerHTML = label.replace(/[(]/, '<br><span class=size>(').replace(/[)]/, ')</span>').trimStart('0');
+    if (idx === currentIndex) btn.classList.add('active');
+    btn.addEventListener('click', () => selectIndex(idx));
+    bar.appendChild(btn);
+  });
+  loadImage(currentIndex);
+}
+
+function selectIndex(idx) {
+  currentIndex = idx;
+  const entries = getEntries();
+  document.querySelectorAll('.quality-bar button').forEach((b, i) => b.classList.toggle('active', i === idx));
+  loadImage(idx);
+  if (autoTimer) resetProgress();
+}
+
+function loadImage(idx) {
+  const entries = getEntries();
+  const [label, file] = entries[idx];
+  document.getElementById('qualityLabel').textContent = label;
+  document.getElementById('mainImg').src = `./${file}`;
+}
+
+function toggleAutoplay() {
+  if (autoTimer) {
+    stopAutoplay();
+  } else {
+    startAutoplay();
+  }
+}
+
+function startAutoplay() {
+  const btn = document.getElementById('autoBtn');
+  btn.textContent = '⏹ 停止播放';
+  btn.classList.add('playing');
+  autoTimer = setInterval(() => {
+    const entries = getEntries();
+    currentIndex = (currentIndex + 1) % entries.length;
+    renderQualityActive();
+    loadImage(currentIndex);
+    resetProgress();
+  }, INTERVAL);
+  resetProgress();
+}
+
+function stopAutoplay() {
+  clearInterval(autoTimer);
+  clearInterval(progressTimer);
+  autoTimer = null;
+  progressTimer = null;
+  const btn = document.getElementById('autoBtn');
+  btn.textContent = '▶ 自動播放';
+  btn.classList.remove('playing');
+  document.getElementById('progressFill').style.width = '0%';
+}
+
+function resetProgress() {
+  clearInterval(progressTimer);
+  progressStart = Date.now();
+  const fill = document.getElementById('progressFill');
+  fill.style.transition = 'none';
+  fill.style.width = '0%';
+  requestAnimationFrame(() => {
+    progressTimer = setInterval(() => {
+      const elapsed = Date.now() - progressStart;
+      const pct = Math.min((elapsed / INTERVAL) * 100, 100);
+      fill.style.transition = 'none';
+      fill.style.width = pct + '%';
+    }, 30);
+  });
+}
+
+function renderQualityActive() {
+  document.querySelectorAll('.quality-bar button').forEach((b, i) => b.classList.toggle('active', i === currentIndex));
+}
+
+init();
+</script>
+</body>
+</html>

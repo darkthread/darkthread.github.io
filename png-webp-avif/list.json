@@ -1,0 +1,68 @@
+{
+  "vscode": {
+    "webp": {
+      "PNG(206 KB)": "vscode.png",
+      "Lossless(57 KB)": "vscode-webp-255.webp",
+      "100%(57 KB)": "vscode-webp-100.webp",
+      "099%(229 KB)": "vscode-webp-099.webp",
+      "095%(194 KB)": "vscode-webp-095.webp",
+      "090%(160 KB)": "vscode-webp-090.webp",
+      "085%(136 KB)": "vscode-webp-085.webp",
+      "080%(119 KB)": "vscode-webp-080.webp",
+      "075%(105 KB)": "vscode-webp-075.webp",
+      "070%(100 KB)": "vscode-webp-070.webp",
+      "065%(96 KB)": "vscode-webp-065.webp",
+      "060%(93 KB)": "vscode-webp-060.webp",
+      "055%(90 KB)": "vscode-webp-055.webp",
+      "050%(86 KB)": "vscode-webp-050.webp"
+    },
+    "avif": {
+      "PNG(206 KB)": "vscode.png",
+      "Lossless(113 KB)": "vscode-avif-255.avif",
+      "099%(113 KB)": "vscode-avif-099.avif",
+      "095%(94 KB)": "vscode-avif-095.avif",
+      "090%(79 KB)": "vscode-avif-090.avif",
+      "085%(70 KB)": "vscode-avif-085.avif",
+      "080%(65 KB)": "vscode-avif-080.avif",
+      "075%(60 KB)": "vscode-avif-075.avif",
+      "070%(56 KB)": "vscode-avif-070.avif",
+      "065%(52 KB)": "vscode-avif-065.avif",
+      "060%(50 KB)": "vscode-avif-060.avif",
+      "055%(47 KB)": "vscode-avif-055.avif",
+      "050%(45 KB)": "vscode-avif-050.avif"
+    }
+  },
+  "istock": {
+    "webp": {
+      "PNG(1118 KB)": "istock.png",
+      "Lossless(753 KB)": "istock-webp-255.webp",
+      "100%(753 KB)": "istock-webp-100.webp",
+      "099%(307 KB)": "istock-webp-099.webp",
+      "095%(235 KB)": "istock-webp-095.webp",
+      "090%(169 KB)": "istock-webp-090.webp",
+      "085%(135 KB)": "istock-webp-085.webp",
+      "080%(114 KB)": "istock-webp-080.webp",
+      "075%(97 KB)": "istock-webp-075.webp",
+      "070%(91 KB)": "istock-webp-070.webp",
+      "065%(86 KB)": "istock-webp-065.webp",
+      "060%(81 KB)": "istock-webp-060.webp",
+      "055%(78 KB)": "istock-webp-055.webp",
+      "050%(74 KB)": "istock-webp-050.webp"
+    },
+    "avif": {
+      "PNG(1118 KB)": "istock.png",
+      "Lossless(359 KB)": "istock-avif-255.avif",
+      "099%(359 KB)": "istock-avif-099.avif",
+      "095%(250 KB)": "istock-avif-095.avif",
+      "090%(184 KB)": "istock-avif-090.avif",
+      "085%(149 KB)": "istock-avif-085.avif",
+      "080%(133 KB)": "istock-avif-080.avif",
+      "075%(116 KB)": "istock-avif-075.avif",
+      "070%(103 KB)": "istock-avif-070.avif",
+      "065%(87 KB)": "istock-avif-065.avif",
+      "060%(78 KB)": "istock-avif-060.avif",
+      "055%(66 KB)": "istock-avif-055.avif",
+      "050%(57 KB)": "istock-avif-050.avif"
+    }
+  }
+}
