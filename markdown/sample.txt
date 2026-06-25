@@ -1,0 +1,131 @@
+# Markdown 轉網頁
+
+[markdown-it](https://github.com/markdown-it/markdown-it) JavaScript 程式庫火力展示，以輕前端 (HTML + `<script src="">`，不需編譯打包) 即時將 Markdown 內容轉成網頁，
+並一併展示其豐富的[外掛功能](https://www.npmjs.com/search?q=keywords:markdown-it-plugin)。
+
+---
+
+章節目錄
+
+[[toc]]
+
+## 1. 程式碼區塊 (使用 [prism.js](https://prismjs.com/))
+
+```csharp
+// 這行是註解
+void Test(string s, int i) {
+    /* 註解 */
+    i = i * 2;
+    Console.WriteLine($"s = {s}, i = {i}");
+}
+```
+
+## 2. Anchor + Attributes
+
+```markdown
+## 指定 Heading ID {#custom-heading}
+### 加上 CSS Class {.yellow}
+這是一句話，`這幾個字`{.yellow} 要變色。
+```
+
+## 指定 Heading ID {#custom-heading}
+
+> 網頁最下方有連結可跳回這裡
+
+### 加上 CSS Class {.yellow}
+
+這是一句話，`這幾個字`{.yellow} 要變色。
+
+---
+
+## 3. Footnotes
+
+```markdown
+這是一個帶有腳註的句子[^1]。
+
+[^1]: 這是腳註內容。
+```
+
+這是一個帶有腳註的句子[^1]。
+
+[^1]: 這是腳註內容。
+
+---
+
+## 4. Emoji
+
+```markdown
+:smile: :cry: :rocket: :dog:
+```
+
+:smile: :cry: :rocket: :dog:
+
+---
+
+## 5. Insert / Mark / Sub / Sup
+
+```markdown
+- ++插入或底線++
+- ==螢光標記==
+- H~2~O
+- E = mc^2^
+```
+
+- ++插入或底線++
+- ==螢光標記==
+- H~2~O
+- E = mc^2^
+
+---
+
+## 6. Task Lists
+
+```markdown
+- [x] 已完成任務
+- [ ] 待辦任務 1
+- [ ] 待辦任務 2
+```
+
+- [x] 已完成任務
+- [ ] 待辦任務 1
+- [ ] 待辦任務 2
+
+---
+
+## 7. KaTeX Math
+
+```markdown
+行內公式：$E = mc^2$
+
+區塊公式：
+
+$$\sum_{i=1}^{n} i = \frac{n(n+1)}{2}$$
+```
+
+行內公式：$E = mc^2$
+
+區塊公式：
+
+$$\sum_{i=1}^{n} i = \frac{n(n+1)}{2}$$
+
+---
+
+## 8. Mermaid
+
+````markdown
+```mermaid
+graph TD
+	A[Client] --> B[Load Balancer]
+	B --> C[Server 01]
+	B --> D[Server 02]
+```
+````
+
+```mermaid
+graph TD
+	A[Client] --> B[Load Balancer]
+	B --> C[Server 01]
+	B --> D[Server 02]
+```
+
+[跳到 Heading ID](#custom-heading)

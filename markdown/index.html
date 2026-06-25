@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Markdown Viewer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it-texmath@1.0.0/texmath.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.9.0/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it-anchor@9.2.0/dist/markdownItAnchor.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it-attrs@4.3.1/markdown-it-attrs.browser.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it-footnote@4.0.0/dist/markdown-it-footnote.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it-emoji@3.0.0/dist/markdown-it-emoji.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it-ins@4.0.0/dist/markdown-it-ins.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it-mark@4.0.0/dist/markdown-it-mark.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it-sub@2.0.0/dist/markdown-it-sub.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it-sup@2.0.0/dist/markdown-it-sup.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it-task-lists@2.1.1/dist/markdown-it-task-lists.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/markdown-it-toc-done-right@4.2.0/dist/markdownItTocDoneRight.umd.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <header>
+        <h1>Markdown 即時轉網頁展示</h1>
+        <p class="subtitle">由 <code>sample.txt</code> 載入 Markdown, 使用 markdown-it + 外掛渲染成網頁。</p>
+    </header>
+
+    <main>
+        <article id="content">Loading...</article>
+    </main>
+
+    <script>
+        // 設定 Prism.js 的自動依語言宣告載入指定語言語法標示
+        Prism.plugins.autoloader.languages_path = 'https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/';
+        // 設定 Mermaid.js 的主題為暗色系
+        mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+
+        const md = window.markdownit({
+            html: true, // 允許 HTML 標籤
+            linkify: false, // 不要將 xxx.com 之類的網址自動轉成連結
+            typographer: true, // 使用 typographer 會將 "..." 轉成 …，"--" 轉成 –，"---" 轉成 —，"(c)" 轉成 ©，"(r)" 轉成 ®，"(tm)" 轉成 ™
+            // Prism.js 語法標示
+            highlight(code, lang) {
+                if (lang === 'mermaid') return `<pre class="mermaid">${md.utils.escapeHtml(code)}</pre>`;
+                const grammar = lang && Prism.languages[lang];
+                return grammar ? Prism.highlight(code, grammar, lang) : md.utils.escapeHtml(code);
+            }
+        })
+            // 使用 markdown-it 外掛
+            .use(window.markdownItAnchor)
+            .use(window.markdownItAttrs)
+            .use(window.markdownitFootnote)
+            .use(window.markdownitEmoji)
+            .use(window.markdownitIns)
+            .use(texmath, {
+                engine: katex,
+                delimiters: 'dollars',
+                katexOptions: { throwOnError: false }
+            })
+            .use(window.markdownitMark)
+            .use(window.markdownitSub)
+            .use(window.markdownitSup)
+            .use(window.markdownitTaskLists, { enabled: true })
+            .use(window.markdownItTocDoneRight, {
+                placeholder: "\\[\\[toc\\]\\]",
+                level: [2, 3],
+                listType: "ul",
+                containerClass: "toc"
+            });
+
+
+        async function render() {
+            const content = document.getElementById('content');
+            try {
+                const res = await fetch('sample.txt');
+                if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+                // 使用 markdown-it 將 Markdown 轉成 HTML
+                content.innerHTML = md.render(await res.text());
+                // 使用 Prism.js 將程式碼區塊加上語法標示
+                Prism.highlightAllUnder(content);
+                // 使用 Mermaid.js 生成流程圖
+                await mermaid.run({ nodes: content.querySelectorAll('.mermaid') });
+            } catch (err) {
+                content.innerHTML = `<p class="error">Failed to load sample.txt: ${err.message}</p>`;
+            }
+        }
+
+        render();
+    </script>
+</body>
+
+</html>

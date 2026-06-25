@@ -1,0 +1,78 @@
+        :root {
+            color-scheme: dark;
+            --bg: #0f172a;
+            --panel: #111827;
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #38bdf8;
+            --border: #334155;
+        }
+
+        * { box-sizing: border-box }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, #1d4ed8 0, var(--bg) 34rem);
+            color: var(--text);
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        header, main {
+            width: min(960px, calc(100% - 2rem));
+            margin: auto;
+        }
+
+        header { padding: 2.5rem 0 1rem }
+
+        h1 {
+            margin: 0 0 .5rem;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            letter-spacing: -.04em;
+        }
+
+        .subtitle {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        main {
+            margin-bottom: 3rem;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: color-mix(in srgb, var(--panel) 92%, transparent);
+            box-shadow: 0 24px 70px rgb(0 0 0 / .3);
+        }
+
+        #content {
+            padding: clamp(1rem, 4vw, 2rem);
+            line-height: 1.75;
+        }
+
+        #content > :first-child { margin-top: 0 }
+        #content > :last-child { margin-bottom: 0 }
+        #content a { color: var(--accent) }
+        #content img { max-width: 100% }
+        #content hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0 }
+        #content blockquote { margin-left: 0; padding-left: 1rem; border-left: 4px solid var(--accent); color: var(--muted) }
+        #content table { width: 100%; border-collapse: collapse; overflow: auto; display: block }
+        #content th, #content td { border: 1px solid var(--border); padding: .45rem .7rem }
+        #content code:not([class*="language-"]) { padding: .1rem .35rem; border-radius: .3rem; background: rgb(148 163 184 / .16) }
+        #content pre { padding: 1rem; overflow: auto; border-radius: .75rem; background: #020617 }
+        #content pre code { background: transparent; padding: 0 }
+        #content .yellow { color: #facc15 }
+        #content .task-list-item { list-style: none }
+        #content .task-list-item-checkbox { margin-right: .5rem }
+        #content .mermaid { display: flex; justify-content: center; background: transparent }
+        .error { color: #fca5a5 }
+
+        nav.toc {
+            background-color: #ccc;
+            padding: 4px;
+            ul li {
+                list-style: none;
+                a {
+                    color: #444!important;
+                }
+            }
+        }
