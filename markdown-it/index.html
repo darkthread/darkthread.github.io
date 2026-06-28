@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>markdown-it Demo</title>
+    <link id="previewThemeCss" rel="stylesheet" href="preview_theme/atom-dark.css">
+    <link id="prismThemeCss" rel="stylesheet" href="prism_theme/atom-dark.css">
+    <link rel="stylesheet" href="lib/katex/katex.min.css">
+    <script src="lib/vue.global.prod.js"></script>
+    <script src="lib/markdown-it.min.js"></script>
+    <script src="lib/katex/katex.min.js"></script>
+    <script src="lib/mermaid.min.js"></script>
+
+    <script src="plugins/markdown-it-anchor.js"></script>
+    <script src="plugins/markdown-it-attrs.js"></script>
+    <script src="plugins/markdown-it-footnote.js"></script>
+    <script src="plugins/markdown-it-emoji.js"></script>
+    <script src="plugins/markdown-it-ins.js"></script>
+    <script src="plugins/markdown-it-texmath.min.js"></script>
+    <script src="plugins/markdown-it-mark.js"></script>
+    <script src="plugins/markdown-it-sub.js"></script>
+    <script src="plugins/markdown-it-sup.js"></script>
+    <script src="plugins/markdown-it-task-lists.js"></script>
+    <script src="plugins/markdown-it-toc-done-right.js"></script>
+
+    <script src="lib/prism.min.js"></script>
+    <script src="lib/prism-autoloader.min.js"></script>
+    <style>
+        :root {
+            color-scheme: light dark;
+            --bg: #0f172a;
+            --panel: #111827;
+            --panel-2: #1f2937;
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --accent: #38bdf8;
+            --border: #334155;
+            --preview-bg: #f8fafc;
+            --preview-text: #0f172a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top left, #1e3a8a 0, var(--bg) 42rem);
+            color: var(--text);
+        }
+
+        header {
+            padding: 2rem clamp(1rem, 4vw, 3rem) 1rem;
+        }
+
+        h1 {
+            margin: 0 0 .5rem;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            letter-spacing: -.04em;
+        }
+
+        .subtitle {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 1rem;
+            padding: 1rem clamp(1rem, 4vw, 3rem) 3rem;
+        }
+
+        .card {
+            min-height: 65vh;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            overflow: hidden;
+            background: color-mix(in srgb, var(--panel) 90%, transparent);
+            box-shadow: 0 24px 70px rgb(0 0 0 / .28);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            /* justify-content: space-between; */
+            gap: 1rem;
+            padding: .85rem 1rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--panel-2);
+            color: var(--muted);
+            font-size: .9rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        button {
+            border: 1px solid #0ea5e9;
+            padding: .45rem .8rem;
+            background: #0284c7;
+            color: white;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        button:hover {
+            background: #0369a1;
+        }
+
+        select {
+            max-width: 12rem;
+            width: 12rem;
+            border: 1px solid var(--border);
+            padding: .4rem .7rem;
+            background: #020617;
+            color: var(--text);
+        }
+
+        textarea {
+            display: block;
+            width: 100%;
+            min-height: calc(100vh - 3.3rem);
+            resize: vertical;
+            border: 0;
+            outline: 0;
+            padding: 1rem;
+            background: #020617;
+            color: var(--text);
+            font: 15px/1.55 Consolas, Monaco, "Courier New", monospace;
+        }
+
+        .status {
+            color: var(--accent);
+            font-size: .8rem;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        #preview {
+            padding: 1em;
+
+            .yellow {
+                color: yellow;
+            }
+        }
+
+
+        @media (max-width: 900px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+
+            .card,
+            textarea,
+            #preview {
+                height: 100vh;
+                min-height: 45vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <h1>markdown-it Demo</h1>
+            <p class="subtitle">Type Markdown on the left. Rendered HTML updates instantly on the right.</p>
+        </header>
+
+        <main>
+            <section class="card" aria-labelledby="editor-title">
+                <div class="card-title" id="editor-title">
+                    Markdown
+                    <select v-model="sampleUrl" aria-label="Sample file">
+                        <option v-for="sample in samples" :key="sample.href" :value="sample.href">{{ sample.name }}</option>
+                    </select>
+                    <button type="button" @click="reset">Reset sample</button>
+                </div>
+                <textarea v-model="source" spellcheck="false" aria-label="Markdown source"></textarea>
+            </section>
+
+            <section class="card" aria-labelledby="preview-title">
+                <div class="card-title" id="preview-title">
+                    Preview
+                    <select class="preview-theme" v-model="previewTheme" aria-label="Preview theme">
+                        <option v-for="theme in previewThemes" :key="theme.href" :value="theme.href">{{ theme.name }}
+                        </option>
+                    </select>
+                    <select class="prism-theme" v-model="prismTheme" aria-label="Code theme">
+                        <option v-for="theme in prismThemes" :key="theme.href" :value="theme.href">{{ theme.name }}
+                        </option>
+                    </select>
+                    <span class="status">Rendered {{ source.length.toLocaleString() }} chars</span>
+                </div>
+                <article id="preview" class="markdown-body" aria-live="polite" v-html="html"></article>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        let sampleMarkdown = '';
+        Prism.plugins.autoloader.languages_path = 'lib/components/';
+        mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+        // Markdown It Plugins - https://mdit-plugins.github.io/
+        const md = window.markdownit({
+            html: true,
+            linkify: false,
+            typographer: true,
+            highlight(code, lang) {
+                if (lang === 'mermaid') return `<pre class="mermaid">${md.utils.escapeHtml(code)}</pre>`;
+                const grammar = lang && Prism.languages[lang];
+                return grammar ? Prism.highlight(code, grammar, lang) : md.utils.escapeHtml(code);
+            }
+        })
+            .use(window.markdownItAnchor)
+            .use(window.markdownItAttrs)
+            .use(window.markdownitFootnote)
+            .use(window.markdownitEmoji)
+            .use(window.markdownitIns)
+            .use(texmath, {
+                engine: katex,
+                delimiters: 'dollars',
+                katexOptions: { throwOnError: false }
+            })
+            .use(window.markdownitMark)
+            .use(window.markdownitSub)
+            .use(window.markdownitSup)
+            .use(window.markdownitTaskLists, { enabled: true })
+            .use(window.markdownItTocDoneRight, {
+                placeholder: "\\[\\[toc\\]\\]",
+                level: [2, 3],
+                listType: "ul",
+                containerClass: "toc"
+            });
+        const setCss = (id, href) => document.getElementById(id).href = href;
+
+        Vue.createApp({
+            data() {
+                return {
+                    sampleUrl: 'basic.txt',
+                    samples: [
+                        { name: 'Basic Markdown', href: 'basic.txt' },
+                        { name: 'Plugin Demo', href: '../markdown/sample.txt' }
+                    ],
+                    source: '',
+                    previewThemes: [
+                        { name: 'Atom Dark', href: 'preview_theme/atom-dark.css' },
+                        { name: 'Atom Light', href: 'preview_theme/atom-light.css' },
+                        { name: 'Atom Material', href: 'preview_theme/atom-material.css' },
+                        { name: 'GitHub Dark', href: 'preview_theme/github-dark.css' },
+                        { name: 'GitHub Light', href: 'preview_theme/github-light.css' },
+                        { name: 'Gothic', href: 'preview_theme/gothic.css' },
+                        { name: 'Medium', href: 'preview_theme/medium.css' },
+                        { name: 'Monokai', href: 'preview_theme/monokai.css' },
+                        { name: 'Newsprint', href: 'preview_theme/newsprint.css' },
+                        { name: 'Night', href: 'preview_theme/night.css' },
+                        { name: 'One Dark', href: 'preview_theme/one-dark.css' },
+                        { name: 'One Light', href: 'preview_theme/one-light.css' },
+                        { name: 'Solarized Dark', href: 'preview_theme/solarized-dark.css' },
+                        { name: 'Solarized Light', href: 'preview_theme/solarized-light.css' },
+                    ],
+                    prismThemes: [
+                        { name: 'Atom Dark', href: 'prism_theme/atom-dark.css' },
+                        { name: 'Atom Light', href: 'prism_theme/atom-light.css' },
+                        { name: 'Atom Material', href: 'prism_theme/atom-material.css' },
+                        { name: 'Coy', href: 'prism_theme/coy.css' },
+                        { name: 'Darcula', href: 'prism_theme/darcula.css' },
+                        { name: 'Dark', href: 'prism_theme/dark.css' },
+                        { name: 'Default', href: 'prism_theme/default.css' },
+                        { name: 'Funky', href: 'prism_theme/funky.css' },
+                        { name: 'GitHub Dark', href: 'prism_theme/github-dark.css' },
+                        { name: 'GitHub', href: 'prism_theme/github.css' },
+                        { name: 'Hopscotch', href: 'prism_theme/hopscotch.css' },
+                        { name: 'Monokai', href: 'prism_theme/monokai.css' },
+                        { name: 'Okaidia', href: 'prism_theme/okaidia.css' },
+                        { name: 'One Dark', href: 'prism_theme/one-dark.css' },
+                        { name: 'One Light', href: 'prism_theme/one-light.css' },
+                        { name: 'Pen Paper Coffee', href: 'prism_theme/pen-paper-coffee.css' },
+                        { name: 'Pojoaque', href: 'prism_theme/pojoaque.css' },
+                        { name: 'Solarized Dark', href: 'prism_theme/solarized-dark.css' },
+                        { name: 'Solarized Light', href: 'prism_theme/solarized-light.css' },
+                        { name: 'Twilight', href: 'prism_theme/twilight.css' },
+                        { name: 'VS', href: 'prism_theme/vs.css' },
+                        { name: 'VS Code', href: 'prism_theme/vscode.css' },
+                        { name: 'Vue', href: 'prism_theme/vue.css' },
+                        { name: 'Xonokai', href: 'prism_theme/xonokai.css' }
+                    ],
+                    previewTheme: 'preview_theme/atom-dark.css',
+                    prismTheme: 'prism_theme/default.css'
+                };
+            },
+            computed: {
+                html() {
+                    return md.render(this.source);
+                }
+            },
+            watch: {
+                sampleUrl() { this.loadSample(); },
+                source() { this.highlightPreview(); },
+                previewTheme(href) { setCss('previewThemeCss', href); },
+                prismTheme(href) { setCss('prismThemeCss', href); }
+            },
+            mounted() {
+                this.loadSample();
+            },
+            methods: {
+                async loadSample() {
+                    try {
+                        const res = await fetch(this.sampleUrl);
+                        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+                        sampleMarkdown = await res.text();
+                        this.reset();
+                    } catch (err) {
+                        this.source = `Failed to load ${this.sampleUrl}: ${err.message}`;
+                    }
+                },
+                reset() {
+                    this.source = sampleMarkdown;
+                },
+                highlightPreview() {
+                    Vue.nextTick(async () => {
+                        const preview = document.getElementById('preview');
+                        Prism.highlightAllUnder(preview);
+                        await mermaid.run({ nodes: preview.querySelectorAll('.mermaid') });
+                    });
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>

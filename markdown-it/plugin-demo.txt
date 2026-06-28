@@ -1,0 +1,112 @@
+# markdown-it Plugin Demo
+
+這份範例集中展示需要外掛或額外 library 才能生效的 Markdown 語法。
+
+---
+
+## 1. Anchor + Attributes
+
+```markdown
+## 指定 Heading ID {#custom-heading}
+### 加上 CSS Class {.yellow}
+這是一句話，`這幾個字`{.yellow} 要變色。
+```
+
+## 指定 Heading ID {#custom-heading}
+### 加上 CSS Class {.yellow}
+
+這是一句話，`這幾個字`{.yellow} 要變色。
+
+---
+
+## 2. Footnotes
+
+```markdown
+這是一個帶有腳註的句子[^1]。
+
+[^1]: 這是腳註內容。
+```
+
+這是一個帶有腳註的句子[^1]。
+
+[^1]: 這是腳註內容。
+
+---
+
+## 3. Emoji
+
+```markdown
+:smile: :cry: :rocket: :dog:
+```
+
+:smile: :cry: :rocket: :dog:
+
+---
+
+## 4. Insert / Mark / Sub / Sup
+
+```markdown
+- ++插入或底線++
+- ==螢光標記==
+- H~2~O
+- E = mc^2^
+```
+
+- ++插入或底線++
+- ==螢光標記==
+- H~2~O
+- E = mc^2^
+
+---
+
+## 5. Task Lists
+
+```markdown
+- [x] 已完成任務
+- [ ] 待辦任務 1
+- [ ] 待辦任務 2
+```
+
+- [x] 已完成任務
+- [ ] 待辦任務 1
+- [ ] 待辦任務 2
+
+---
+
+## 6. KaTeX Math
+
+```markdown
+行內公式：$E = mc^2$
+
+區塊公式：
+
+$$\sum_{i=1}^{n} i = \frac{n(n+1)}{2}$$
+```
+
+行內公式：$E = mc^2$
+
+區塊公式：
+
+$$\sum_{i=1}^{n} i = \frac{n(n+1)}{2}$$
+
+---
+
+## 7. Mermaid
+
+````markdown
+```mermaid
+graph TD
+	A[Client] --> B[Load Balancer]
+	B --> C[Server 01]
+	B --> D[Server 02]
+```
+````
+
+```mermaid
+graph TD
+	A[Client] --> B[Load Balancer]
+	B --> C[Server 01]
+	B --> D[Server 02]
+```
+
+[跳到 Heading ID](#custom-heading)

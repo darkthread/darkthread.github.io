@@ -1,0 +1,132 @@
+:root {
+    color-scheme: light dark;
+    --bg: #0f172a;
+    --panel: #111827;
+    --panel-2: #1f2937;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --border: #334155;
+    --preview-bg: #f8fafc;
+    --preview-text: #0f172a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top left, #1e3a8a 0, var(--bg) 42rem);
+    color: var(--text);
+}
+
+header {
+    padding: 2rem clamp(1rem, 4vw, 3rem) 1rem;
+}
+
+h1 {
+    margin: 0 0 .5rem;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    letter-spacing: -.04em;
+}
+
+.subtitle {
+    margin: 0;
+    color: var(--muted);
+}
+
+main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1rem;
+    padding: 1rem clamp(1rem, 4vw, 3rem) 3rem;
+}
+
+.card {
+    min-height: 65vh;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--panel) 90%, transparent);
+    box-shadow: 0 24px 70px rgb(0 0 0 / .28);
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: .85rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel-2);
+    color: var(--muted);
+    font-size: .9rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+button {
+    border: 1px solid #0ea5e9;
+    padding: .45rem .8rem;
+    background: #0284c7;
+    color: white;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+button:hover {
+    background: #0369a1;
+}
+
+select {
+    max-width: 12rem;
+    width: 12rem;
+    border: 1px solid var(--border);
+    padding: .4rem .7rem;
+    background: #020617;
+    color: var(--text);
+}
+
+textarea {
+    display: block;
+    width: 100%;
+    min-height: calc(100vh - 3.3rem);
+    resize: vertical;
+    border: 0;
+    outline: 0;
+    padding: 1rem;
+    background: #020617;
+    color: var(--text);
+    font: 15px/1.55 Consolas, Monaco, "Courier New", monospace;
+}
+
+.status {
+    color: var(--accent);
+    font-size: .8rem;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+#preview {
+    padding: 1em;
+
+    .yellow {
+        color: yellow;
+    }
+}
+
+@media (max-width: 900px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+
+    .card,
+    textarea,
+    #preview {
+        height: 100vh;
+        min-height: 45vh;
+    }
+}

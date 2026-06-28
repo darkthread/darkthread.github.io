@@ -1,0 +1,160 @@
+#preview {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    background: #363b40;
+    color: #b8bfc6;
+    fill: currentColor;
+    font-style: normal;
+    line-height: 1.625rem;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    hr {
+        height: 2px;
+        border: 0;
+        margin: 50px 0 !important;
+        background: #474d54;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Lucida Grande', Corbal, Georgia, serif;
+        font-weight: 400;
+        clear: both;
+        -ms-word-wrap: break-word;
+        word-wrap: break-word;
+        margin: 0;
+        padding: 0;
+        color: #dedede;
+    }
+
+    h1 { font-size: 2.25rem; line-height: 2.5rem; margin: 2em 0 1.5rem; letter-spacing: -1.5px }
+    h2 { font-size: 1.5rem; line-height: 1.875rem; margin-bottom: 1.5rem; letter-spacing: -1px }
+    h3 { font-size: 1.125rem; line-height: 1.5rem; margin-bottom: 1.5rem; letter-spacing: -1px }
+    h4 { font-size: 1rem; line-height: 1.375rem; margin-bottom: 1.5rem }
+    h5 { font-size: 1rem; line-height: 1.25rem; margin-bottom: 1.5rem }
+    h6 { font-size: 1rem; line-height: 1rem; margin-bottom: .75rem; font-weight: 700 }
+
+    a {
+        color: #e0e0e0;
+        text-decoration: underline;
+        outline: 0;
+        -webkit-transition: all .2s ease-in-out;
+        transition: all .2s ease-in-out;
+
+        &:hover { color: #fff; outline: 0 }
+        &:focus { outline: thin dotted }
+    }
+
+    p { -ms-word-wrap: break-word; word-wrap: break-word }
+
+    .wp-audio-shortcode, .wp-caption, .wp-video-shortcode,
+    address, dd, hr, iframe, ol, p, pre, table, ul {
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+    }
+
+    audio:not([controls]), [hidden] { display: none }
+
+    ::-moz-selection {
+        background: #4a89dc;
+        color: #fff;
+        text-shadow: none;
+    }
+
+    .in-text-selection, ::selection {
+        background: #4a89dc;
+        color: #fff;
+        text-shadow: none;
+    }
+
+    ol, ul { padding: 0 0 0 1.875rem }
+    ul { list-style: square }
+    ol { list-style: decimal }
+    ol ol, ol ul, ul ol, ul ul { margin: 0 }
+
+    b, dt, strong, th {
+        font-weight: 700;
+        color: #dedede;
+    }
+
+    cite, dfn, em, i { font-style: italic }
+
+    blockquote {
+        padding-left: 30px;
+        margin: 35px 0 1.875rem 1.875rem;
+        border-left: solid 2px #474d54;
+        color: #9da2a6;
+        background-color: #494f56;
+    }
+
+    code, kbd, pre, tt, var {
+        background: rgba(0, 0, 0, .05);
+        font-size: .875rem;
+        font-family: Monaco, Consolas, 'Andale Mono', 'DejaVu Sans Mono', monospace;
+    }
+
+    code, kbd, tt, var { padding: 2px 5px }
+
+    pre.md-fences {
+        padding: 10px 30px;
+        margin-bottom: 20px;
+        border: 1px solid;
+    }
+
+    .md-fences .code-tooltip { bottom: -3.2em }
+
+    table {
+        max-width: 100%;
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: #dedede;
+
+        a { color: #dedede }
+    }
+
+    td, th {
+        padding: 5px 10px;
+        vertical-align: top;
+        border: solid 1px #474d54;
+        text-align: left;
+    }
+
+    .math, .mathjax-exps, li, p { color: #dedede }
+    mark { background: #d3d40e }
+
+    li > p { margin-top: 0; margin-bottom: 0 }
+    .task-list { padding-left: 0 }
+
+    .task-list-item {
+        list-style: none;
+        margin-left: -2em;
+
+        .task-list-item-checkbox { margin-right: .8em }
+
+        input {
+            top: .1875rem;
+
+            &::before {
+                content: '';
+                display: inline-block;
+                width: .875rem;
+                height: .875rem;
+                vertical-align: middle;
+                text-align: center;
+                border: 1px solid #b8bfc6;
+                background-color: #363b40;
+                margin-top: -.4375rem;
+            }
+
+            &:checked::before, &[checked]::before {
+                content: '\221A';
+                font-size: .625rem;
+                line-height: .625rem;
+                color: #dedede;
+            }
+        }
+    }
+
+    img { max-width: 100% }
+}

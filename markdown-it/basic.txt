@@ -1,0 +1,121 @@
+# Markdown 基本語法範例
+
+## 1. 標題 (Headings)
+
+```markdown
+# This is an \<h1\> tag
+## This is an \<h2\> tag
+### This is an \<h3\> tag
+#### This is an \<h4\> tag
+##### This is an \<h5\> tag
+###### This is an \<h6\> tag
+```
+
+# This is an \<h1\> tag
+## This is an \<h2\> tag
+### This is an \<h3\> tag
+#### This is an \<h4\> tag
+##### This is an \<h5\> tag
+###### This is an \<h6\> tag
+
+
+---
+
+## 2. 強調 (Emphasis)
+
+```markdown
+* *這是斜體* (Asterisks)
+* _這也是斜體_ (Underscores)
+* **這是粗體** (Double asterisks)
+* __這也是粗體__ (Double underscores)
+* ***這是粗斜體*** (Triple asterisks)
+* ~~這是刪除線~~ (Strikethrough)
+```
+
+
+* *這是斜體* (Asterisks)
+* _這也是斜體_ (Underscores)
+* **這是粗體** (Double asterisks)
+* __這也是粗體__ (Double underscores)
+* ***這是粗斜體*** (Triple asterisks)
+* ~~這是刪除線~~ (Strikethrough)
+
+---
+
+## 3. 列表 (Lists)
+
+### 無序列表
+
+```markdown
+* 項目一
+* 項目二
+    * 子項目 A
+    * 子項目 B
++ 項目三 (也可以用 +)
+- 項目四 (也可以用 -)
+```
+
+* 項目一
+* 項目二
+    * 子項目 A
+    * 子項目 B
++ 項目三 (也可以用 +)
+- 項目四 (也可以用 -)
+
+### 有序列表
+1. 第一步
+2. 第二步
+3. 第三步
+
+## 4. 連結與圖片 (Links and Images)
+
+* **外部連結:** [點我前往 Google](https://www.google.com)
+* **帶有標題的連結:** [GitHub](https://github.com "前往 GitHub") (滑鼠懸停顯示文字)
+* **圖片:** 
+![Markdown Logo](https://upload.wikimedia.org/wikipedia/commons/4/48/Markdown-mark.svg)
+
+---
+
+## 5. 引用 (Blockquotes)
+> 這是一段引用文字。
+> 
+> > 這是巢狀引用 (Nested blockquotes)。
+
+---
+
+## 6. 程式碼 (Code)
+
+### 行內程式碼
+使用 `inline code` 來標記句子中的程式碼。
+
+### 程式碼區塊 (Code Blocks)
+```python
+def hello_world():
+    print("Hello, Markdown Preview Enhanced!")
+```
+
+---
+
+## 7. 表格 (Tables)
+
+| 姓名 | 年齡 | 職業 | 說明 |
+| :--- | :---: | ---: | --- |
+| 左對齊 | 居中對齊 | 右對齊 | 預設 |
+| 小明 | 20 | 學生 | 測試文字 |
+| 曉華 | 30 | 工程師 | 測試文字 |
+
+---
+
+## 8. 分隔線 (Horizontal Rules)
+以下三種方式皆可產生分隔線：
+***
+---
+___
+
+---
+
+## 9. 換行說明
+在 Markdown 中，單純換行不會產生新段落。
+若要換行，可以在行末輸入 **兩個空格**  
+或是使用 HTML 的 `<br>` 標籤。<br>
+若要開始新段落，請在兩行文字中間留一個**空行**。

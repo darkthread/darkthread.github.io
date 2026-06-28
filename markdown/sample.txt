@@ -25,7 +25,7 @@ void Test(string s, int i) {
 ```markdown
 ## 指定 Heading ID {#custom-heading}
 ### 加上 CSS Class {.yellow}
-這是一句話，`這幾個字`{.yellow} 要變色。
+這是一句話，[這幾個字](){.yellow} 要變色。
 ```
 
 ## 指定 Heading ID {#custom-heading}
@@ -34,7 +34,7 @@ void Test(string s, int i) {
 
 ### 加上 CSS Class {.yellow}
 
-這是一句話，`這幾個字`{.yellow} 要變色。
+這是一句話，[這幾個字](){.yellow} 要變色。
 
 ---
 

@@ -1,0 +1,140 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,400i,700,700i);
+
+#preview {
+    background: #fcfcfc;
+    color: #111;
+    font-family: Raleway, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+
+    .math, .mathjax-exps, h1, h2, h3, h4, h5, h6, li, table {
+        color: #111;
+        font-family: Raleway, sans-serif;
+    }
+
+    h1, h2 {
+        font-weight: 400;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    h1 {
+        line-height: 4rem;
+        margin: 4rem 0 1.75rem;
+        padding: 20px 30px;
+        font-size: 2.827rem;
+    }
+
+    h2 {
+        line-height: 3rem;
+        margin: 3rem 0 1.9375rem;
+        padding: 0 30px;
+        font-size: 1.999rem;
+    }
+
+    h3 { font-size: 1.413rem; font-weight: 400 }
+    h4 { font-size: 1.25rem; font-weight: 400 }
+    h5 { font-size: 1.15rem; font-weight: 400 }
+    h6 { font-size: 1rem; font-weight: 700 }
+
+    p {
+        color: #111;
+        font-size: 1rem;
+        line-height: 1.75rem;
+        margin: 0 0 1.25rem;
+    }
+
+    a {
+        color: #900;
+        text-decoration: none;
+
+        &:hover { text-decoration: underline }
+    }
+
+    table {
+        margin-bottom: 20px;
+
+        td, th {
+            padding: 8px;
+            line-height: 1.25rem;
+            vertical-align: top;
+            border-top: 1px solid #ddd;
+        }
+
+        th { font-weight: 700 }
+        thead th { vertical-align: bottom }
+        caption + thead tr:first-child td, caption + thead tr:first-child th,
+        colgroup + thead tr:first-child td, colgroup + thead tr:first-child th,
+        thead:first-child tr:first-child td, thead:first-child tr:first-child th { border-top: 0 }
+        tbody + tbody { border-top: 2px solid #ddd }
+    }
+
+    code {
+        color: inherit;
+        border: 1px solid #ccc;
+        padding: .1em;
+        font-size: .9em;
+        margin-left: .2em;
+        margin-right: .2em;
+    }
+
+    pre > code { border: none }
+    li > p { margin-top: 0; margin-bottom: 0 }
+
+    .task-list { padding-left: 0 }
+
+    .task-list-item {
+        list-style: none;
+        margin-left: -2.4em;
+
+        input {
+            top: 3px;
+            margin-right: 1.6em;
+
+            &::before {
+                content: '';
+                display: inline-block;
+                width: 1rem;
+                height: 1rem;
+                vertical-align: middle;
+                text-align: center;
+                border: 1px solid gray;
+                background-color: #fdfdfd;
+                margin-left: 0;
+                margin-top: -.8rem;
+            }
+
+            &:checked::before, &[checked]::before {
+                content: '\25FC';
+                font-size: .8125rem;
+                line-height: .9375rem;
+                margin-top: -1rem;
+            }
+        }
+    }
+
+    blockquote {
+        margin: 0 0 1.11111rem;
+        padding: .5rem 1.11111rem 0 1.05556rem;
+        border-left: 1px solid gray;
+        background-color: #ededed;
+        line-height: 1.6;
+        color: #6f6f6f;
+
+        p {
+            line-height: 1.6;
+            color: #6f6f6f;
+        }
+    }
+
+    img { max-width: 100% }
+    kbd { color: #111 }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
+    #preview {
+        .task-list-item input {
+            &::before, &:checked::before, &[checked]::before { margin-top: -.2rem }
+        }
+    }
+}
