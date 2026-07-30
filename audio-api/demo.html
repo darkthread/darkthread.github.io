@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Audio API Oscillator Demo</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: safe center;
+      font-family: sans-serif;
+    }
+
+    .panel {
+      box-sizing: border-box;
+      width: min(90%, 600px);
+      padding: 20px;
+      border: 1px solid;
+    }
+
+    .waveforms {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    button {
+      padding: 8px 16px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .section {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid;
+    }
+
+    .section-title {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .waveforms button {
+      flex: 1 1 100px;
+    }
+
+    .waveforms { flex-wrap: wrap; }
+
+    .selected {
+      color: white;
+      background: #286b55;
+    }
+
+    .control {
+      display: grid;
+      grid-template-columns: 80px 1fr 70px;
+      gap: 10px;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    .control input {
+      width: 100%;
+    }
+
+    output {
+      text-align: right;
+    }
+
+    canvas {
+      width: 100%;
+      height: 320px;
+      background: #ddd;
+    }
+
+    @media (max-width: 500px) {
+      .control {
+        grid-template-columns: 1fr 70px;
+      }
+
+      .control label {
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <main id="app" class="panel">
+    <header>
+      <h1>Oscillator</h1>
+    </header>
+    <section class="section">
+      <canvas ref="visualizer" width="560" height="320" role="img" aria-label="示波器"></canvas>
+    </section>
+
+    <section class="section">
+      <span class="section-title">波形</span>
+      <div class="waveforms">
+        <button
+          v-for="waveform in waveforms"
+          :key="waveform"
+          type="button"
+          :class="{ selected: isPlaying && type === waveform }"
+          :aria-pressed="isPlaying && type === waveform"
+          @click="toggleWaveform(waveform)"
+        >{{ waveform.split(" ")[0] }}<br>{{ waveform.split(" ")[1] }}</button>
+      </div>
+    </section>
+
+    <section class="section" aria-label="音訊參數">
+      <div class="control">
+        <label for="frequency">頻率</label>
+        <input id="frequency" v-model.number="frequency" type="range" min="0" max="3000" step="1">
+        <output for="frequency">{{ frequency }} Hz</output>
+      </div>
+      <div class="control">
+        <label for="detune">微調</label>
+        <input id="detune" v-model.number="detune" type="range" min="-1000" max="1000" step="1">
+        <output for="detune">{{ detune }} ct</output>
+      </div>
+      <div class="control">
+        <label for="volume">音量</label>
+        <input id="volume" v-model.number="volume" type="range" min="0" max="1" step="0.01">
+        <output for="volume">{{ volume }}</output>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          waveforms: ["Sine 正弦波", "Square 方波", "Sawtooth 鋸齒波", "Triangle 三角波"],
+          type: "Sine 正弦波",
+          frequency: 440,
+          detune: 0,
+          volume: 0.05,
+          isPlaying: false,
+          audioContext: undefined,
+          oscillator: undefined,
+          gainNode: undefined,
+          analyser: undefined,
+          dataArray: undefined,
+          animationFrame: undefined
+        };
+      },
+      watch: {
+        type(value) {
+          if (this.oscillator) this.oscillator.type = value.split(" ")[0].toLowerCase();
+        },
+        frequency(value) {
+          if (this.oscillator) this.oscillator.frequency.value = value;
+        },
+        detune(value) {
+          if (this.oscillator) this.oscillator.detune.value = value;
+        },
+        volume(value) {
+          if (this.gainNode) this.gainNode.gain.value = value;
+        }
+      },
+      methods: {
+        toggleWaveform(waveform) {
+          if (this.isPlaying && this.type === waveform) {
+            this.stop();
+            return;
+          }
+          this.type = waveform;
+          if (!this.isPlaying) this.start();
+        },
+        async start() {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass || this.isPlaying) return;
+
+          this.audioContext ||= new AudioContextClass();
+          await this.audioContext.resume();
+
+          this.oscillator = this.audioContext.createOscillator();
+          this.gainNode = this.audioContext.createGain();
+          // AnalyserNode 可即時取得音訊數位資料
+          this.analyser = this.audioContext.createAnalyser();
+          this.oscillator.type = this.type.split(" ")[0].toLowerCase();
+          this.oscillator.frequency.value = this.frequency;
+          this.oscillator.detune.value = this.detune;
+          this.gainNode.gain.value = this.volume;
+          // 串接 OscillatorNode -> GainNode -> AnalyserNode -> AudioDestinationNode
+          this.oscillator.connect(this.gainNode).connect(this.analyser).connect(this.audioContext.destination);
+          this.oscillator.start();
+          this.isPlaying = true;
+          this.draw();
+        },
+        draw() {
+          const canvas = this.$refs.visualizer;
+          const context = canvas.getContext("2d");
+          const width = canvas.width;
+          const height = canvas.height;
+          // 計算可見樣本數，並依此決定 FFT 的大小
+          const visibleSamples = Math.round(this.audioContext.sampleRate * 0.02);
+          // FFT = Fast Fourier Transform，快速傅立葉轉換，將時域訊號轉換為頻域訊號
+          // FFT 的大小必須是 2 的次方，且至少要比可見樣本數大
+          const fftSize = 2 ** Math.ceil(Math.log2(visibleSamples * 2));
+          if (this.analyser.fftSize !== fftSize || this.dataArray?.length !== fftSize) {
+            this.analyser.fftSize = fftSize;
+            this.dataArray = new Uint8Array(fftSize);
+          }
+
+          this.analyser.getByteTimeDomainData(this.dataArray);
+          context.fillStyle = "#ddd";
+          context.fillRect(0, 0, width, height);
+          // 繪製灰色中線，代表 0 振幅
+          context.strokeStyle = "#aaa";
+          context.beginPath();
+          context.moveTo(0, height / 2);
+          context.lineTo(width, height / 2);
+          context.stroke();
+
+          // 繪製波形          
+          context.lineWidth = 2;
+          context.strokeStyle = "#000";
+          context.beginPath();
+
+          // 找到第一個從 0 向上的樣本，讓線圖最左側的波形從 0 開始
+          let start = 0;
+          const searchLimit = this.dataArray.length - visibleSamples;
+          for (let index = 1; index < searchLimit; index += 1) {
+            if (this.dataArray[index - 1] > 128 && this.dataArray[index] <= 128) {
+              start = index;
+              break;
+            }
+          }
+          // 計算可見樣本數，避免超出陣列範圍
+          const sampleCount = Math.min(visibleSamples, this.dataArray.length - start);
+          const sliceWidth = width / (sampleCount - 1);
+          for (let index = 0; index < sampleCount; index += 1) {
+            const x = index * sliceWidth;
+            const y = (this.dataArray[start + index] / 128) * (height / 2);
+            // 第 0 點用 moveTo，其他點用 lineTo
+            index ? context.lineTo(x, y) : context.moveTo(x, y);
+          }
+          // 將最後一個點連回中線，避免波形在右側中斷
+          context.lineTo(width, height / 2);
+          context.stroke();
+          // 以 requestAnimationFrame 方式呼叫自己，形成動畫迴圈
+          this.animationFrame = requestAnimationFrame(this.draw);
+        },
+        stop() {
+          if (!this.oscillator) return;
+          // 取消動畫迴圈，停止振盪器，斷開節點連接，釋放資源
+          cancelAnimationFrame(this.animationFrame);
+          this.oscillator.stop();
+          this.oscillator.disconnect();
+          this.gainNode.disconnect();
+          this.analyser.disconnect();
+          this.oscillator = undefined;
+          this.gainNode = undefined;
+          this.analyser = undefined;
+          this.dataArray = undefined;
+          this.animationFrame = undefined;
+          this.isPlaying = false;
+        }
+      },
+      beforeUnmount() {
+        this.stop();
+        this.audioContext?.close();
+      }
+    }).mount("#app");
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>電話撥號模擬</title>
+</head>
+
+<body>
+    <button id="play" type="button" style="font-size: 2em; margin: 12px; padding: 12px 24px">模擬電話撥號</button>
+    <script>
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        const DTMF = {
+            0: [941, 1336], 1: [697, 1209], 2: [697, 1336], 3: [697, 1477], 4: [770, 1209],
+            5: [770, 1336], 6: [770, 1477], 7: [852, 1209], 8: [852, 1336], 9: [852, 1477]
+        };
+        const phoneNumber = "28825252";
+        const playButton = document.querySelector("#play");
+        let audioContext;
+        let masterGain;
+        function createTones(frequencies, start, duration, volume = 0.08, type = "sine", endFrequency) {
+            for (const frequency of frequencies) createTone(frequency, start, duration, volume, type, endFrequency);
+        }
+        function createTone(frequency, start, duration, volume = 0.08, type = "sine", endFrequency) {
+            // OscillatorNode 用來產生指定頻率的週期波形，GainNode 負責控制音量
+            // 每次建立獨立節點，以便多個頻率可在同一時間播放，例如 DTMF 的雙音組合。
+            const oscillator = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+
+            // 設定波形種類與起始頻率，start 是 AudioContext 的絕對時間
+            // 確保不會因 JavaScript 執行延遲，影響開始播放時機
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(frequency, start);
+
+            // 若有提供結束頻率，會音調持續期間做指數式滑音，接近人耳對音高的感受
+            if (endFrequency) oscillator.frequency.exponentialRampToValueAtTime(endFrequency, start + duration);
+
+            // 建立簡短的音量包絡(Envelope)：從靜音淡入、維持指定音量，結尾再淡出
+            // 避免波形在非零振幅處突然開始或停止產生喀聲（click/pop）
+            gain.gain.setValueAtTime(0, start);
+            // 淡入最多 15 毫秒；短音調則使用其長度的四分之一，以免淡入占比過高
+            gain.gain.linearRampToValueAtTime(volume, start + Math.min(0.015, duration / 4));
+            // 在結束前至少保留 25 毫秒淡出空間，加入 Math.max 因應極短音調
+            gain.gain.setValueAtTime(volume, start + Math.max(0.015, duration - 0.025));
+            gain.gain.linearRampToValueAtTime(0, start + duration);
+
+            // 將「振盪器 -> 單音增益 -> 主增益 -> 喇叭」串接起來。
+            // 主增益可統一調整總音量
+            oscillator.connect(gain).connect(masterGain);
+
+            // 啟動與停止也使用 AudioContext 時間排程，多留 10 毫秒再銷毀節點，確保淡出自動化完整執行
+            // 停止後節點會由瀏覽器回收
+            oscillator.start(start);
+            oscillator.stop(start + duration + 0.01);
+        }
+
+        function sayHello(start = audioContext.currentTime) {
+            const duration = 0.45;
+            const voiceGain = audioContext.createGain();
+            // 建立 Envelope：淡入、維持、淡出，避免喀聲
+            voiceGain.gain.setValueAtTime(0, start);
+            voiceGain.gain.linearRampToValueAtTime(0.2, start + 0.04);
+            voiceGain.gain.setValueAtTime(0.2, start + duration - 0.08);
+            voiceGain.gain.linearRampToValueAtTime(0, start + duration);
+            voiceGain.connect(masterGain);
+
+            const vocalSource = audioContext.createOscillator();
+            const sourceGain = audioContext.createGain();
+            vocalSource.type = "sawtooth";
+
+            // 設定起始頻率，並在持續期間做滑音，模擬人聲的音高變化
+            vocalSource.frequency.setValueAtTime(145, start);
+            vocalSource.frequency.linearRampToValueAtTime(130, start + duration * 0.65);
+            vocalSource.frequency.exponentialRampToValueAtTime(170, start + duration);
+            sourceGain.gain.value = 0.25;
+            vocalSource.connect(sourceGain);
+
+            let formantOutput = sourceGain;
+
+            function createFormant(initialFrequency, endFrequency, gainDb, quality) {
+                // 用 BiquadFilterNode 模擬人聲的共振峰 (Formant)
+                const filter = audioContext.createBiquadFilter();
+                filter.type = "peaking";
+                filter.frequency.setValueAtTime(initialFrequency, start);
+                filter.frequency.linearRampToValueAtTime(endFrequency, start + duration);
+                // 品質因數 (Q)，數值越高共振峰越尖銳，數值越低共振峰越寬廣
+                filter.Q.value = quality;
+                filter.gain.value = gainDb;
+                formantOutput.connect(filter);
+                formantOutput = filter;
+            }
+
+            // 加入三段共振峰，模擬人聲的主要共振頻率
+            createFormant(300, 430, 10, 2.5);
+            createFormant(650, 1900, 25, 3.5);
+            createFormant(2000, 2250, 45, 3);
+            formantOutput.connect(voiceGain);
+
+            vocalSource.start(start);
+            vocalSource.stop(start + duration + 0.01);
+            vocalSource.onended = () => {
+                playButton.disabled = false;
+                voiceGain.disconnect();
+            };
+        }
+
+        function scheduleSequence() {
+            const start = audioContext.currentTime + 0.08;
+            // 撥話音：350hz + 440hz
+            createTones([350, 440], start, 2, 0.055);
+            let cursor = start + 2.05;
+            for (const digit of phoneNumber) {
+                createTones(DTMF[digit], cursor, 0.12, 0.1);
+                cursor += 0.2;
+            }
+            // 鈴聲：480hz + 440hz
+            cursor += 0.5;
+            for (let i = 0; i < 2; i += 1) {
+                createTones([480, 440], cursor, 1, 0.055);
+                cursor += 2.5
+            }
+            // 模擬「喂」
+            sayHello(cursor);
+        }
+
+        async function playSequence() {
+            if (!AudioContextClass) return;
+            playButton.disabled = true;
+            audioContext ||= new AudioContextClass();
+            await audioContext.resume();
+            masterGain = audioContext.createGain();
+            masterGain.gain.value = 0.75;
+            masterGain.connect(audioContext.destination);
+            scheduleSequence();
+        }
+
+        playButton.addEventListener("click", playSequence);
+    </script>
+</body>
+
+</html>
