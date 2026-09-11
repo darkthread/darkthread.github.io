@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="color-scheme" content="light">
+	<title>GitHub Copilot Models | 模型價格比較</title>
+	<link rel="stylesheet" href="styles.css">
+	<script defer src="vue.global.prod.js"></script>
+	<script defer src="app.js"></script>
+</head>
+<body>
+	<main id="app" v-cloak>
+		<header class="page-header">
+			<div>
+				<div class="eyebrow"><img class="brand-mark" src="github-mark.svg" width="26" height="26" alt=""> MODEL DIRECTORY</div>
+				<div class="title-row">
+					<h1>GitHub Copilot <span>Models</span></h1>
+					<nav class="language-switch" :aria-label="t('languageLabel')">
+						<button type="button" @click="setLocale('zh')" :class="{ active: locale === 'zh' }" :aria-pressed="locale === 'zh'">中文</button>
+						<button type="button" @click="setLocale('en')" :class="{ active: locale === 'en' }" :aria-pressed="locale === 'en'">EN</button>
+					</nav>
+				</div>
+				<p class="subtitle">{{ t('subtitle') }}</p>
+			</div>
+			<div class="totals" :aria-label="t('statsLabel')">
+				<div><strong>{{ modelCount }}</strong><span>{{ t('models') }}</span></div>
+				<div><strong>{{ vendors.length }}</strong><span>{{ t('vendors') }}</span></div>
+				<div><strong>{{ rows.length }}</strong><span>{{ t('pricingPlans') }}</span></div>
+			</div>
+		</header>
+
+		<section class="filters" :aria-label="t('filtersLabel')">
+			<label class="search-field">{{ t('keyword') }}
+				<span class="search-input-wrap">
+					<input type="search" v-model="query" :placeholder="t('searchPlaceholder')" autocomplete="off">
+					<button type="button" class="search-reset" @click="reset" :disabled="!hasFilters" :aria-label="t('reset')" :title="t('reset')">×</button>
+				</span>
+			</label>
+			<fieldset class="toggle-group vendor-group">
+				<legend>{{ t('vendor') }}</legend>
+				<div class="toggle-options">
+					<label v-for="item in vendors" :key="item" class="toggle-option"><input class="sr-only" type="checkbox" v-model="vendor" :value="item"><span class="toggle-button">{{ item }}</span></label>
+				</div>
+			</fieldset>
+			<fieldset class="toggle-group">
+				<legend>{{ t('category') }}</legend>
+				<div class="toggle-options">
+					<label v-for="item in categories" :key="item" class="toggle-option"><input class="sr-only" type="checkbox" v-model="category" :value="item"><span class="toggle-button">{{ item }}</span></label>
+				</div>
+			</fieldset>
+		</section>
+
+		<div class="table-meta">
+			<p role="status" aria-live="polite">{{ loading ? t('loading') : t('showing', filteredRows.length, rows.length) }}</p>
+			<div class="legend"><span>{{ t('priceUnit') }}</span><span>{{ t('low') }}</span><span class="heat-scale" aria-hidden="true"></span><span>{{ t('high') }}</span><span class="legend-label">{{ t('heatmap') }}</span></div>
+		</div>
+
+		<section v-if="error" class="empty-state" role="alert">
+			<h2>{{ t('loadFailed') }}</h2><p>{{ error }}</p><button @click="loadModels">{{ t('retry') }}</button>
+		</section>
+		<div v-else class="table-scroll" role="region" :aria-label="t('tableLabel')" tabindex="0" :aria-busy="loading">
+			<table>
+				<caption class="sr-only">{{ t('tableCaption') }}</caption>
+				<thead><tr>
+					<th v-for="column in columns" :key="column.key" scope="col" :class="{ numeric: column.price }" :aria-sort="sortKey === column.key ? (sortDirection === 1 ? 'ascending' : 'descending') : 'none'">
+						<button @click="sortBy(column.key)" :title="t('sortBy', column.label)">
+							{{ column.label }}<span class="sort-arrow" :class="{ active: sortKey === column.key }" aria-hidden="true">{{ sortKey === column.key ? (sortDirection === 1 ? '↑' : '↓') : '↕' }}</span>
+						</button>
+					</th>
+				</tr></thead>
+				<tbody>
+					<tr v-for="row in filteredRows" :key="row.id">
+						<td class="vendor-cell"><span class="vendor-dot" :style="{ backgroundColor: vendorColor(row.vendor) }"></span>{{ row.vendor }}</td>
+						<th scope="row" class="model-cell">
+							<span class="model-name">{{ row.model }} <span v-if="tierNote(row)" class="tier-note">{{ tierNote(row) }}</span></span>
+							<span class="model-tags"><span class="model-tag category-tag">{{ row.category }}</span></span>
+						</th>
+						<td v-for="key in priceKeys" :key="key" class="numeric price-cell" :class="{ unavailable: row.prices[key] === null }" :style="heatStyle(row.prices[key], key)" :title="row.prices[key] === null ? t('unavailable') : `${row.model} · ${row[key]}`">{{ display(row[key]) }}</td>
+					</tr>
+					<tr v-if="!filteredRows.length"><td :colspan="columns.length" class="empty-state">
+						<template v-if="loading">{{ t('loadingModels') }}</template>
+						<template v-else><h2>{{ t('noModels') }}</h2><p>{{ t('noResults') }}</p><button v-if="hasFilters" @click="reset">{{ t('reset') }}</button></template>
+					</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<footer><span>{{ t('source') }} <a href="https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing" target="_blank" rel="noopener noreferrer">{{ t('officialPricing') }}</a> 2026-09-11</span></footer>
+	</main>
+	<noscript>請啟用 JavaScript 以查看模型價格表。 Enable JavaScript to view the model pricing table.</noscript>
+</body>
+</html>
