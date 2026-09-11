@@ -577,7 +577,11 @@ a {
 
 @media (max-width: 600px) {
   main {
+    height: auto;
+    min-height: calc(100vh - 4px);
+    min-height: calc(100dvh - 4px);
     padding: 18px 12px 16px;
+    overflow: visible;
   }
 
   .page-header {
@@ -615,21 +619,49 @@ a {
   }
 
   .filters {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     gap: 10px;
     padding: 12px 0;
   }
 
+  .toggle-group {
+    width: 100%;
+    min-inline-size: 0;
+  }
+
   .toggle-options {
+    flex-wrap: nowrap;
     gap: 5px;
+    width: 100%;
+    padding: 2px 3px 5px;
+    margin: -2px -3px -5px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+    scroll-snap-type: inline proximity;
+  }
+
+  .toggle-option {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
   }
 
   .toggle-button {
     min-width: 68px;
+    white-space: nowrap;
   }
 
   .table-meta {
     align-items: flex-start;
     padding: 10px 0 8px;
+  }
+
+  .table-scroll {
+    flex: none;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
 
   .legend-label {
