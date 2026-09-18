@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <div style="margin-bottom: 15px;">
+        <input id="fileInput" type="file" accept=".docx">
+        <p style="font-size: 0.9em; color: #666;">選擇 Word 文件(.docx)進行預覽</p>
+    </div>
+    <div class="row">
+        <div style="margin-bottom: 20px;">
+            <h3>預覽結果</h3>
+            <div id="container"></div>
+        </div>
+    </div>
+    <script src="jszip.min.js"></script>
+    <script src="docx-preview.min.js"></script>
+    <script>
+        // 初始化事件監聽
+        document.getElementById("fileInput").addEventListener("change", handleFile, false);
+
+        function handleFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const docData = e.target.result;
+                    docx.renderAsync(docData, document.getElementById("container"))
+                        .then(x => {
+                            console.log("docx: finished", x)
+                        });
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }
+    </script>
+</body>
+
+</html>

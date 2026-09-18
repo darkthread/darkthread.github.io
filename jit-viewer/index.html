@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/jit-viewer/dist/iife/jit-viewer.min.css">
+</head>
+<body>
+  <div id="viewer"></div>
+  <input type="file" id="fileInput">
+  
+  <script src="https://unpkg.com/jit-viewer/dist/iife/jit-viewer.min.js"></script>
+  <script>
+    const { createViewer } = JitViewer;
+    
+    const viewer = createViewer({
+      target: '#viewer',
+      theme: 'light',
+      toolbar: true
+    });
+    viewer.mount();
+    
+    document.getElementById('fileInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) viewer.setFile(file, file.name);
+    });
+  </script>
+</body>
+</html>
