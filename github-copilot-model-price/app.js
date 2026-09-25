@@ -40,6 +40,7 @@ createApp({
       { key: 'output', label: 'Output', price: true }
     ]);
     const rows = ref([]);
+    const date = ref('');
     const query = ref('');
     const vendor = ref([]);
     const category = ref([]);
@@ -127,14 +128,15 @@ createApp({
         const response = await fetch('./models.json');
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
-        if (!Array.isArray(data) || data.some(row => !row || typeof row !== 'object' || typeof row.model !== 'string' || typeof row.vendor !== 'string')) {
+        if (!data || typeof data.date !== 'string' || !Array.isArray(data.models) || data.models.some(row => !row || typeof row !== 'object' || typeof row.model !== 'string' || typeof row.vendor !== 'string')) {
           throw new Error(t('invalidData'));
         }
-        rows.value = data.map((row, id) => ({
+        rows.value = data.models.map((row, id) => ({
           ...row, id,
           searchText: row.model.toLocaleLowerCase(),
           prices: Object.fromEntries(priceKeys.map(key => [key, parsePrice(row[key])]))
         }));
+        date.value = data.date;
         reset();
       } catch (cause) {
         errorType.value = location.protocol === 'file:' ? 'fileProtocolError' : 'fetchError';
@@ -147,6 +149,6 @@ createApp({
       setLocale(locale.value);
       loadModels();
     });
-    return { locale, t, setLocale, columns, priceKeys, rows, query, vendor, category, sortKey, sortDirection, loading, error, vendors, categories, modelCount, hasFilters, filteredRows, display, tierNote, sortBy, reset, heatStyle, vendorColor, loadModels };
+    return { locale, t, setLocale, columns, priceKeys, rows, date, query, vendor, category, sortKey, sortDirection, loading, error, vendors, categories, modelCount, hasFilters, filteredRows, display, tierNote, sortBy, reset, heatStyle, vendorColor, loadModels };
   }
 }).mount('#app');
