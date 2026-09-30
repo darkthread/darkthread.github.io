@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-25",
+  "date": "2026-09-30",
   "models": [
     {
       "vendor": "OpenAI",
@@ -242,6 +242,30 @@
       "output": "$15.00"
     },
     {
+      "vendor": "OpenAI",
+      "model": "GPT-6.1 Sol",
+      "status": "GA",
+      "category": "Powerful",
+      "tier": "Default",
+      "threshold": "\u2264 272K",
+      "input": "$2.00",
+      "cached-input": "$0.10",
+      "cached-write": "$2.50",
+      "output": "$10.00"
+    },
+    {
+      "vendor": "OpenAI",
+      "model": "GPT-6.1 Sol",
+      "status": "GA",
+      "category": "Powerful",
+      "tier": "Long context",
+      "threshold": "\u003E 272K",
+      "input": "$4.00",
+      "cached-input": "$0.20",
+      "cached-write": "$5.00",
+      "output": "$15.00"
+    },
+    {
       "vendor": "Anthropic",
       "model": "Claude Haiku 4.5",
       "status": "GA",
@@ -328,6 +352,18 @@
     {
       "vendor": "Anthropic",
       "model": "Claude Sonnet 5",
+      "status": "GA",
+      "category": "Versatile",
+      "tier": "-",
+      "threshold": "-",
+      "input": "$2.00",
+      "cached-input": "$0.20",
+      "cached-write": "$2.50",
+      "output": "$10.00"
+    },
+    {
+      "vendor": "Anthropic",
+      "model": "Claude Sonnet 5.5",
       "status": "GA",
       "category": "Versatile",
       "tier": "-",
